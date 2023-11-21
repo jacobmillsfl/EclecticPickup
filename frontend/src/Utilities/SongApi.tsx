@@ -2,6 +2,7 @@ import { SongDetail } from "../Models/SongDetail";
 
 export default class SongApi {
     static async getSongs() : Promise<SongDetail[]> {
+        return new Array<SongDetail>()
         const apiUrl = SongApi.getAppUrl();
         if (apiUrl) {
             const response = await fetch(`${apiUrl}/songs`);
