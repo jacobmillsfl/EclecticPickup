@@ -76,10 +76,7 @@ export default function LandingPage() {
       <VideoCarousel props={videos} />
       <UpcomingShows props={upcomingShows}/>
       <QuoteBox />
-
       {/* <MediaPlayer /> */}
-
-
       <Socials props={socialLinks} />
     </ContentContainer>
   );
