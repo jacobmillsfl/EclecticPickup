@@ -12,46 +12,46 @@ import space_05 from '../media/space_05.mp4';
 export default class VideoUtility {
     static getVideos() : Array<VideoDetail> {
         return [
-            {
-                name: "cyber_01",
-                video: cyber_01,
-                playbackRate: .7
-            },
-            {
-                name: "cyber_02",
-                video: cyber_02,
-                playbackRate: .5
-            },
-            {
-                name: "cyber_03",
-                video: cyber_03,
-                playbackRate: .7
-            },
-            {
-                name: "cyber_04",
-                video: cyber_04,
-                playbackRate: .6
-            },
-            {
-                name: "space_01",
-                video: space_01,
-                playbackRate: .8
-            },
-            {
-                name: "space_02",
-                video: space_02,
-                playbackRate: 1
-            },
-            {
-                name: "space_03",
-                video: space_03,
-                playbackRate: .6
-            },
-            {
-                name: "space_04",
-                video: space_04,
-                playbackRate: .8
-            },
+            // {
+            //     name: "cyber_01",
+            //     video: cyber_01,
+            //     playbackRate: .7
+            // },
+            // {
+            //     name: "cyber_02",
+            //     video: cyber_02,
+            //     playbackRate: .5
+            // },
+            // {
+            //     name: "cyber_03",
+            //     video: cyber_03,
+            //     playbackRate: .7
+            // },
+            // {
+            //     name: "cyber_04",
+            //     video: cyber_04,
+            //     playbackRate: .6
+            // },
+            // {
+            //     name: "space_01",
+            //     video: space_01,
+            //     playbackRate: .8
+            // },
+            // {
+            //     name: "space_02",
+            //     video: space_02,
+            //     playbackRate: 1
+            // },
+            // {
+            //     name: "space_03",
+            //     video: space_03,
+            //     playbackRate: .6
+            // },
+            // {
+            //     name: "space_04",
+            //     video: space_04,
+            //     playbackRate: .8
+            // },
             {
                 name: "space_05",
                 video: space_05,

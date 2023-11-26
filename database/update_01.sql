@@ -7,30 +7,30 @@
 -- ------------------------------
 
 
-UPDATE `tafdb`.`Song`
+UPDATE `eclecticpickupdb`.`Song`
 SET name = 'Free Your Mind'
 WHERE name = 'FreeYourMind';
 
-UPDATE `tafdb`.`Song`
+UPDATE `eclecticpickupdb`.`Song`
 SET name = 'Jumping It Up'
 WHERE name = 'JumpingItUp';
 
-UPDATE `tafdb`.`Song`
+UPDATE `eclecticpickupdb`.`Song`
 SET name = 'Heaven Light My Candle'
 WHERE name = 'HeavenLightMyCandle';
 
-UPDATE `tafdb`.`Song`
+UPDATE `eclecticpickupdb`.`Song`
 SET name = 'The Distance Between Us'
 WHERE name = 'TheDistanceBetweenUs';
 
-UPDATE `tafdb`.`Song`
+UPDATE `eclecticpickupdb`.`Song`
 SET name = 'Soul On Fire'
 WHERE name = 'SoulOnFire';
 
-UPDATE `tafdb`.`Song`
+UPDATE `eclecticpickupdb`.`Song`
 SET name = 'Abyss of Bliss'
 WHERE name = 'AbyssOfBliss';
 
-UPDATE `tafdb`.`Song`
+UPDATE `eclecticpickupdb`.`Song`
 SET name = 'Bring It Back'
 WHERE name = 'BringItBack';

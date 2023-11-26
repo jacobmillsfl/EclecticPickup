@@ -97,3 +97,17 @@ Note:
 ## Tech Stack
 The TAF2.0 tech stack uses dockerized components for the web app, the web api, and the database. Persistent data is stored in Docker volumes. The following illustration outlines the current tech stack.
 ![TAF Tech Stack](docs/taf20_arch.drawio.png)
+
+
+## TODO
+The following is needed for Eclectic Pickup.
+
+- Band Bio
+- Band Email
+- Band Social Media Links
+-- Instagram
+-- Facebook
+-- YouTube
+- Official Band Art / Logo
+- Audio Recordings
+- Video segments

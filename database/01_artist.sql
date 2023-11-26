@@ -5,12 +5,12 @@ Description:		Creates the Artist table and respective stored procedures
 
 */
 
-USE tafdb;
+USE eclecticpickupdb;
 
 
 -- Create Table 
 
-CREATE TABLE `tafdb`.`Artist` (
+CREATE TABLE `eclecticpickupdb`.`Artist` (
 id INT AUTO_INCREMENT,
 name VARCHAR(255),
 description VARCHAR(1024),
@@ -20,7 +20,7 @@ CONSTRAINT pk_Artist_id PRIMARY KEY (id)
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Artist_Load`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Artist_Load`
 (
 	IN paramid INT
 )
@@ -37,7 +37,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Artist_LoadAll`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Artist_LoadAll`
 (
 )
 BEGIN
@@ -52,7 +52,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Artist_Add`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Artist_Add`
 (
 	IN paramname VARCHAR(255),
 	IN paramdescription VARCHAR(1024),
@@ -68,7 +68,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Artist_Update`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Artist_Update`
 (
 	IN paramid INT,
 	IN paramname VARCHAR(255),
@@ -88,7 +88,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Artist_Delete`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Artist_Delete`
 (
 	IN paramid INT
 )
@@ -100,7 +100,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Artist_Search`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Artist_Search`
 (
 	IN paramid INT,
 	IN paramname VARCHAR(255),

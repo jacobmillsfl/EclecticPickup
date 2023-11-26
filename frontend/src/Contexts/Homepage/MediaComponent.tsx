@@ -3,7 +3,7 @@ import mediaContext from './MediaContext'
 import mediaReducer from './MediaReducer'
 import { SongDetail } from '../../Models/SongDetail';
 import { HtmlAudioRef } from '../../Models/HtmlAudioRef';
-import SongApi from '../../Utilities/SongApi';
+import ApiClient from '../../Utilities/ApiClient';
 import MediaContainer from '../../Components/MediaPlayer/MediaContainer';
 
 import {
@@ -169,7 +169,7 @@ const MediaComponent = (props: any) => {
     // Onload effect
     useEffect( () => {
         console.log("SongApi::getSongs()");
-        SongApi.getSongs().then( (apiSongs) => {
+        ApiClient.getSongs().then( (apiSongs) => {
             setSongsArray(apiSongs);
         });
     }, []);

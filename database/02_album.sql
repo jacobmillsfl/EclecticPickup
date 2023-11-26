@@ -5,11 +5,11 @@ Description:		Creates the Album table and respective stored procedures
 
 */
 
-USE tafdb;
+USE eclecticpickupdb;
 
 -- Create Table 
 
-CREATE TABLE `tafdb`.`Album` (
+CREATE TABLE `eclecticpickupdb`.`Album` (
 id INT AUTO_INCREMENT,
 artistId INT NOT NULL,
 name VARCHAR(255),
@@ -21,7 +21,7 @@ CONSTRAINT fk_Album_artistId_Artist_id FOREIGN KEY (artistId) REFERENCES Artist 
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Album_Load`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Album_Load`
 (
 	IN paramid INT
 )
@@ -39,7 +39,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Album_LoadAll`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Album_LoadAll`
 (
 )
 BEGIN
@@ -55,7 +55,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Album_Add`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Album_Add`
 (
 	IN paramartistId INT,
 	IN paramname VARCHAR(255),
@@ -72,7 +72,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Album_Update`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Album_Update`
 (
 	IN paramid INT,
 	IN paramartistId INT,
@@ -94,7 +94,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Album_Delete`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Album_Delete`
 (
 	IN paramid INT
 )
@@ -106,7 +106,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Album_Search`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Album_Search`
 (
 	IN paramid INT,
 	IN paramartistId INT,

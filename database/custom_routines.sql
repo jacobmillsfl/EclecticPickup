@@ -1,7 +1,7 @@
 
 -- Retrieves data for default playlist
 DELIMITER //
-CREATE PROCEDURE `tafdb`.`usp_Custom_LoadAllSongsWithArtistAlbumInfo`
+CREATE PROCEDURE `eclecticpickupdb`.`usp_Custom_LoadAllSongsWithArtistAlbumInfo`
 (
 )
 BEGIN
