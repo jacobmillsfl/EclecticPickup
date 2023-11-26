@@ -5,11 +5,11 @@ export type Image = {
   src: string;
   alt: string;
 };
-/** TODO: Create utility to create ImageCarouselData and VideoCarouselData */
+
 export const ImageCarousel: React.FC<{ props: Array<Image> }> = ({ props }) => {
-  const carouselItemData = props.map((item) => {
+  const carouselItemData = props.map((item, index) => {
     return (
-      <Carousel.Item>
+      <Carousel.Item key={index}>
         <div className="row" style={CarouselRowStyle}>
           <div className="col-lg-12">
             <img src={item.src} alt={item.alt} style={ImageStyle} />
@@ -21,7 +21,9 @@ export const ImageCarousel: React.FC<{ props: Array<Image> }> = ({ props }) => {
 
   return (
     <ShadowBox mode="top">
-      <Carousel>{carouselItemData}</Carousel>
+      <Carousel fade pause={"hover"}>
+        {carouselItemData}
+      </Carousel>
     </ShadowBox>
   );
 };

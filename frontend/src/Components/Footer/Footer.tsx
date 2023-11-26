@@ -35,9 +35,6 @@ function Footer() {
      * Onload event
      */
     useEffect(() => {
-        console.log("Footer::useEffect::onload");
-        console.log("PLAYLIST (footer)", playlist);
-        console.log("CURRENT SONG INDEX", currentSongIndex);
         setCurrentSong(0);
     }, [playlist])
 
@@ -45,7 +42,7 @@ function Footer() {
         <div className="footerLayer">
             <div className="footerLayerBg">
                 <div className="footerLayerAuthor">
-                    <Row stlye={{display: "inline-block"}}>
+                    {/* <Row stlye={{display: "inline-block"}}>
                         <Col className="col-md-3 d-none d-md-block" style={{fontFamily: "Audiowide"}}>{artistText}</Col>
                         <Col className="col-md-6 col-sm-12" style={FooterPlayerText}>
                             <input type="checkbox" id="shuffle" /><label className="shuffle" htmlFor="shuffle" onClick={() => toggleRandom()}></label>
@@ -55,8 +52,7 @@ function Footer() {
                             <input type="checkbox" id="repeat" /><label className="repeat" htmlFor="repeat" onClick={() => toggleRepeat()}></label>
                         </Col>
                         <Col className="col-md-3 d-none d-md-block" style={FooterPlayerFont}>{songText}</Col>
-                    </Row>
-            
+                    </Row> */}
                 </div>
             </div>
         </div>

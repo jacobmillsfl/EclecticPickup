@@ -54,10 +54,8 @@ const MediaComponent = (props: any) => {
 
     const toggleAudio = (play: boolean) => {
         if (play) {
-            console.log("MediaComponent::play()")
             audio.current!.play();
         } else {
-            console.log("MediaComponent::pause()")
             audio.current!.pause();
         }
     }
@@ -105,7 +103,6 @@ const MediaComponent = (props: any) => {
                     state.playlist.length - 1 :
                     id % state.playlist.length;
 
-            console.log(`MediaComponent:: PreviousSongIndex=${state.currentSongIndex} NewSongIndex=${newIndex}.`)
             dispatch({ type: SET_CURRENT_SONG, data: newIndex });
         }
     }
@@ -140,7 +137,6 @@ const MediaComponent = (props: any) => {
             return;
         }
         if (state.random) {
-            console.log("MediaComponent:: Generating random song index...")
             let randomIndex = ~~(Math.random() * state.playlist.length);
             if (randomIndex === state.currentSongIndex) {
                 randomIndex = (randomIndex + 1) % state.playlist.length;
@@ -150,14 +146,12 @@ const MediaComponent = (props: any) => {
                 data: randomIndex,
             })
         } else if (state.repeat) {
-            console.log("MediaComponent:: Repeating the song...")
             if (state.audio.current) {
                 // Just reset the currentTime and play the song again
                 state.audio.current.currentTime = 0;
                 state.audio.current.play();
             }
         } else {
-            console.log("MediaComponent:: Next song...")
             let newSongIndex = (state.currentSongIndex + 1) % state.playlist.length;
             return dispatch({
                 type: SET_CURRENT_SONG,
@@ -168,14 +162,12 @@ const MediaComponent = (props: any) => {
 
     // Onload effect
     useEffect( () => {
-        console.log("SongApi::getSongs()");
         ApiClient.getSongs().then( (apiSongs) => {
             setSongsArray(apiSongs);
         });
     }, []);
 
     useEffect( () => {
-        console.log("Setting Playlist");
         setPlaylist("");
     }, [state.songs]);
 

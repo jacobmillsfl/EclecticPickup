@@ -1,7 +1,7 @@
 import '../HomePage.css';
 import { useEffect, useState } from "react";
 import { ImageCarousel, Image } from "../Components/Content/ImageCarousel";
-import { ContentContainer } from "./ContentContainer/ContentContainer";
+import { ContentContainer } from "../Components/Controls/ContentContainer";
 import { BandMember, BandMemberList} from "../Components/Content/BandMemberList";
 import { InfoBox, InfoBoxProps } from "../Components/Content/InfoBox";
 import { Show, UpcomingShows } from "../Components/Content/UpcomingShows";
@@ -9,13 +9,15 @@ import { Socials, AllSocialLinks } from "../Components/Content/Socials";
 import MediaPlayer from "../Components/MediaPlayer/MediaPlayer";
 import QuoteBox from "../Components/Content/QuoteBox";
 import ApiClient from "../Utilities/ApiClient";
+import { Video, VideoCarousel } from '../Components/Content/VideoCarousel';
 
 export default function LandingPage() {
   const [aboutInfo, setAboutInfo] = useState<InfoBoxProps>({"heading":"","paragraph":""});
   const [bandMembers, setBandMembers] = useState<Array<BandMember>>(new Array());
   const [images, setImages] = useState<Array<Image>>(new Array());
+  const [videos, setVideos] = useState<Array<Video>>(new Array());
   const [upcomingShows, setUpcomingShows] = useState<Array<Show>>(new Array());
-  const [socialLinks, setSocailLinks] = useState<AllSocialLinks>({
+  const [socialLinks, setSocialLinks] = useState<AllSocialLinks>({
     "email": new Array(),
     "merch": new Array(),
     "socialMedia": new Array(),
@@ -49,7 +51,12 @@ export default function LandingPage() {
 
     const fetchSocialLinks = async () => {
       const socialLinks = await ApiClient.getAllSocialLinks();
-      setSocailLinks(socialLinks);
+      setSocialLinks(socialLinks);
+    }
+
+    const fetchVideos = async () => {
+      const videos = await ApiClient.getCarouselVideos();
+      setVideos(videos);
     }
 
     fetchAboutInfo();
@@ -57,18 +64,22 @@ export default function LandingPage() {
     fetchImages();
     fetchUpcomingShows();
     fetchSocialLinks();
+    fetchVideos();
   }, []);
 
   return (
     <ContentContainer>
+      <div id="home"></div>
       <ImageCarousel props={images} />
       <InfoBox props={aboutInfo}/>
       <BandMemberList props={bandMembers} />
+      <VideoCarousel props={videos} />
       <UpcomingShows props={upcomingShows}/>
+      <QuoteBox />
 
       {/* <MediaPlayer /> */}
 
-      <QuoteBox />
+
       <Socials props={socialLinks} />
     </ContentContainer>
   );

@@ -9,7 +9,7 @@ export type AllSocialLinks = {
 
 export const Socials: React.FC<{ props: AllSocialLinks }> = ({ props }) => {
   return (
-    <div className="row">
+    <div id="socials" className="row">
       <div className="col-md-6 col-sm-12">
         <SocialList listings={props.socialMedia} heading="Social Media" />
         <SocialList listings={props.merch} heading="Merch" />

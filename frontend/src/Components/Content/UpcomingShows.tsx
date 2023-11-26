@@ -8,7 +8,7 @@ export type Show = {
 };
 
 export const UpcomingShows: React.FC<{ props: Array<Show> }> = ({ props }) => {
-  let formatDate = (date: Date) => {
+  const formatDate = (date: Date) => {
     const months = [
       "Jan",
       "Feb",
@@ -33,8 +33,26 @@ export const UpcomingShows: React.FC<{ props: Array<Show> }> = ({ props }) => {
     return `${dayOfWeek}, ${dayOfMonth} ${month} ${year}`;
   };
 
+  const sortShows = (shows: Array<Show>): Array<Show> => {
+    // Use the sort method to sort the shows array based on the date field
+    const sortedShows = [...shows].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+
+      if (dateA < dateB) {
+        return -1;
+      } else if (dateA > dateB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    return sortedShows;
+  };
+
   return (
-    <div className="layer4Bg">
+    <div id="shows" className="layer4Bg">
       <div style={HeaderStyle}>
         <h2>Upcoming Shows</h2>
       </div>
@@ -49,8 +67,8 @@ export const UpcomingShows: React.FC<{ props: Array<Show> }> = ({ props }) => {
           </tr>
         </thead>
         <tbody>
-          {props.map((show) => (
-            <tr>
+          {sortShows(props).map((show, index) => (
+            <tr key={index}>
               <td>{formatDate(show.date)}</td>
               <td>{show.time}</td>
               <td>{show.venue}</td>
@@ -70,7 +88,7 @@ const HeaderStyle = {
 };
 
 const TableStyle = {
-    "maxWidth": "1020px",
-    "marginLeft": "auto",
-    "marginRight": "auto",
-}
+  maxWidth: "1020px",
+  marginLeft: "auto",
+  marginRight: "auto",
+};

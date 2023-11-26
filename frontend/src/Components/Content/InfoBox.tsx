@@ -8,7 +8,7 @@ export type InfoBoxProps = {
 export const InfoBox: React.FC<{ props: InfoBoxProps }> = ({ props }) => {
   return (
     <ShadowBox mode="top">
-      <div style={InfoBoxBodyStyle}>
+      <div id="about" style={InfoBoxBodyStyle}>
         <h2>{props.heading}</h2>
         <p style={AboutContentStyle}>{props.paragraph}</p>
       </div>

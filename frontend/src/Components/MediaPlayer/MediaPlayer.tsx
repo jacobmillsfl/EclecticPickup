@@ -7,7 +7,7 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { SongDetail } from "../../Models/SongDetail";
 import tafAlbum from "../../media/tafalbum.png";
 import CyberBackground from "../../media/cyber_03.mp4";
-import { ContentContainer } from '../../Views/ContentContainer/ContentContainer';
+import { ContentContainer } from '../Controls/ContentContainer';
 
 function MediaPlayer() {
     const {
