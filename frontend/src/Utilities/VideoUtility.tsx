@@ -8,6 +8,7 @@ import space_02 from '../media/space_02.mp4';
 import space_03 from '../media/space_03.mp4';
 import space_04 from '../media/space_04.mp4';
 import space_05 from '../media/space_05.mp4';
+import bandshot from '../media/bandshot.mov';
 
 export default class VideoUtility {
     static getVideos() : Array<VideoDetail> {
@@ -52,11 +53,16 @@ export default class VideoUtility {
             //     video: space_04,
             //     playbackRate: .8
             // },
+            // {
+            //     name: "space_05",
+            //     video: space_05,
+            //     playbackRate: 1
+            // },
             {
-                name: "space_05",
-                video: space_05,
-                playbackRate: 1
-            },
+                name: "band_shot",
+                video: bandshot,
+                playbackRate: .5,
+            }
         ]
     }
 }

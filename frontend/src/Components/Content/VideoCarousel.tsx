@@ -11,18 +11,30 @@ export const VideoCarousel: React.FC<{ props: Array<Video> }> = ({ props }) => {
   const videoEmbed = (video: Video) => {
     if (video.youtube) {
       return (
-        <iframe
-          width="100%"
-          height="300px"
-          src={video.src}
-          title={video.alt}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        ></iframe>
+        <div style={VideoContainerStyle}>
+          <iframe
+            style={VideoContainerInnerStyle}
+            src={video.src}
+            title={video.alt}
+            allowFullScreen
+            frameBorder="0"
+          ></iframe>
+        </div>
       );
     } else {
-      return <div></div>;
+      return (
+        <div style={VideoContainerStyle}>
+          <video
+            style={VideoContainerInnerStyle}
+            controls
+            loop
+            src={video.src}
+          >
+            <source src={video.src} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      );
     }
   };
 
@@ -53,8 +65,8 @@ export const VideoCarousel: React.FC<{ props: Array<Video> }> = ({ props }) => {
 };
 
 const VideoStyle = {
-  maxWidth: "100vw",
-  maxHeight: "300px",
+  // maxWidth: "100vw",
+  // maxHeight: "300px",
   display: "block",
   marginLeft: "auto",
   marginRight: "auto",
@@ -64,6 +76,7 @@ const VideoStyle = {
 
 const CarouselRowStyle = {
   minHeight: "350px",
+  paddingBottom: "4em",
 };
 
 const HeaderStyle = {
@@ -71,3 +84,19 @@ const HeaderStyle = {
   textShadow: "5px 5px black",
   paddingBottom: "2em",
 };
+
+const VideoContainerStyle = {
+  position: "relative" as const,
+  width: "100%",
+  height: "600px",
+  paddingTop: "56.25%", /* 16:9 aspect ratio (height/width * 100) */
+} as React.CSSProperties
+
+const VideoContainerInnerStyle = {
+  position: "absolute" as const,
+  top: "0",
+  left: "0",
+  width: "100%",
+  height: "100%",
+  // objectFit: 'cover',
+} as React.CSSProperties

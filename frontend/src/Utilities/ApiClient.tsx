@@ -80,6 +80,26 @@ class ApiClient {
         src: `https://www.youtube.com/embed/Gbcc9EOd2ik?si=3_h__QsQATo9Ea-5`,
         alt: "Stepping Stones",
         youtube: true,
+      },
+      {
+        src: `${this.config.baseUrl}/vids/1.mov`,
+        alt: "Video Clip",
+        youtube: false
+      },
+      {
+        src: `${this.config.baseUrl}/vids/4.mov`,
+        alt: "Video Clip",
+        youtube: false
+      },
+      {
+        src: `${this.config.baseUrl}/vids/2.mov`,
+        alt: "Video Clip",
+        youtube: false
+      },
+      {
+        src: `${this.config.baseUrl}/vids/3.mov`,
+        alt: "Video Clip",
+        youtube: false
       }
     );
     return videos;
