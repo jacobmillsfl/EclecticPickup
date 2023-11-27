@@ -27,7 +27,6 @@ export const VideoCarousel: React.FC<{ props: Array<Video> }> = ({ props }) => {
           <video
             style={VideoContainerInnerStyle}
             controls
-            loop
             src={video.src}
           >
             <source src={video.src} type="video/mp4" />

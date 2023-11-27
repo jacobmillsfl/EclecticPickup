@@ -87,11 +87,6 @@ class ApiClient {
         youtube: false
       },
       {
-        src: `${this.config.baseUrl}/vids/4.mov`,
-        alt: "Video Clip",
-        youtube: false
-      },
-      {
         src: `${this.config.baseUrl}/vids/2.mov`,
         alt: "Video Clip",
         youtube: false
