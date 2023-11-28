@@ -1,46 +1,39 @@
 version: "3.7"
 services:
-  mysqldb:
-    container_name: tafweb-db
-    image: mysql:5.7
-    restart: unless-stopped
-    env_file:
-      - ./database/.database.env
-    volumes:
-      - db:/var/lib/mysql
-      - ./database/create_db.sql:/docker-entrypoint-initdb.d/1.sql
-      - ./database/01_artist.sql:/docker-entrypoint-initdb.d/2.sql
-      - ./database/02_album.sql:/docker-entrypoint-initdb.d/3.sql
-      - ./database/03_song.sql:/docker-entrypoint-initdb.d/4.sql
-      - ./database/init_data.sql:/docker-entrypoint-initdb.d/5.sql
-      - ./database/custom_routines.sql:/docker-entrypoint-initdb.d/6.sql
-      - ./database/update_01.sql:/docker-entrypoint-initdb.d/7.sql
-      - ./database/update_02.sql:/docker-entrypoint-initdb.d/8.sql
-  api:
-    container_name: tafweb-api
-    build:
-      context: ./backend/
-      dockerfile: Dockerfile.backend
-    restart: unless-stopped
-    ports:
-      - 8081:5000
-    env_file:
-      - ./backend/.backend.env
-      - ./database/.database.env
-    depends_on:
-      - mysqldb
-    volumes:
-      - files:/home/appuser/files
+  # mysqldb:
+  #   container_name: ep-db
+  #   image: mysql:5.7
+  #   restart: unless-stopped
+  #   env_file:
+  #     - ./database/.database.env
+  #   volumes:
+  #     - db:/var/lib/mysql
+  #     - ./database/create_db.sql:/docker-entrypoint-initdb.d/1.sql
+  # api:
+  #   container_name: ep-api
+  #   build:
+  #     context: ./backend/
+  #     dockerfile: Dockerfile.backend
+  #   restart: unless-stopped
+  #   ports:
+  #     - 8081:5000
+  #   env_file:
+  #     - ./backend/.backend.env
+  #     - ./database/.database.env
+  #   depends_on:
+  #     - mysqldb
+  #   volumes:
+  #     - epfiles:/home/appuser/files
   app:
-    container_name: tafweb-app
+    container_name: eclecticpickup-app
     restart: unless-stopped
     build:
       context: ./frontend/
       dockerfile: Dockerfile.frontend
     ports:
       - 3001:80
-    depends_on:
-      - api
+    # depends_on:
+    #   - api
 volumes: 
   db:
   files:

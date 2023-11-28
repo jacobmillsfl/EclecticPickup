@@ -6,13 +6,13 @@ read -p "Enter the database password: " dbpass
 
 cat << EOF > backend/.backend.env
 FLASK_API_BASE_URL="$apiurl"
-MYSQL_HOSTNAME="tafweb-db"
+MYSQL_HOSTNAME="ep-db"
 MYSQL_API_USER=root
 EOF
 
 cat << EOF > database/.database.env
 MYSQL_ROOT_PASSWORD="$dbpass"
-MYSQL_DATABASE=tafdb
+MYSQL_DATABASE=epdb
 MYSQL_PORT=3306
 EOF
 

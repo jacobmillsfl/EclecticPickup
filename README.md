@@ -1,5 +1,5 @@
-# TAF2.0
-A new and improved web application for music and artist management.
+# Eclectic Pickup
+A new and improved web application for music and artist management. This repo was initially cloned from the TAF2.0 repo and customized for a new artist. There may be remnants of the original TAF project, which should be removed over time.
 
 ## Tech Stack
 - Frontend: ReactJS + TypeScript
