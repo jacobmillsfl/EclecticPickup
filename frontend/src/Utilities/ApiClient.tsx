@@ -62,7 +62,7 @@ class ApiClient {
       },
       {
         name: "Liam",
-        imgUrl: "img/band/Unknown.png",
+        imgUrl: "img/band/Liam.png",
         text: "Percussion",
       }
     );
@@ -107,10 +107,10 @@ class ApiClient {
 
   async getCarouselImages(): Promise<Array<Image>> {
     const images = new Array<Image>(
-      {
-        src: `${this.config.baseUrl}/img/EclecticPickup-224x300.gif`,
-        alt: "",
-      },
+      // {
+      //   src: `${this.config.baseUrl}/img/EclecticPickup-224x300.gif`,
+      //   alt: "",
+      // },
       {
         src: `${this.config.baseUrl}/img/photos/1.jpg`,
         alt: "@ Purpose Brewery",
