@@ -57,7 +57,7 @@ class ApiClient {
       },
       {
         name: "Big Obie",
-        imgUrl: "img/band/BigOB.jpg",
+        imgUrl: "img/band/BigOb2.png",
         text: "Mandolin, Vocals, Percussion",
       },
       {
@@ -71,6 +71,11 @@ class ApiClient {
 
   async getCarouselVideos(): Promise<Array<Video>> {
     const videos = new Array<Video>(
+      {
+        src: `${this.config.baseUrl}/vids/EclecticPickup_WakeUpCall.mp4`,
+        alt: "Video Clip",
+        youtube: false
+      },
       {
         src: `https://www.youtube.com/embed/fjvXvEQSXrI?si=CzJAUOQqjuIsRCni`,
         alt: "Funk'n A",
@@ -104,40 +109,56 @@ class ApiClient {
     const images = new Array<Image>(
       {
         src: `${this.config.baseUrl}/img/EclecticPickup-224x300.gif`,
-        alt: "Eclectic Pickup",
+        alt: "",
       },
       {
-        src: `${this.config.baseUrl}/img/photos/8.png`,
-        alt: "Band photo",
+        src: `${this.config.baseUrl}/img/photos/1.jpg`,
+        alt: "@ Purpose Brewery",
       },
       {
-        src: `${this.config.baseUrl}/img/photos/1.png`,
-        alt: "Chris, Jester, Rob",
+        src: `${this.config.baseUrl}/img/photos/2.jpg`,
+        alt: "@ Fort Collins Block Party",
       },
       {
-        src: `${this.config.baseUrl}/img/photos/2.png`,
-        alt: "Full band",
+        src: `${this.config.baseUrl}/img/photos/3.jpg`,
+        alt: "@ Purpose Brewery",
       },
       {
-        src: `${this.config.baseUrl}/img/photos/3.png`,
-        alt: "Liam, Rob, Jacob",
+        src: `${this.config.baseUrl}/img/photos/4.jpg`,
+        alt: "@ Fort Collins Block Party",
       },
       {
-        src: `${this.config.baseUrl}/img/photos/4.png`,
-        alt: "Band photo",
+        src: `${this.config.baseUrl}/img/photos/5.jpg`,
+        alt: "@ Funkwerks Brewery",
       },
       {
-        src: `${this.config.baseUrl}/img/photos/5.png`,
-        alt: "Band photo",
+        src: `${this.config.baseUrl}/img/photos/6.jpg`,
+        alt: "@ Funkwerks Brewery",
       },
       {
-        src: `${this.config.baseUrl}/img/photos/6.png`,
-        alt: "Band photo",
+        src: `${this.config.baseUrl}/img/photos/7.jpg`,
+        alt: "@ Fort Collins Block Party",
       },
       {
-        src: `${this.config.baseUrl}/img/photos/7.png`,
-        alt: "Band photo",
-      }
+        src: `${this.config.baseUrl}/img/photos/8.jpg`,
+        alt: "@ Purpose Brewery",
+      },
+      {
+        src: `${this.config.baseUrl}/img/photos/9.jpg`,
+        alt: "@ Funkwerks Brewery",
+      },
+      {
+        src: `${this.config.baseUrl}/img/photos/10.jpg`,
+        alt: "@ Funkwerks Brewery",
+      },
+      {
+        src: `${this.config.baseUrl}/img/photos/11.jpg`,
+        alt: "@ Fort Collins Block Party",
+      },
+      {
+        src: `${this.config.baseUrl}/img/photos/12.jpg`,
+        alt: "@ Funkwerks Brewery",
+      },
     );
 
     return images;
@@ -197,7 +218,7 @@ class ApiClient {
         text: "Facebook",
       },
       {
-        hrefUrl: "#",
+        hrefUrl: "https://www.instagram.com/EclecticPickup/",
         imgUrl: `${this.config.baseUrl}/img/socials/instagram.jpg`,
         text: "Instagram",
       }

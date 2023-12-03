@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import ShadowBox from "../Controls/ShadowBox";
 import Carousel from "react-bootstrap/Carousel";
 
@@ -37,8 +38,8 @@ export const VideoCarousel: React.FC<{ props: Array<Video> }> = ({ props }) => {
     }
   };
 
-  const carouselItemData = props.map((video, index) => {
-    return (
+  const memoizedCarouselItem = useMemo(() => {
+    return props.map((video, index) => (
       <Carousel.Item key={index}>
         <div className="row" style={CarouselRowStyle}>
           <div className="col-sm-2"></div>
@@ -48,16 +49,16 @@ export const VideoCarousel: React.FC<{ props: Array<Video> }> = ({ props }) => {
           <div className="col-sm-2"></div>
         </div>
       </Carousel.Item>
-    );
-  });
+    ));
+  }, [props]);
 
   return (
     <ShadowBox mode="top">
       <div id="videos" style={HeaderStyle}>
         <h2>Videos</h2>
       </div>
-      <Carousel slide interval={null}>
-        {carouselItemData}
+      <Carousel slide interval={null} controls={false} prevIcon={false} nextIcon={false}>
+        {memoizedCarouselItem}
       </Carousel>
     </ShadowBox>
   );

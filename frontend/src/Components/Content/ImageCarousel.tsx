@@ -10,11 +10,10 @@ export const ImageCarousel: React.FC<{ props: Array<Image> }> = ({ props }) => {
   const carouselItemData = props.map((item, index) => {
     return (
       <Carousel.Item key={index}>
-        <div className="row" style={CarouselRowStyle}>
-          <div className="col-lg-12">
-            <img src={item.src} alt={item.alt} style={ImageStyle} />
-          </div>
-        </div>
+        <img src={item.src} alt={item.alt} style={ImageStyle} />
+        <Carousel.Caption style={CaptionStyle}>
+          <p>{item.alt}</p>
+        </Carousel.Caption>
       </Carousel.Item>
     );
   });
@@ -38,6 +37,12 @@ const ImageStyle = {
   marginBottom: "auto",
 };
 
-const CarouselRowStyle = {
-  minHeight: "350px",
-};
+const CaptionStyle = {
+  //backgroundColor: "rgba(0, 0, 0, 0.6)", // Transparent black background
+  color: "#fff",
+  fontFamily: "fantasy",
+  textAlign: "center",
+  padding: "10px",
+  fontSize: "larger",
+  textShadow: "6px 6px 10px rgba(0,0,0, 1.0)",
+} as React.CSSProperties;

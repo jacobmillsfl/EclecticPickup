@@ -51,6 +51,10 @@ export const UpcomingShows: React.FC<{ props: Array<Show> }> = ({ props }) => {
     return sortedShows;
   };
 
+  const getMapLink = (address: string) => {
+    return `https://www.google.com/maps/search/?api=1&query=${address}`
+  }
+
   return (
     <div id="shows" className="layer4Bg">
       <div style={HeaderStyle}>
@@ -72,7 +76,13 @@ export const UpcomingShows: React.FC<{ props: Array<Show> }> = ({ props }) => {
               <td>{formatDate(show.date)}</td>
               <td>{show.time}</td>
               <td>{show.venue}</td>
-              <td>{show.address}</td>
+              <td><a 
+                href={getMapLink(show.address)}
+                target="_blank"
+                rel="noopener noreferrer">
+                  {show.address}
+              </a>
+              </td>
             </tr>
           ))}
         </tbody>

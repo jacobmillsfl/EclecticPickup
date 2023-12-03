@@ -24,6 +24,19 @@ export default function LandingPage() {
     "streaming": new Array(),
   });
 
+  function shuffle(array: Array<any>) {
+    let currentIndex = array.length,  randomIndex;
+  
+    while (currentIndex > 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
+
   useEffect(() => {
     const fetchAboutInfo = async () => {
       try {
@@ -36,12 +49,12 @@ export default function LandingPage() {
 
     const fetchBandMembers = async () => {
       const bandMembers = await ApiClient.getBandMembers();
-      setBandMembers(bandMembers);
+      setBandMembers(shuffle(bandMembers));
     }
 
     const fetchImages = async () => {
       const images = await ApiClient.getCarouselImages();
-      setImages(images);
+      setImages(shuffle(images));
     }
 
     const fetchUpcomingShows = async () => {
@@ -77,7 +90,7 @@ export default function LandingPage() {
       <UpcomingShows props={upcomingShows}/>
       <QuoteBox />
       {/* <MediaPlayer /> */}
-      <Socials props={socialLinks} />
+      {/* <Socials props={socialLinks} /> */}
     </ContentContainer>
   );
 }
