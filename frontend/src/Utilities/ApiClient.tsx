@@ -35,6 +35,7 @@ class ApiClient {
       heading: "Eclectic Pickup",
       paragraph:
         "It's a jam, but this isn't your typical jam band. While the music is rooted in rock, blues, and funk, the shows are a jazz-like experience. The songs, whether original or covers, are always fresh reinterpretations, depending on the players and the chemistry that session.",
+      image: `${this.config.baseUrl}/img/EclecticPickup-224x300.gif`
     };
   }
 

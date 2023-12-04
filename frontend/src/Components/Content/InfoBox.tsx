@@ -1,15 +1,18 @@
 import ShadowBox from "../Controls/ShadowBox";
 
 export type InfoBoxProps = {
-  heading: string;
-  paragraph: string;
+  heading: string,
+  paragraph: string,
+  image?: string,
 };
 
 export const InfoBox: React.FC<{ props: InfoBoxProps }> = ({ props }) => {
   return (
     <ShadowBox mode="top">
       <div id="about" style={InfoBoxBodyStyle}>
-        <img src={`${process.env.PUBLIC_URL}/img/EclecticPickup-224x300.gif`} />
+        { props.image && 
+          <img src={props.image} />
+        }        
         <h2>{props.heading}</h2>
         <p style={AboutContentStyle}>{props.paragraph}</p>
       </div>
