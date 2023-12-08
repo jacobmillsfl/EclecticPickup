@@ -35,7 +35,6 @@ class ApiClient {
       heading: "Eclectic Pickup",
       paragraph:
         "It's a jam, but this isn't your typical jam band. While the music is rooted in rock, blues, and funk, the shows are a jazz-like experience. The songs, whether original or covers, are always fresh reinterpretations, depending on the players and the chemistry that session.",
-      image: `${this.config.baseUrl}/img/EclecticPickup-224x300.gif`
     };
   }
 
@@ -178,6 +177,30 @@ class ApiClient {
         time: "4-6 pm",
         venue: "Funkwerks Brewing",
         address: "1900 E Lincoln Ave, Fort Collins",
+      },
+      {
+        date: new Date("04-22-2023"),
+        time: "12-4 pm",
+        venue: "Jessup Farm Barrel House",
+        address: "1921 Jessup Dr, Fort Collins, CO 80525",
+      },
+      {
+        date: new Date("08-25-2023"),
+        time: "6-8 pm",
+        venue: "Purpose Brewing and Cellars",
+        address: "4025 S Mason St unit c, Fort Collins, CO 80525",
+      },
+      {
+        date: new Date("06-23-2023"),
+        time: "6-8 pm",
+        venue: "Purpose Brewing and Cellars",
+        address: "4025 S Mason St unit c, Fort Collins, CO 80525",
+      },
+      {
+        date: new Date("07-22-2023"),
+        time: "1-4 pm",
+        venue: "Rock Bottom Resaurant & Brewery",
+        address: "6025 Sky Pond Dr, Loveland, CO 80538",
       }
     );
     return shows;
