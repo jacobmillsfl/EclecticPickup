@@ -1387,3 +1387,7 @@ html {
 #home {
     padding-top: 3em;
 }
+
+.past-date {
+    opacity: .8;
+}

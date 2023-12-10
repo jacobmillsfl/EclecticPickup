@@ -72,7 +72,7 @@ export const UpcomingShows: React.FC<{ props: Array<Show> }> = ({ props }) => {
         </thead>
         <tbody>
           {sortShows(props).map((show, index) => (
-            <tr key={index}>
+            <tr key={index} className={show.date.getTime() < Date.now() ? 'past-date' : '' }>
               <td>{formatDate(show.date)}</td>
               <td>{show.time}</td>
               <td>{show.venue}</td>

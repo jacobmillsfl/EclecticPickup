@@ -47,7 +47,7 @@ class ApiClient {
       },
       {
         name: "Jacob",
-        imgUrl: "img/band/Jacob.png",
+        imgUrl: "img/band/Jacob2.jpg",
         text: "Guitar, Bass",
       },
       {
@@ -57,12 +57,12 @@ class ApiClient {
       },
       {
         name: "Big Obie",
-        imgUrl: "img/band/BigOb2.png",
+        imgUrl: "img/band/bigobie3.png",
         text: "Mandolin, Vocals, Percussion",
       },
       {
         name: "Liam",
-        imgUrl: "img/band/Liam.png",
+        imgUrl: "img/band/Liam2.jpg",
         text: "Percussion",
       }
     );
@@ -201,6 +201,12 @@ class ApiClient {
         time: "1-4 pm",
         venue: "Rock Bottom Resaurant & Brewery",
         address: "6025 Sky Pond Dr, Loveland, CO 80538",
+      },
+      {
+        date: new Date("12-15-2023"),
+        time: "7-10 pm",
+        venue: "Black and Blues Music and Brews",
+        address: "423 N Cleveland Ave, Loveland, CO 80537",
       }
     );
     return shows;
