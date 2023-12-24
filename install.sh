@@ -1,22 +1,15 @@
 #!/bin/bash
 # This script creates the initial environment files and installs all dependencies for the application
 
-read -p "Enter the API's base URL: " apiurl
-read -p "Enter the database password: " dbpass
+read -p "Enter the API's base URL: " API_URL
+JWT_SECRET=`openssl rand -base64 48`
 
 cat << EOF > backend/.backend.env
-FLASK_API_BASE_URL="$apiurl"
-MYSQL_HOSTNAME="ep-db"
-MYSQL_API_USER=root
-EOF
-
-cat << EOF > database/.database.env
-MYSQL_ROOT_PASSWORD="$dbpass"
-MYSQL_DATABASE=epdb
-MYSQL_PORT=3306
+FLASK_API_BASE_URL="$API_URL"
+JWT_SECRET="$JWT_SECRET"
 EOF
 
 cat << EOF > frontend/.frontend.env
-REACT_APP_API_URL="$apiurl"
+REACT_APP_API_URL="$API_URL"
 FAST_REFRESH=false
 EOF
