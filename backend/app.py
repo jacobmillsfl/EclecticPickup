@@ -1,59 +1,52 @@
-from flask import Flask, send_from_directory
+from flask import Flask
 from flask_cors import CORS
-import json
-import os
-from database import DatabaseUtil
+from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
 
-# Create global app object
+from Utils.ConfigManager import ConfigManager
+from Models.database import db
+from Models.user import User
+from Models.event import Event
+
+from Routes.auth import auth_bp
+from Routes.events import event_bp
+
+# #####################
+# Init
+# #####################
+
 app = Flask(__name__)
-
-# Allow CORS
 CORS(app)
 
-# Get base url from environment variable
-BASE_URL = os.environ.get("FLASK_API_BASE_URL")
-if not BASE_URL:
-    raise Exception("ERROR: FLASK_API_BASE_URL not set. Please set and export environment variables and relaunch.")
-
-
 # #####################
-# Database
+# Configurations
 # #####################
-db = DatabaseUtil()
 
+config = ConfigManager.get_config()
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["JWT_TOKEN_LOCATION"] = ["headers", "query_string"]
+app.config["JWT_SECRET_KEY"] = config.jwt_secret
+
+db.init_app(app)
+migrate = Migrate(app, db)
+jwt = JWTManager(app)
 
 # #####################
 # Routes
 # #####################
 
+app.register_blueprint(auth_bp)
+app.register_blueprint(event_bp)
+
 @app.route("/")
 def home():
-    return "TAF 2.0 Web API"
+    """
+    Root endpoint
+    """
+    return "Eclectic Pickup Web API"
 
-@app.route("/files/<path:path>")
-def get_static_file(path):
-    return send_from_directory("../files", path)
-
-@app.route("/songs")
-def songs():
-    song_list = []
-    songs = db.custom_load_default_playlist()
-
-    for song in songs:
-        song_list.append({
-            "title": song["SongName"],
-            "artist": song["ArtistName"],
-            "album": song["AlbumName"],
-            "url": f'{BASE_URL}/files/{song["SongPath"]}',
-            "albumArt": f'{BASE_URL}/files/{song["ArtPath"]}',
-            "trackNumber": song["TrackNumber"],
-        })
-
-    return json.dumps(song_list)
-@app.route("/albums")
-def albums():
-    albums = db.album_load_all()
-    return albums
-
-#if __name__ == "__main__":
-#    app.run(host="0.0.0.0", port=80)
+# WARNING: Comment this code when running in docker. Uncomment only for local dev without Docker.
+if __name__ == "__main__":
+   app.run(host="0.0.0.0", port=8081)

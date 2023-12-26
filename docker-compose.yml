@@ -1,29 +1,27 @@
 version: "3.7"
 services:
-  # mysqldb:
-  #   container_name: ep-db
-  #   image: mysql:5.7
-  #   restart: unless-stopped
-  #   env_file:
-  #     - ./database/.database.env
-  #   volumes:
-  #     - db:/var/lib/mysql
-  #     - ./database/create_db.sql:/docker-entrypoint-initdb.d/1.sql
-  # api:
-  #   container_name: ep-api
-  #   build:
-  #     context: ./backend/
-  #     dockerfile: Dockerfile.backend
-  #   restart: unless-stopped
-  #   ports:
-  #     - 8081:5000
-  #   env_file:
-  #     - ./backend/.backend.env
-  #     - ./database/.database.env
-  #   depends_on:
-  #     - mysqldb
-  #   volumes:
-  #     - epfiles:/home/appuser/files
+  mysqldb:
+    container_name: ep-db
+    image: mysql
+    restart: unless-stopped
+    env_file:
+      - ./database/.database.env
+    volumes:
+      - ep_db:/var/lib/mysql
+  api:
+    container_name: ep-api
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile.backend
+    restart: unless-stopped
+    ports:
+      - 8081:5000
+    env_file:
+      - ./backend/.backend.env
+    depends_on:
+      - mysqldb
+    volumes:
+      - ep_files:/home/appuser/files
   app:
     container_name: eclecticpickup-app
     restart: unless-stopped
@@ -32,8 +30,8 @@ services:
       dockerfile: Dockerfile.frontend
     ports:
       - 3001:80
-    # depends_on:
-    #   - api
-# volumes: 
-#   db:
-#   files:
+    depends_on:
+      - api
+volumes: 
+  ep_db:
+  ep_files:

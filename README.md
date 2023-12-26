@@ -3,8 +3,8 @@ A new and improved web application for music and artist management. This repo wa
 
 ## Tech Stack
 - Frontend: ReactJS + TypeScript
-- Backend: Python Flask
-- Database: MySQL
+- Backend: Python + Flask
+- Database: SQLite
 - Distribution: Docker
 
 ## Requirements
@@ -20,12 +20,11 @@ It is also recommended that you use an IDE such as VS Code.
 This application has 3 primary components
 - Frontend (ReactJS)
 - Backend (Python/Flask)
-- Database (MySQL)
+- Database (SQLite)
 
 Each of these components has a .env file that includes necessary environment variables.
 - `.frontend.env`
 - `.backend.env`
-- `.database.env`
 
 To automatically generate these environment files, run the `./install.sh` script found in the root directory of this repo.
 

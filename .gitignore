@@ -117,3 +117,6 @@ frontend/build/
 
 # Don't add cache
 backend/__pycache__/
+
+# Don't add SQLite db
+backend/instance
