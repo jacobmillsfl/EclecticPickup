@@ -168,43 +168,55 @@ class ApiClient {
     const shows = new Array<Show>(
       {
         date: new Date("09-23-2023"),
-        time: "2-4 pm",
+        time: "2 - 4pm",
         venue: "Funkwerks Brewing",
         address: "1900 E Lincoln Ave, Fort Collins",
       },
       {
         date: new Date("10-14-2023"),
-        time: "4-6 pm",
+        time: "4 - 6pm",
         venue: "Funkwerks Brewing",
         address: "1900 E Lincoln Ave, Fort Collins",
       },
       {
         date: new Date("04-22-2023"),
-        time: "12-4 pm",
+        time: "12 - 4pm",
         venue: "Jessup Farm Barrel House",
         address: "1921 Jessup Dr, Fort Collins, CO 80525",
       },
       {
         date: new Date("08-25-2023"),
-        time: "6-8 pm",
+        time: "6 - 8pm",
         venue: "Purpose Brewing and Cellars",
         address: "4025 S Mason St unit c, Fort Collins, CO 80525",
       },
       {
         date: new Date("06-23-2023"),
-        time: "6-8 pm",
+        time: "6 - 8pm",
         venue: "Purpose Brewing and Cellars",
         address: "4025 S Mason St unit c, Fort Collins, CO 80525",
       },
       {
         date: new Date("07-22-2023"),
-        time: "1-4 pm",
+        time: "1 - 4pm",
         venue: "Rock Bottom Resaurant & Brewery",
         address: "6025 Sky Pond Dr, Loveland, CO 80538",
       },
       {
         date: new Date("12-15-2023"),
-        time: "7-10 pm",
+        time: "7 - 10pm",
+        venue: "Black and Blues Music and Brews",
+        address: "423 N Cleveland Ave, Loveland, CO 80537",
+      },
+      {
+        date: new Date("01-12-2024"),
+        time: "7:30 - 10pm",
+        venue: "Black and Blues Music and Brews",
+        address: "423 N Cleveland Ave, Loveland, CO 80537",
+      },
+      {
+        date: new Date("06-06-2024"),
+        time: "7 - 9pm",
         venue: "Black and Blues Music and Brews",
         address: "423 N Cleveland Ave, Loveland, CO 80537",
       }
