@@ -1,13 +1,12 @@
 import Table from "react-bootstrap/Table";
+import { Gig } from "../../Types";
 
-export type Show = {
-  date: Date;
-  time: string;
-  venue: string;
-  address: string;
+export type UpcomingGigsProps = {
+  heading: string;
+  gigs: Array<Gig>;
 };
 
-export const UpcomingShows: React.FC<{ props: Array<Show> }> = ({ props }) => {
+export const UpcomingShows: React.FC<{ props: UpcomingGigsProps }> = ({ props }) => {
   const formatDate = (date: Date) => {
     const months = [
       "Jan",
@@ -33,7 +32,7 @@ export const UpcomingShows: React.FC<{ props: Array<Show> }> = ({ props }) => {
     return `${dayOfWeek}, ${dayOfMonth} ${month} ${year}`;
   };
 
-  const sortShows = (shows: Array<Show>): Array<Show> => {
+  const sortShows = (shows: Array<Gig>): Array<Gig> => {
     // Use the sort method to sort the shows array based on the date field
     const sortedShows = [...shows].sort((a, b) => {
       const dateA = new Date(a.date);
@@ -56,9 +55,9 @@ export const UpcomingShows: React.FC<{ props: Array<Show> }> = ({ props }) => {
   }
 
   return (
-    <div id="shows" className="layer4Bg">
+    <div id="shows" className={props.heading == "Upcoming Gigs" ? "layer4Bg" : "layer4BgReversed"}>
       <div style={HeaderStyle}>
-        <h2>Upcoming Shows</h2>
+        <h2>{props.heading}</h2>
       </div>
 
       <Table striped bordered hover variant="dark" style={TableStyle}>
@@ -71,7 +70,7 @@ export const UpcomingShows: React.FC<{ props: Array<Show> }> = ({ props }) => {
           </tr>
         </thead>
         <tbody>
-          {sortShows(props).map((show, index) => (
+          {sortShows(props.gigs).map((show, index) => (
             <tr key={index} className={show.date.getTime() < Date.now() ? 'past-date' : '' }>
               <td>{formatDate(show.date)}</td>
               <td>{show.time}</td>

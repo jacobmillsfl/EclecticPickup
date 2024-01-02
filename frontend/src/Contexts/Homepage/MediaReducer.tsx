@@ -1,4 +1,4 @@
-import { MediaState } from './MediaComponent'
+import { MediaState } from '../../Components/MediaPlayer/MediaComponent'
 
 import {
     SET_CURRENT_SONG,

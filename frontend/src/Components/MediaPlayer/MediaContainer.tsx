@@ -1,8 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import mediaContext from "../../Contexts/Homepage/MediaContext";
 import VideoUtility from "../../Utilities/VideoUtility";
-import { VideoDetail } from "../../Models/VideoDetail";
-import cyberBackground from "../../media/cyber_01.mp4";
+import { VideoDetail } from "../../Types/VideoDetail";
 
 function MediaContainer() {
     const {
@@ -10,7 +9,7 @@ function MediaContainer() {
         videoShuffle,
     } = useContext(mediaContext)
 
-    let defaultVideo = { name: "default", video: cyberBackground, playbackRate: 1 };
+    let defaultVideo = { name: "default", video: null, playbackRate: 1 };
     const [currentVideo, setCurrentVideo] = useState<VideoDetail>(defaultVideo);
     const videos = VideoUtility.getVideos();
 

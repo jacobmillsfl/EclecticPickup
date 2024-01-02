@@ -4,7 +4,7 @@ import { Table, ListGroup } from "react-bootstrap";
 import { AiOutlineMenuUnfold, AiOutlineMenuFold } from "react-icons/ai";
 import { RiVideoFill, RiVideoLine } from "react-icons/ri";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
-import { SongDetail } from "../../Models/SongDetail";
+import { SongDetail } from "../../Types/SongDetail";
 import tafAlbum from "../../media/tafalbum.png";
 import CyberBackground from "../../media/cyber_03.mp4";
 import { ContentContainer } from '../Controls/ContentContainer';

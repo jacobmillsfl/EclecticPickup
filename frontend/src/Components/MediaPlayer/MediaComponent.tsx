@@ -1,10 +1,9 @@
 import React, { useReducer, useRef, useEffect, useState } from 'react';
-import mediaContext from './MediaContext'
-import mediaReducer from './MediaReducer'
-import { SongDetail } from '../../Models/SongDetail';
-import { HtmlAudioRef } from '../../Models/HtmlAudioRef';
-import ApiClient from '../../Utilities/ApiClient';
-import MediaContainer from '../../Components/MediaPlayer/MediaContainer';
+import mediaContext from '../../Contexts/Homepage/MediaContext'
+import mediaReducer from '../../Contexts/Homepage/MediaReducer'
+import { SongDetail } from '../../Types/SongDetail';
+import { HtmlAudioRef } from '../../Types/HtmlAudioRef';
+import MediaContainer from './MediaContainer';
 
 import {
     SET_CURRENT_SONG,
@@ -16,7 +15,7 @@ import {
     SET_PLAYLIST,
     SET_PLAYLIST_NAME,
     MediaAction
-} from './MediaActions'
+} from '../../Contexts/Homepage/MediaActions'
 
 export type MediaState = {
     currentSongIndex: number,
@@ -162,9 +161,7 @@ const MediaComponent = (props: any) => {
 
     // Onload effect
     useEffect( () => {
-        ApiClient.getSongs().then( (apiSongs) => {
-            setSongsArray(apiSongs);
-        });
+        // Set songs?
     }, []);
 
     useEffect( () => {

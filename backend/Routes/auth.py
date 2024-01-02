@@ -14,7 +14,7 @@ config = ConfigManager.get_config()
 def register():
     data = request.json
     if not data:
-        return jsonify({'message': 'Invalid request'})
+        return jsonify({'message': 'Invalid request'}), 400
     
     username = data.get('username')
     email = data.get('email')
@@ -30,7 +30,7 @@ def register():
         # Hash the password securely before storing it
         hashed_password = CryptoManager.hash_password(password)
         active_status = 0
-        initial_scope = "admin"
+        initial_scope = "user"
         initial_desc = ""
 
         # Create a new User object
@@ -56,18 +56,18 @@ def login():
     # If valid, issue JWT
     data = request.json
     if not data:
-        return jsonify({'message': 'Invalid request'})
+        return jsonify({'message': 'Invalid request'}), 400
 
     username = data.get('username')
     password = data.get('password')
 
     if not username or not password:
-        return jsonify({'message': 'username and password required'}), 400
+        return jsonify({'message': 'Username and password required'}), 400
 
     user = User.query.filter_by(username=username).first()
 
     if not user:
-        return jsonify({'message': 'user not found'}), 400
+        return jsonify({'message': 'User not found'}), 400
     elif CryptoManager.check_password(password, user.password):
         claims = {
             'iss': 'api.eclecticpickup.com',  # Issuer
@@ -81,6 +81,6 @@ def login():
             'iat': datetime.utcnow(),  # Issued At
         }
         token = jwt.encode(claims, config.jwt_secret, algorithm='HS256')
-        return jsonify({'token': token})
+        return jsonify({'message': token}), 200
     else:
-        return jsonify({'message': 'incorrect password'}), 400
+        return jsonify({'message': 'Incorrect password'}), 400

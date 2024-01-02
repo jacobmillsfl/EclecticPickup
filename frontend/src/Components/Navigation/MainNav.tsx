@@ -33,11 +33,11 @@ function MainNav() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={toggle} />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-			<Nav.Link href="#home">Home</Nav.Link>
-			<Nav.Link href="#about">About</Nav.Link>
-			<Nav.Link href="#videos">Videos</Nav.Link>
-			<Nav.Link href="#shows">Shows</Nav.Link>
-			<Nav.Link href="#socials">Socials</Nav.Link>
+			<Nav.Link href="/#home">Home</Nav.Link>
+			<Nav.Link href="/#about">About</Nav.Link>
+			<Nav.Link href="/#videos">Videos</Nav.Link>
+			<Nav.Link href="/#shows">Shows</Nav.Link>
+			<Nav.Link href="/#socials">Socials</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

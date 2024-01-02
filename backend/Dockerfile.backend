@@ -13,16 +13,19 @@ RUN useradd -ms /bin/bash appuser
 WORKDIR /home/appuser
 USER appuser
 
-# Initialize volume data
-RUN mkdir ./files
-COPY ./default_data/album/ ./files/album/
-COPY ./default_data/artist/ ./files/artist/
-COPY ./default_data/song/ ./files/song/
-
 # Copy the API code
 RUN mkdir ./app
 WORKDIR ./app
 COPY ./ ./
+
+# Initialize volume data
+RUN mkdir -p ./files
+RUN mkdir -p ./instance
+
+# Give appuser permissions to write to volume
+USER root
+RUN chown -R appuser:appuser /home/appuser
+USER appuser
 
 # Install Python requirements
 RUN pip install --upgrade pip
