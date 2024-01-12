@@ -1,6 +1,13 @@
-# TAF Backend
+# The Backend
 
 
+## Host requirements
+This is intended to run on linux or in a docker container. You may need to run the following from that host
+```
+apt update
+apt upgrade
+apt install python3-dev default-libmysqlclient-dev build-essential pkg-config
+```
 
 ## The Back End Stack
 
@@ -61,12 +68,14 @@ This solution is designed to have `nginx` running externally.
 The best way to set this up initially would be to create an entry in
 `/etc/nginx/sites-available/` that includes the following configuration
 to reverse proxy app and api traffic to the docker containers.
+
+A certificate should be bound to enable HTTPS. Use a utility such as `certbot`.
 ```
 # Complete Nginx Docker reverse proxy config file
 server {
   listen 80;
   listen [::]:80;
-  server_name tafers.net;
+  server_name domain.com;
 
   location / {
     index index.html index.htm;
@@ -77,7 +86,7 @@ server {
 server {
   listen 80;
   listen [::]:80;
-  server_name api.tafers.net;
+  server_name api.domain.com;
 
   location / {
     index index.html index.htm;
@@ -85,3 +94,21 @@ server {
   }
 }
 ```
+
+## API test cheatsheet commands
+
+Create user
+```
+curl http://127.0.0.1:8081/register -X POST -H "Content-Type: application/json" --data '{"username":"test","password":"pass","email":"user@domain.com"}'
+```
+
+Login
+```
+curl http://127.0.0.1:8081/login -X POST -H "Content-Type: application/json" --data '{"username":"test","password":"pass"}'
+```
+
+Create events (w/ JWT)
+```
+curl http://127.0.0.1:8081/events -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" -d '{"date":"2023-12-31","time":"8pm","venue":"Event Venue","address":"Event Address"}'
+```
+

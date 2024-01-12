@@ -1,10 +1,10 @@
-from flask import Blueprint, Flask, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 
-from Utils.CryptoManager import CryptoManager
 from Utils.ConfigManager import ConfigManager
 from Models.event import Event
 from Models.database import db
+from Utils.Decorators import scope_required, required_fields
 
 event_bp = Blueprint('event', __name__)
 config = ConfigManager.get_config()
@@ -19,14 +19,28 @@ def get_all_events():
         'venue': event.venue,
         'address': event.address
     } for event in events]
-    return jsonify(event_list)
+    return jsonify({'message': 'All events', 'data': event_list}), 200
+
+@event_bp.route('/events/<int:event_id>', methods=['GET'])
+def get_event_by_id(event_id):
+    event = Event.query.get(event_id)
+    if event:
+        event_data = {
+            'id': event.id,
+            'date': event.date,
+            'time': event.time,
+            'venue': event.venue,
+            'address': event.address
+        }
+        return jsonify({'message': 'Event found', 'data': event_data}), 200
+    else:
+        return jsonify({'message': 'Event not found'}), 404
 
 @event_bp.route('/events', methods=['POST'])
-@jwt_required()  # Requires a valid JWT token
+@jwt_required()
+@scope_required(["admin"])
+@required_fields(["date","time","venue","address"])
 def create_event():
-    if 'admin' not in get_jwt_identity().get('scope', []):
-        return jsonify({'message': 'Unauthorized'}), 403
-
     data = request.get_json()
     new_event = Event(
         date=data['date'],
@@ -36,14 +50,21 @@ def create_event():
     )
     db.session.add(new_event)
     db.session.commit()
-    return jsonify({'message': 'Event created successfully'}), 201
+    db.session.flush()
+    event_data = {
+        'id': new_event.id,
+        'date': new_event.date,
+        'time': new_event.time,
+        'venue': new_event.venue,
+        'address': new_event.address
+    }
+    return jsonify({'message': 'Event created', 'data': event_data}), 200
 
 @event_bp.route('/events/<int:event_id>', methods=['PUT'])
-@jwt_required()  # Requires a valid JWT token
+@jwt_required()
+@scope_required(["admin"])
+@required_fields(["date","time","venue","address"])
 def edit_event(event_id):
-    if 'admin' not in get_jwt_identity().get('scope', []):
-        return jsonify({'message': 'Unauthorized'}), 403
-
     event = Event.query.get(event_id)
     if not event:
         return jsonify({'message': 'Event not found'}), 404
@@ -55,13 +76,12 @@ def edit_event(event_id):
     event.address = data.get('address', event.address)
     
     db.session.commit()
-    return jsonify({'message': 'Event updated successfully'})
+    return jsonify({'message': 'Event updated successfully'}), 200
 
 @event_bp.route('/events/<int:event_id>', methods=['DELETE'])
-@jwt_required()  # Requires a valid JWT token
+@jwt_required()
+@scope_required(["admin"])
 def delete_event(event_id):
-    if 'admin' not in get_jwt_identity().get('scope', []):
-        return jsonify({'message': 'Unauthorized'}), 403
 
     event = Event.query.get(event_id)
     if not event:

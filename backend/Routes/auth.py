@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, jsonify, request
+from Utils.Decorators import required_fields, scope_required
+from flask_jwt_extended import jwt_required
 import jwt
 
 from Utils.CryptoManager import CryptoManager
@@ -11,10 +13,13 @@ auth_bp = Blueprint('auth', __name__)
 config = ConfigManager.get_config()
 
 @auth_bp.route('/register', methods=['POST'])
+@jwt_required()
+@scope_required(["admin"])
+@required_fields(["username", "email", "password"])
 def register():
     data = request.json
     if not data:
-        return jsonify({'message': 'Invalid request'})
+        return jsonify({'message': 'Invalid request'}), 400
     
     username = data.get('username')
     email = data.get('email')
@@ -30,7 +35,7 @@ def register():
         # Hash the password securely before storing it
         hashed_password = CryptoManager.hash_password(password)
         active_status = 0
-        initial_scope = "admin"
+        initial_scope = "user"
         initial_desc = ""
 
         # Create a new User object
@@ -43,11 +48,20 @@ def register():
             about=initial_desc
         )
 
-        # Add the new user to the session and commit changes to the database
         db.session.add(new_user)
         db.session.commit()
-
-        return jsonify({'message': 'Successfully created user'}), 200
+        db.session.flush()
+        user_data = {
+            'id': user.id,
+            'username': user.href_url,
+            'email': user.img_url,
+            'active': user.text,
+            'scope': user.text,
+            'about': user.text,
+            'password': user.text,
+        }
+        return jsonify({'message': 'User created', 'data': user_data}), 200    
+    
 
 
 @auth_bp.route('/login', methods=['POST'])
@@ -56,18 +70,18 @@ def login():
     # If valid, issue JWT
     data = request.json
     if not data:
-        return jsonify({'message': 'Invalid request'})
+        return jsonify({'message': 'Invalid request'}), 400
 
     username = data.get('username')
     password = data.get('password')
 
     if not username or not password:
-        return jsonify({'message': 'username and password required'}), 400
+        return jsonify({'message': 'Username and password required'}), 400
 
     user = User.query.filter_by(username=username).first()
 
     if not user:
-        return jsonify({'message': 'user not found'}), 400
+        return jsonify({'message': 'User not found'}), 400
     elif CryptoManager.check_password(password, user.password):
         claims = {
             'iss': 'api.eclecticpickup.com',  # Issuer
@@ -80,7 +94,8 @@ def login():
             'exp': datetime.utcnow() + timedelta(days=30),  # Expiration Time
             'iat': datetime.utcnow(),  # Issued At
         }
+        
         token = jwt.encode(claims, config.jwt_secret, algorithm='HS256')
-        return jsonify({'token': token})
+        return jsonify({'message': token}), 200
     else:
-        return jsonify({'message': 'incorrect password'}), 400
+        return jsonify({'message': 'Incorrect password'}), 400

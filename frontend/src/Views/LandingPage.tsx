@@ -4,19 +4,21 @@ import { ImageCarousel, Image } from "../Components/Content/ImageCarousel";
 import { ContentContainer } from "../Components/Controls/ContentContainer";
 import { BandMember, BandMemberList} from "../Components/Content/BandMemberList";
 import { InfoBox, InfoBoxProps } from "../Components/Content/InfoBox";
-import { Show, UpcomingShows } from "../Components/Content/UpcomingShows";
+import { UpcomingGigsProps, UpcomingShows } from "../Components/Content/UpcomingShows";
 import { Socials, AllSocialLinks } from "../Components/Content/Socials";
 import MediaPlayer from "../Components/MediaPlayer/MediaPlayer";
-import QuoteBox from "../Components/Content/QuoteBox";
-import ApiClient from "../Utilities/ApiClient";
+import { QuoteBox, QuoteBoxProps } from "../Components/Content/QuoteBox";
+import ApiClient from "../Utilities/Api/ApiClient";
 import { Video, VideoCarousel } from '../Components/Content/VideoCarousel';
 
 export default function LandingPage() {
   const [aboutInfo, setAboutInfo] = useState<InfoBoxProps>({"heading":"","paragraph":""});
+  const [motto, setMotto] = useState<QuoteBoxProps>({"quote":""});
   const [bandMembers, setBandMembers] = useState<Array<BandMember>>(new Array());
   const [images, setImages] = useState<Array<Image>>(new Array());
   const [videos, setVideos] = useState<Array<Video>>(new Array());
-  const [upcomingShows, setUpcomingShows] = useState<Array<Show>>(new Array());
+  const [upcomingGigs, setUpcomingGigs] = useState<UpcomingGigsProps>({"heading":"", gigs: new Array()});
+  const [pastGigs, setPastGigs] = useState<UpcomingGigsProps>({"heading":"", gigs: new Array()});
   const [socialLinks, setSocialLinks] = useState<AllSocialLinks>({
     "email": new Array(),
     "merch": new Array(),
@@ -40,12 +42,32 @@ export default function LandingPage() {
   useEffect(() => {
     const fetchAboutInfo = async () => {
       try {
-        const aboutInfo = await ApiClient.getAboutInfo();
-        setAboutInfo(aboutInfo);
+        const aboutInfo = await ApiClient.settings.getSettingByName("BAND_BIO");
+        if (aboutInfo.data) {
+          const info = {
+            "heading":"Eclectic Pickup",
+            "paragraph": aboutInfo.data.value
+          }
+          setAboutInfo(info);
+        }
       } catch (error) {
         console.error('Error fetching about info:', error);
       }
     };
+
+    const fetchMotto = async () => {
+      try {
+        const response = await ApiClient.settings.getSettingByName("BAND_MOTTO");
+        if (response.data) {
+          const quoteProps = {
+            "quote":response.data.value
+          }
+          setMotto(quoteProps);
+        }
+      } catch (error) {
+        console.error('Error fetching about info:', error);
+      }
+    }
 
     const fetchBandMembers = async () => {
       const bandMembers = await ApiClient.getBandMembers();
@@ -58,8 +80,21 @@ export default function LandingPage() {
     }
 
     const fetchUpcomingShows = async () => {
-      const upcomingShows = await ApiClient.getUpcomingShows();
-      setUpcomingShows(upcomingShows);
+      const response = await ApiClient.event.all();
+      if (response.data) {
+        const upcomingGigs = {
+          heading: "Upcoming Gigs",
+          gigs: response.data.filter( (gig) => gig.date.getTime() > Date.now()),
+        }
+
+        const pastGigs = {
+          heading: "Previous Gigs",
+          gigs: response.data.filter( (gig) => gig.date.getTime() < Date.now()),
+        }
+
+        setUpcomingGigs(upcomingGigs);
+        setPastGigs(pastGigs)
+      }
     }
 
     const fetchSocialLinks = async () => {
@@ -73,6 +108,7 @@ export default function LandingPage() {
     }
 
     fetchAboutInfo();
+    fetchMotto();
     fetchBandMembers();
     fetchImages();
     fetchUpcomingShows();
@@ -87,8 +123,9 @@ export default function LandingPage() {
       <InfoBox props={aboutInfo}/>
       <BandMemberList props={bandMembers} />
       <VideoCarousel props={videos} />
-      <UpcomingShows props={upcomingShows}/>
-      <QuoteBox />
+      <UpcomingShows props={upcomingGigs}/>
+      <UpcomingShows props={pastGigs}/>
+      <QuoteBox props={motto}/>
       {/* <MediaPlayer /> */}
       {/* <Socials props={socialLinks} /> */}
     </ContentContainer>
