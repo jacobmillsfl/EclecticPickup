@@ -1,7 +1,9 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required
+
 from Models.database import db
 from Models.setting import Settings
+from Utils.Decorators import scope_required, required_fields
 
 setting_bp = Blueprint('settings', __name__)
 
@@ -44,10 +46,9 @@ def get_setting_by_name(setting_name):
 
 @setting_bp.route('/settings', methods=['POST'])
 @jwt_required()
+@scope_required(["admin"])
+@required_fields(["name","value"])
 def create_setting():
-    if 'admin' not in get_jwt_identity().get('scope', []):
-        return jsonify({'message': 'Unauthorized'}), 403
-
     data = request.get_json()
     new_setting = Settings(
         name=data['name'],
@@ -55,14 +56,19 @@ def create_setting():
     )
     db.session.add(new_setting)
     db.session.commit()
-    return jsonify({'message': 'Setting created successfully'}), 200
+    db.session.flush()
+    setting_data = {
+        'id': new_setting.id,
+        'name': new_setting.name,
+        'value': new_setting.value,
+    }
+    return jsonify({'message': 'Setting created', 'data': setting_data}), 200
 
 @setting_bp.route('/settings/<int:setting_id>', methods=['PUT'])
 @jwt_required()
+@scope_required(["admin"])
+@required_fields(["name","value"])
 def edit_setting(setting_id):
-    if 'admin' not in get_jwt_identity().get('scope', []):
-        return jsonify({'message': 'Unauthorized'}), 403
-
     setting = Settings.query.get(setting_id)
     if not setting:
         return jsonify({'message': 'Setting not found'}), 404
@@ -76,9 +82,8 @@ def edit_setting(setting_id):
 
 @setting_bp.route('/settings/<int:setting_id>', methods=['DELETE'])
 @jwt_required()
+@scope_required(["admin"])
 def delete_setting(setting_id):
-    if 'admin' not in get_jwt_identity().get('scope', []):
-        return jsonify({'message': 'Unauthorized'}), 403
 
     setting = Settings.query.get(setting_id)
     if not setting:

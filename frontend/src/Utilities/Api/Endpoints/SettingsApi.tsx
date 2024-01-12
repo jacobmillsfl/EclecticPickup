@@ -1,17 +1,17 @@
+import { SettingsModel } from "../../../Types/DbModels";
 import AuthManager from "../../AuthManager";
-import { ApiConfig, ApiResponse, SettingApiResponse, SettingsApiResponse } from "../ApiTypes";
+import { ApiConfig, ApiResponse, ApiResponseWithData, ICrudApi } from "../ApiTypes";
 
-export class SettingsApi {
+export class SettingsApi implements ICrudApi<SettingsModel> {
   private config: ApiConfig;
 
   constructor(config: ApiConfig) {
     this.config = config;
   }
 
-  async createSetting(
-    name: string,
-    value: string
-  ): Promise<ApiResponse> {
+  async create(
+    setting: Omit<SettingsModel, "id">
+  ): Promise<ApiResponseWithData<SettingsModel>> {
     const jwtToken = AuthManager.getAuthToken();
 
     const response = await fetch(`${this.config.apiUrl}/settings`, {
@@ -21,19 +21,21 @@ export class SettingsApi {
         Authorization: `Bearer ${jwtToken}`,
       },
       body: JSON.stringify({
-        name: name,
-        value: value,
+        ...setting
       }),
     });
     const result = await response.json();
-    const data = {
+
+    return {
       ...result,
       status: response.status,
-    } as ApiResponse;
-    return data;
+      data: response.status === 200
+        ? result.data
+        : undefined,
+    };
   }
 
-  async getSettingById(settingId: number): Promise<SettingApiResponse> {
+  async get(settingId: number): Promise<ApiResponseWithData<SettingsModel>> {
     const jwtToken = AuthManager.getAuthToken();
 
     const response = await fetch(`${this.config.apiUrl}/settings/${settingId}`, {
@@ -43,14 +45,17 @@ export class SettingsApi {
       },
     });
     const result = await response.json();
-    const data = {
+
+    return {
       ...result,
       status: response.status,
+      data: response.status === 200
+        ? result.data
+        : undefined,
     };
-    return data;
   }
 
-  async getAllSettings(): Promise<SettingsApiResponse> {
+  async all(): Promise<ApiResponseWithData<Array<SettingsModel>>> {
     const jwtToken = AuthManager.getAuthToken();
 
     const response = await fetch(`${this.config.apiUrl}/settings`, {
@@ -67,33 +72,31 @@ export class SettingsApi {
     return data;
   }
 
-  async updateSetting(
-    settingId: number,
-    name: string,
-    value: string
-  ): Promise<SettingApiResponse> {
+  async update(
+    setting: SettingsModel
+  ): Promise<ApiResponseWithData<SettingsModel>> {
     const jwtToken = AuthManager.getAuthToken();
 
-    const response = await fetch(`${this.config.apiUrl}/settings/${settingId}`, {
+    const response = await fetch(`${this.config.apiUrl}/settings/${setting.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${jwtToken}`,
       },
-      body: JSON.stringify({
-        name: name,
-        value: value,
-      }),
+      body: JSON.stringify({...setting}),
     });
     const result = await response.json();
-    const data = {
+
+    return {
       ...result,
       status: response.status,
+      data: response.status === 200
+        ? result.data
+        : undefined,
     };
-    return data;
   }
 
-  async deleteSetting(settingId: number): Promise<ApiResponse> {
+  async delete(settingId: number): Promise<ApiResponse> {
     const jwtToken = AuthManager.getAuthToken();
 
     const response = await fetch(`${this.config.apiUrl}/settings/${settingId}`, {
@@ -110,7 +113,7 @@ export class SettingsApi {
     return data;
   }
 
-  async getSettingByName(settingName: string): Promise<SettingApiResponse> {
+  async getSettingByName(settingName: string): Promise<ApiResponseWithData<SettingsModel>> {
     const jwtToken = AuthManager.getAuthToken();
 
     const response = await fetch(`${this.config.apiUrl}/settings/name/${settingName}`, {
@@ -120,11 +123,13 @@ export class SettingsApi {
       },
     });
     const result = await response.json();
-    console.log("API RESULT", result)
-    const data = {
+
+    return {
       ...result,
       status: response.status,
+      data: response.status === 200
+        ? result.data
+        : undefined,
     };
-    return data;
   }
 }

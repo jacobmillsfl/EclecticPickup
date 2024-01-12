@@ -23,7 +23,7 @@ export const AdminEventTable: React.FC<{ props: Array<Gig> }> = ({
 
   const handleConfirmDelete = () => {
     if (selectedGig) {
-      ApiClient.event.deleteEvent(selectedGig.id);
+      ApiClient.event.delete(selectedGig.id);
       window.location.href = "/admin";
     }
   }

@@ -70,12 +70,12 @@ function App() {
                 isAuthenticated ? <LogOutComponent /> : <Navigate to="/login" />
               }
             />
-            <Route
+            {/* <Route
               path="/create-event"
               element={
                 isAuthenticated ? <CreateEvent /> : <Navigate to="/login" />
               }
-            />
+            /> */}
           </Routes>
           <Footer />
         </MediaComponent>

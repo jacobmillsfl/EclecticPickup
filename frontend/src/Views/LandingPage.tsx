@@ -7,13 +7,13 @@ import { InfoBox, InfoBoxProps } from "../Components/Content/InfoBox";
 import { UpcomingGigsProps, UpcomingShows } from "../Components/Content/UpcomingShows";
 import { Socials, AllSocialLinks } from "../Components/Content/Socials";
 import MediaPlayer from "../Components/MediaPlayer/MediaPlayer";
-import QuoteBox from "../Components/Content/QuoteBox";
+import { QuoteBox, QuoteBoxProps } from "../Components/Content/QuoteBox";
 import ApiClient from "../Utilities/Api/ApiClient";
 import { Video, VideoCarousel } from '../Components/Content/VideoCarousel';
-import { Gig } from "../Types";
 
 export default function LandingPage() {
   const [aboutInfo, setAboutInfo] = useState<InfoBoxProps>({"heading":"","paragraph":""});
+  const [motto, setMotto] = useState<QuoteBoxProps>({"quote":""});
   const [bandMembers, setBandMembers] = useState<Array<BandMember>>(new Array());
   const [images, setImages] = useState<Array<Image>>(new Array());
   const [videos, setVideos] = useState<Array<Video>>(new Array());
@@ -55,6 +55,20 @@ export default function LandingPage() {
       }
     };
 
+    const fetchMotto = async () => {
+      try {
+        const response = await ApiClient.settings.getSettingByName("BAND_MOTTO");
+        if (response.data) {
+          const quoteProps = {
+            "quote":response.data.value
+          }
+          setMotto(quoteProps);
+        }
+      } catch (error) {
+        console.error('Error fetching about info:', error);
+      }
+    }
+
     const fetchBandMembers = async () => {
       const bandMembers = await ApiClient.getBandMembers();
       setBandMembers(shuffle(bandMembers));
@@ -66,7 +80,7 @@ export default function LandingPage() {
     }
 
     const fetchUpcomingShows = async () => {
-      const response = await ApiClient.event.getAllEvents();
+      const response = await ApiClient.event.all();
       if (response.data) {
         const upcomingGigs = {
           heading: "Upcoming Gigs",
@@ -94,6 +108,7 @@ export default function LandingPage() {
     }
 
     fetchAboutInfo();
+    fetchMotto();
     fetchBandMembers();
     fetchImages();
     fetchUpcomingShows();
@@ -110,7 +125,7 @@ export default function LandingPage() {
       <VideoCarousel props={videos} />
       <UpcomingShows props={upcomingGigs}/>
       <UpcomingShows props={pastGigs}/>
-      <QuoteBox />
+      <QuoteBox props={motto}/>
       {/* <MediaPlayer /> */}
       {/* <Socials props={socialLinks} /> */}
     </ContentContainer>

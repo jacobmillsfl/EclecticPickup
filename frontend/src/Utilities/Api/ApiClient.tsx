@@ -24,14 +24,6 @@ class ApiClient {
     this.auth = new AuthApi(config);
   }
 
-  // async getAboutInfo(): Promise<InfoBoxProps> {
-  //   return {
-  //     heading: "Eclectic Pickup",
-  //     paragraph:
-  //       "It's a jam, but this isn't your typical jam band. While the music is rooted in rock, blues, and funk, the shows are a jazz-like experience. The songs, whether original or covers, are always fresh reinterpretations, depending on the players and the chemistry that session.",
-  //   };
-  // }
-
   async getBandMembers(): Promise<Array<BandMember>> {
     const bandMembers = new Array<BandMember>(
       {

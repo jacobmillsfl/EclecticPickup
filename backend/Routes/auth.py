@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, jsonify, request
+from Utils.Decorators import required_fields, scope_required
+from flask_jwt_extended import jwt_required
 import jwt
 
 from Utils.CryptoManager import CryptoManager
@@ -11,6 +13,9 @@ auth_bp = Blueprint('auth', __name__)
 config = ConfigManager.get_config()
 
 @auth_bp.route('/register', methods=['POST'])
+@jwt_required()
+@scope_required(["admin"])
+@required_fields(["username", "email", "password"])
 def register():
     data = request.json
     if not data:
@@ -43,11 +48,20 @@ def register():
             about=initial_desc
         )
 
-        # Add the new user to the session and commit changes to the database
         db.session.add(new_user)
         db.session.commit()
-
-        return jsonify({'message': 'Successfully created user'}), 200
+        db.session.flush()
+        user_data = {
+            'id': user.id,
+            'username': user.href_url,
+            'email': user.img_url,
+            'active': user.text,
+            'scope': user.text,
+            'about': user.text,
+            'password': user.text,
+        }
+        return jsonify({'message': 'User created', 'data': user_data}), 200    
+    
 
 
 @auth_bp.route('/login', methods=['POST'])
@@ -80,6 +94,7 @@ def login():
             'exp': datetime.utcnow() + timedelta(days=30),  # Expiration Time
             'iat': datetime.utcnow(),  # Issued At
         }
+        
         token = jwt.encode(claims, config.jwt_secret, algorithm='HS256')
         return jsonify({'message': token}), 200
     else:

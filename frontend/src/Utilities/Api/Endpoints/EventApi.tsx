@@ -1,46 +1,42 @@
 import { Gig } from "../../../Types";
+import { EventModel } from "../../../Types/DbModels";
 import AuthManager from "../../AuthManager";
 import {
-  AllEventsApiResponse,
   ApiConfig,
   ApiResponse,
-  EventsApiResponse,
+  ICrudApi,
+  ApiResponseWithData,
 } from "../ApiTypes";
 
-export class EventApi {
+export class EventApi implements ICrudApi<EventModel> {
   private config: ApiConfig;
 
   constructor(config: ApiConfig) {
     this.config = config;
   }
 
-  async getEvent(eventId: number): Promise<EventsApiResponse> {
+  async get(eventId: number): Promise<ApiResponseWithData<EventModel>> {
     const response = await fetch(`${this.config.apiUrl}/events/${eventId}`, {
       method: "GET",
     });
     const result = await response.json();
-    if (response.status === 200) {
-      console.log("RESULT", result);
-      const data = {
-        ...result,
-        status: response.status,
-        data: {
-          ...result.data,
-          date: new Date(`${result.data.date}T00:00:00`),
-        },
-      };
-      return data;
-    } else {
-      return result;
-    }
+
+    return {
+      ...result,
+      status: response.status,
+      data: response.status === 200
+        ? { ...result.data, date: new Date(`${result.data.date}T00:00:00`) }
+        : undefined,
+    };
   }
 
-  async getAllEvents(): Promise<AllEventsApiResponse> {
+  async all(): Promise<ApiResponseWithData<Array<EventModel>>> {
     const response = await fetch(`${this.config.apiUrl}/events`, {
       method: "GET",
     });
     const result = await response.json();
-    const data: AllEventsApiResponse = {
+    console.log("ALL GIGS API CALL",result.data);
+    return {
       ...result,
       status: response.status,
       data: result.data.map((gig: Gig) => ({
@@ -48,15 +44,11 @@ export class EventApi {
         date: new Date(`${gig.date}T00:00:00`),
       })),
     };
-    return data;
   }
 
-  async createEvent(
-    date: string,
-    time: string,
-    venue: string,
-    address: string
-  ): Promise<ApiResponse> {
+  async create(
+    event: Omit<EventModel, "id">
+  ): Promise<ApiResponseWithData<EventModel>> {
     const jwtToken = AuthManager.getAuthToken();
 
     const response = await fetch(`${this.config.apiUrl}/events`, {
@@ -65,55 +57,43 @@ export class EventApi {
         "Content-Type": "application/json",
         Authorization: `Bearer ${jwtToken}`,
       },
-      body: JSON.stringify({
-        date: date,
-        time: time,
-        venue: venue,
-        address: address,
-      }),
+      body: JSON.stringify({ ...event, date: event.date.toISOString().split('T')[0] }),
     });
+
     const result = await response.json();
-    const data = {
+    return {
       ...result,
       status: response.status,
-    } as ApiResponse;
-    return data;
+      data: response.status === 200
+        ? { ...result.data, date: new Date(`${result.data.date}T00:00:00`) }
+        : undefined,
+    };
   }
 
-  async editEvent(
-    eventId: number,
-    date: string,
-    time: string,
-    venue: string,
-    address: string
+  async update(
+    event: EventModel
   ): Promise<ApiResponse> {
     const jwtToken = AuthManager.getAuthToken();
 
-    const response = await fetch(`${this.config.apiUrl}/events/${eventId}`, {
+    const response = await fetch(`${this.config.apiUrl}/events/${event.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${jwtToken}`,
       },
-      body: JSON.stringify({
-        date: date,
-        time: time,
-        venue: venue,
-        address: address,
-      }),
+      body: JSON.stringify({ ...event, date: event.date.toISOString().split('T')[0]  }),
     });
+
     const result = await response.json();
-    const data = {
+    return {
       ...result,
       status: response.status,
-    } as ApiResponse;
-    return data;
+    }
   }
 
-  async deleteEvent(eventId: number): Promise<ApiResponse> {
+  async delete(id: number): Promise<ApiResponse> {
     const jwtToken = AuthManager.getAuthToken();
-
-    const response = await fetch(`${this.config.apiUrl}/events/${eventId}`, {
+    const response = await fetch(`${this.config.apiUrl}/events/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -121,10 +101,9 @@ export class EventApi {
       },
     });
     const result = await response.json();
-    const data = {
+    return {
       ...result,
       status: response.status,
     };
-    return data;
   }
 }

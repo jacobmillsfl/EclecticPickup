@@ -1,16 +1,16 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required
+
 from Models.database import db
 from Models.user import User
+from Utils.Decorators import scope_required, user_edit_permission, required_fields
 
 user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/users', methods=['GET'])
-@jwt_required()  # Requires a valid JWT token
-def get_all_users():
-    if 'admin' not in get_jwt_identity().get('scope', []):
-        return jsonify({'message': 'Unauthorized'}), 403
-    
+@jwt_required()
+@scope_required(["admin"])
+def get_all_users():    
     users = User.query.all()
     user_list = [{
         'id': user.id,
@@ -23,11 +23,9 @@ def get_all_users():
     return jsonify({'message': 'All users', 'data': user_list}), 200
 
 @user_bp.route('/users/<int:user_id>', methods=['GET'])
-@jwt_required()  # Requires a valid JWT token
+@jwt_required()
+@scope_required(["admin"])
 def get_user_by_id(user_id):
-    if 'admin' not in get_jwt_identity().get('scope', []):
-        return jsonify({'message': 'Unauthorized'}), 403
-    
     user = User.query.get(user_id)
     if user:
         user_data = {
@@ -43,17 +41,16 @@ def get_user_by_id(user_id):
         return jsonify({'message': 'User not found'}), 404
 
 @user_bp.route('/users/<int:user_id>', methods=['PUT'])
-@jwt_required()  # Requires a valid JWT token
+@jwt_required()
+@user_edit_permission
+@required_fields(["username","email","active","scope","about"])
 def edit_user(user_id):
-    current_user_id = get_jwt_identity().get('id')
-
-    # Users can edit their own details or admin can edit any user's details
-    if current_user_id != user_id and 'admin' not in get_jwt_identity().get('scope', []):
-        return jsonify({'message': 'Unauthorized'}), 403
-
     user = User.query.get(user_id)
+
     if not user:
         return jsonify({'message': 'User not found'}), 404
+    if user.username == "admin":
+        return jsonify({'message': 'This user cannot be modified'}), 401
 
     data = request.get_json()
     user.username = data.get('username', user.username)
@@ -65,17 +62,27 @@ def edit_user(user_id):
         user.password = data['password']
     
     db.session.commit()
-    return jsonify({'message': 'User updated successfully'}), 200
+    user_data = {
+        'id': user.id,
+        'username': user.href_url,
+        'email': user.img_url,
+        'active': user.text,
+        'scope': user.text,
+        'about': user.text,
+        'password': user.text,
+    }
+    return jsonify({'message': 'User updated', 'data': user_data}), 200
 
 @user_bp.route('/users/<int:user_id>', methods=['DELETE'])
-@jwt_required()  # Requires a valid JWT token
+@jwt_required()
+@scope_required(["admin"])
 def delete_user(user_id):
-    if 'admin' not in get_jwt_identity().get('scope', []):
-        return jsonify({'message': 'Unauthorized'}), 403
-    
+
     user = User.query.get(user_id)
     if not user:
         return jsonify({'message': 'User not found'}), 404
+    if user.username == "admin":
+        return jsonify({'message': 'This user cannot be modified'}), 401
 
     db.session.delete(user)
     db.session.commit()

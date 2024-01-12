@@ -1,6 +1,13 @@
-# TAF Backend
+# The Backend
 
 
+## Host requirements
+This is intended to run on linux or in a docker container. You may need to run the following from that host
+```
+apt update
+apt upgrade
+apt install python3-dev default-libmysqlclient-dev build-essential pkg-config
+```
 
 ## The Back End Stack
 
