@@ -150,65 +150,6 @@ class ApiClient {
     return images;
   }
 
-  // async getUpcomingShows(): Promise<Array<Gig>> {
-  //   const shows = new Array<Gig>(
-  //     {
-  //       id: 1,
-  //       date: new Date("09-23-2023"),
-  //       time: "2-4 pm",
-  //       venue: "Funkwerks Brewing",
-  //       address: "1900 E Lincoln Ave, Fort Collins",
-  //     },
-  //     {
-  //       id: 2,
-  //       date: new Date("10-14-2023"),
-  //       time: "4-6 pm",
-  //       venue: "Funkwerks Brewing",
-  //       address: "1900 E Lincoln Ave, Fort Collins",
-  //     },
-  //     {
-  //       id: 3,
-  //       date: new Date("04-22-2023"),
-  //       time: "12-4 pm",
-  //       venue: "Jessup Farm Barrel House",
-  //       address: "1921 Jessup Dr, Fort Collins, CO 80525",
-  //     },
-  //     {
-        
-  //       id: 4,
-  //       date: new Date("08-25-2023"),
-  //       time: "6-8 pm",
-  //       venue: "Purpose Brewing and Cellars",
-  //       address: "4025 S Mason St unit c, Fort Collins, CO 80525",
-  //     },
-  //     {
-        
-  //       id: 5,
-  //       date: new Date("06-23-2023"),
-  //       time: "6-8 pm",
-  //       venue: "Purpose Brewing and Cellars",
-  //       address: "4025 S Mason St unit c, Fort Collins, CO 80525",
-  //     },
-  //     {
-        
-  //       id: 6,
-  //       date: new Date("07-22-2023"),
-  //       time: "1-4 pm",
-  //       venue: "Rock Bottom Resaurant & Brewery",
-  //       address: "6025 Sky Pond Dr, Loveland, CO 80538",
-  //     },
-  //     {
-        
-  //       id: 7,
-  //       date: new Date("12-15-2023"),
-  //       time: "7-10 pm",
-  //       venue: "Black and Blues Music and Brews",
-  //       address: "423 N Cleveland Ave, Loveland, CO 80537",
-  //     }
-  //   );
-  //   return shows;
-  // }
-
   async getAllSocialLinks(): Promise<AllSocialLinks> {
     const streamingList = new Array<SocialListing>(
       {
