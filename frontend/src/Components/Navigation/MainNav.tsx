@@ -1,13 +1,26 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import AuthManager from "../../Utilities/AuthManager";
+import { Link as ScrollLink } from 'react-scroll';
 
 function MainNav() {
   const [collapsed, setCollapsed] = useState(true);
 
   const isAuthenticated = AuthManager.isAuthenticated();
+
+  useEffect(() => {
+    const hash = window.location.hash.substring(1);
+
+    if (hash && document.getElementById(hash)) {
+      setTimeout(() => {
+        document.getElementById(hash)?.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }, 1200);
+    }
+  }, []);
 
   const toggle = () => {
     setCollapsed((collapsed) => !collapsed);
@@ -41,12 +54,36 @@ function MainNav() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={toggle} />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/#home">Home</Nav.Link>
-            <Nav.Link href="/#about">About</Nav.Link>
-            <Nav.Link href="/#videos">Videos</Nav.Link>
-            <Nav.Link href="/#shows">Shows</Nav.Link>
-            <Nav.Link href="/#socials">Socials</Nav.Link>
-            <Nav.Link href="/#subscribe">Subscribe</Nav.Link>
+            <Nav.Link>
+              <ScrollLink to="home" smooth={true} offset={-70} duration={500}>
+                Home
+              </ScrollLink>
+            </Nav.Link>
+            <Nav.Link>
+              <ScrollLink to="about" smooth={true} offset={-70} duration={500}>
+                About
+              </ScrollLink>
+            </Nav.Link>
+            <Nav.Link>
+              <ScrollLink to="videos" smooth={true} offset={-70} duration={500}>
+                Videos
+              </ScrollLink>
+            </Nav.Link>
+            <Nav.Link>
+              <ScrollLink to="shows" smooth={true} offset={-70} duration={500}>
+                Shows
+              </ScrollLink>
+            </Nav.Link>
+            <Nav.Link>
+              <ScrollLink to="socials" smooth={true} offset={-70} duration={500}>
+                Socials
+              </ScrollLink>
+            </Nav.Link>
+            <Nav.Link>
+              <ScrollLink to="subscribe" smooth={true} offset={-70} duration={500}>
+                Subscribe
+              </ScrollLink>
+            </Nav.Link>
             {isAuthenticated && (
               <>
                 <Nav.Link href="/admin">Admin</Nav.Link>
