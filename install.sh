@@ -4,11 +4,11 @@
 read -p "Enter the API's base URL: " API_URL
 read -p "Enter the Admin User Password: " ADMIN_PASSWORD
 read -p "Enter the Admin User Email: " ADMIN_EMAIL
-JWT_SECRET=`openssl rand -base64 48`
+JWT_SECRET_KEY=`openssl rand -base64 48`
 
 cat << EOF > backend/.backend.env
 FLASK_API_BASE_URL="$API_URL"
-JWT_SECRET="$JWT_SECRET"
+JWT_SECRET_KEY="$JWT_SECRET"
 ADMIN_USERNAME="admin"
 ADMIN_PASSWORD="$ADMIN_PASSWORD"
 ADMIN_EMAIL="$ADMIN_EMAIL"
