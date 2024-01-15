@@ -508,12 +508,12 @@ html {
 }
 
 .layer4Bg {
-    background-image: linear-gradient(rgba(111,83,179, 0.8), rgba(88,13,114,0.5));
+    background-image: linear-gradient(rgba(111, 83, 179, 0.8), rgba(88, 13, 114, 0.5));
     padding: 2.5em 0;
 }
 
 .layer4BgReversed {
-    background-image: linear-gradient(rgba(88,13,114,0.5), rgba(111,83,179, 0.8));
+    background-image: linear-gradient(rgba(88, 13, 114, 0.5), rgba(111, 83, 179, 0.8));
     padding: 2.5em 0;
 }
 
@@ -1365,7 +1365,6 @@ html {
     height: 10px;
     outline: none;
     transition: background 450ms ease-in;
-    -webkit-appearance: media-slider;
 }
 
 .dropdown-header {
@@ -1400,3 +1399,11 @@ html {
 .input-form-text {
     color: white !important;
 }
+
+/** MailChimp **/
+#mc_embed_signup {
+    background: #fff;
+    clear: left;
+    font: 14px Helvetica, Arial, sans-serif;
+}
+/** End MailChimp **/

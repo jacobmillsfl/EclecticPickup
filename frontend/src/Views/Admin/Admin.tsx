@@ -8,17 +8,23 @@ import { AdminDataTable } from "../../Components/Admin/AdminDataTable";
 import { Data, DataTable, JwtSubject } from "../../Types";
 import { CreateEvent } from "./CreateEvent";
 import { CreateSetting } from "./CreateSetting";
-// import { ICrudApi } from "../../Utilities/Api/ApiTypes";
-// import { EventModel } from "../../Types/DbModels";
+import { useNavigate } from "react-router-dom";
 
 
 export const AdminComponent: React.FC = () => {
+  const navigate = useNavigate();
   const [subject, setSubject] = useState<JwtSubject>();
   const [gigs, setGigs] = useState<Array<Data>>([]);
   const [settings, setSettings] = useState<Array<Data>>([]);
 
+  console.log("ADMIN COMPONENT LOAD")
   useEffect(() => {
+    console.log("USE EFFECT LOAD")
     const jwt = AuthManager.getAuthToken();
+    if (!jwt) {
+      console.log("NO JWT TOKEN");
+      navigate("/login");
+    }
     const jwtParts = jwt?.split(".");
     if (jwtParts && jwtParts.length === 3) {
       const decodedSubject = JSON.parse(atob(jwtParts[1]));

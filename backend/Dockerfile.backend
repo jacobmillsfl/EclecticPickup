@@ -16,16 +16,11 @@ USER appuser
 # Copy the API code
 RUN mkdir ./app
 WORKDIR ./app
-COPY ./ ./
+COPY --chown=appuser:appuser ./ ./
 
 # Initialize volume data
 RUN mkdir -p ./files
 RUN mkdir -p ./instance
-
-# Give appuser permissions to write to volume
-USER root
-RUN chown -R appuser:appuser /home/appuser
-USER appuser
 
 # Install Python requirements
 RUN pip install --upgrade pip
@@ -39,6 +34,4 @@ EXPOSE 5000
 ENV PATH="${PATH}:/home/appuser/.local/bin/"
 
 # Run API
-#CMD ["python3", "./app.py"]
-#CMD ["uwsgi", "--ini", "uwsgi.ini", "--socket", "0.0.0.0:5000", "--enable-threads", "--protocol=http", "-w", "wsgi:app"]
 CMD ["bash", "init_script.sh"]

@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthManager from "../../Utilities/AuthManager";
 
 export const LogOutComponent: React.FC = () => {
-  AuthManager.setAuthToken("");
-  window.location.href = "/login";
+  const navigate = useNavigate();
 
-  return (
-    <>
-    </>
-  );
+  useEffect(() => {
+    const logout = async () => {
+      AuthManager.setAuthToken("");
+      navigate("/login");
+    };
+
+    logout();
+  }, [navigate]);
+  return <></>;
 };
-

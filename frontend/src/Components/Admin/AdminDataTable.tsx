@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
 import Badge from "react-bootstrap/Badge";
 import Table from "react-bootstrap/Table";
+  
 
 import Misc from "../../Utilities/Misc";
 import { ApiResponse } from "../../Utilities/Api/ApiTypes";
@@ -114,7 +115,7 @@ export const AdminDataTable: React.FC<{ props: DataTable }> = ({ props }) => {
                                         handleShowComponentModal(item.id);
                                     }}
                                 >
-                                    Edit
+                                    <i className="fas fa-edit"></i>
                                 </Badge>
                             </td>
                             <td>
@@ -126,7 +127,7 @@ export const AdminDataTable: React.FC<{ props: DataTable }> = ({ props }) => {
                                         handleShowDeleteModal(item.id);
                                     }}
                                 >
-                                    Delete
+                                    <i className="fas fa-trash"></i>
                                 </Badge>
                             </td>
                         </tr>

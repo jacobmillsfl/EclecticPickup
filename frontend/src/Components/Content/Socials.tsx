@@ -10,13 +10,19 @@ export type AllSocialLinks = {
 export const Socials: React.FC<{ props: AllSocialLinks }> = ({ props }) => {
   return (
     <div id="socials" className="row">
-      <div className="col-md-6 col-sm-12">
-        <SocialList listings={props.socialMedia} heading="Social Media" />
-        <SocialList listings={props.merch} heading="Merch" />
-        <SocialList listings={props.email} heading="Email" />
-      </div>
-      <div className="col-md-6 col-sm-12">
-        <SocialList listings={props.streaming} heading="Music" />
+      <div className="col-md-12 col-sm-12">
+        {props.socialMedia.length > 0 && (
+          <SocialList listings={props.socialMedia} heading="Social Media" />
+        )}
+        {props.merch.length > 0 && (
+          <SocialList listings={props.merch} heading="Merch" />
+        )}
+        {props.email.length > 0 && (
+          <SocialList listings={props.email} heading="Email" />
+        )}
+        {props.streaming.length > 0 && (
+          <SocialList listings={props.streaming} heading="Music" />
+        )}
       </div>
     </div>
   );

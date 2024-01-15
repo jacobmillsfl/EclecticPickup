@@ -11,7 +11,7 @@ class AuthManager {
   }
 
   static setAuthToken(token: string): void {
-    if (token) localStorage.setItem("jwtToken", token);
+    localStorage.setItem("jwtToken", token);
   }
 
   static getAuthToken(): string | null {

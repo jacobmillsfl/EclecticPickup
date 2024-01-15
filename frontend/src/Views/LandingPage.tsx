@@ -10,6 +10,7 @@ import MediaPlayer from "../Components/MediaPlayer/MediaPlayer";
 import { QuoteBox, QuoteBoxProps } from "../Components/Content/QuoteBox";
 import ApiClient from "../Utilities/Api/ApiClient";
 import { Video, VideoCarousel } from '../Components/Content/VideoCarousel';
+import { MailChimpComponent } from '../Components/MailChimp/MailChimpComponent';
 
 export default function LandingPage() {
   const [aboutInfo, setAboutInfo] = useState<InfoBoxProps>({"heading":"","paragraph":""});
@@ -127,7 +128,8 @@ export default function LandingPage() {
       <UpcomingShows props={pastGigs}/>
       <QuoteBox props={motto}/>
       {/* <MediaPlayer /> */}
-      {/* <Socials props={socialLinks} /> */}
+      <Socials props={socialLinks} />
+      <MailChimpComponent />
     </ContentContainer>
   );
 }

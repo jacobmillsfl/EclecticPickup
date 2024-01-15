@@ -35,7 +35,6 @@ export class EventApi implements ICrudApi<EventModel> {
       method: "GET",
     });
     const result = await response.json();
-    console.log("ALL GIGS API CALL",result.data);
     return {
       ...result,
       status: response.status,

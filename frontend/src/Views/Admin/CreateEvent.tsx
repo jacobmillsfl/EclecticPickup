@@ -43,7 +43,7 @@ export const CreateEvent: React.FC<CreateEditDataProps> = (props) => {
                 }
             });
         }
-    });
+    }, []);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();

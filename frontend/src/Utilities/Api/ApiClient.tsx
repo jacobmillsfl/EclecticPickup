@@ -153,35 +153,15 @@ class ApiClient {
   async getAllSocialLinks(): Promise<AllSocialLinks> {
     const streamingList = new Array<SocialListing>(
       {
-        hrefUrl: "#",
-        imgUrl: `${this.config.baseUrl}/img/socials/spotify.jpg`,
-        text: "Spotify",
-      },
-      {
-        hrefUrl: "#",
-        imgUrl: `${this.config.baseUrl}/img/socials/youtube.jpg`,
-        text: "YouTube",
-      },
-      {
-        hrefUrl: "#",
-        imgUrl: `${this.config.baseUrl}/img/socials/itunes.jpg`,
-        text: "iTunes",
-      },
-      {
-        hrefUrl: "#",
-        imgUrl: `${this.config.baseUrl}/img/socials/applemusic.jpg`,
-        text: "Apple Music",
-      },
-      {
-        hrefUrl: "#",
-        imgUrl: `${this.config.baseUrl}/img/socials/soundcloud.jpg`,
-        text: "SoundCloud",
+        hrefUrl: "https://theeclecticpickup.bandcamp.com/",
+        imgUrl: `${this.config.baseUrl}/img/socials/bandcamp.png`,
+        text: "BandCamp",
       }
     );
 
     const socialMediaList = new Array<SocialListing>(
       {
-        hrefUrl: "#",
+        hrefUrl: "https://www.facebook.com/eclecticpickup",
         imgUrl: `${this.config.baseUrl}/img/socials/facebook.png`,
         text: "Facebook",
       },
@@ -192,11 +172,7 @@ class ApiClient {
       }
     );
 
-    const merchList = new Array<SocialListing>({
-      hrefUrl: "#",
-      imgUrl: `${this.config.baseUrl}/img/socials/ebay.jpg`,
-      text: "eBay",
-    });
+    const merchList = new Array<SocialListing>();
 
     const emailList = new Array<SocialListing>({
       hrefUrl: "mailto:eclecticpickup@gmail.com",
