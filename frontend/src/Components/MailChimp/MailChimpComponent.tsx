@@ -7,7 +7,7 @@ export const MailChimpComponent: React.FC = () => {
 
   return (
     <ShadowBox mode="wide">
-      <h2
+      <h2 id="subscribe"
         style={{
           textAlign: "center",
         }}

@@ -126,10 +126,10 @@ export default function LandingPage() {
       <VideoCarousel props={videos} />
       <UpcomingShows props={upcomingGigs}/>
       <UpcomingShows props={pastGigs}/>
-      <QuoteBox props={motto}/>
       {/* <MediaPlayer /> */}
       <Socials props={socialLinks} />
       <MailChimpComponent />
+      <QuoteBox props={motto}/>
     </ContentContainer>
   );
 }

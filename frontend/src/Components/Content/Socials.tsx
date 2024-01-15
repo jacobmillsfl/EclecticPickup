@@ -9,7 +9,7 @@ export type AllSocialLinks = {
 
 export const Socials: React.FC<{ props: AllSocialLinks }> = ({ props }) => {
   return (
-    <div id="socials" className="row">
+    <div id="socials" className="row" style={{"marginTop": "6em"}}>
       <div className="col-md-12 col-sm-12">
         {props.socialMedia.length > 0 && (
           <SocialList listings={props.socialMedia} heading="Social Media" />

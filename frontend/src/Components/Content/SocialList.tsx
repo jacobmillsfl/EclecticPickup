@@ -49,7 +49,7 @@ const SocialHeadingStyle = {
 const SocialListStyle = {
     "maxWidth": "600px",
     "textAlign": "center" as const,
-    "margin": "auto"
+    "margin": "auto",
 }
 
 const SocialListAttributeStyle = {

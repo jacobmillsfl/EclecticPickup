@@ -46,6 +46,7 @@ function MainNav() {
             <Nav.Link href="/#videos">Videos</Nav.Link>
             <Nav.Link href="/#shows">Shows</Nav.Link>
             <Nav.Link href="/#socials">Socials</Nav.Link>
+            <Nav.Link href="/#subscribe">Subscribe</Nav.Link>
             {isAuthenticated && (
               <>
                 <Nav.Link href="/admin">Admin</Nav.Link>
