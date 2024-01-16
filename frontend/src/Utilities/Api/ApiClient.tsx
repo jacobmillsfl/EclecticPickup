@@ -1,10 +1,10 @@
 import { InfoBoxProps } from "../../Components/Content/InfoBox";
-import { Image } from "../../Components/Content/ImageCarousel";
+import { BandImage } from "../../Components/Content/ImageCarousel";
 import { BandMember } from "../../Components/Content/BandMemberList";
 import { Gig } from "../../Types";
 import { AllSocialLinks } from "../../Components/Content/Socials";
 import { SocialListing } from "../../Components/Content/SocialList";
-import { Video } from "../../Components/Content/VideoCarousel";
+import { BandVideo } from "../../Components/Content/VideoCarousel";
 import { ApiConfig, ApiResponse } from "./ApiTypes";
 import { EventApi } from "./Endpoints/EventApi";
 import { SettingsApi } from "./Endpoints/SettingsApi";
@@ -55,8 +55,8 @@ class ApiClient {
     return bandMembers;
   }
 
-  async getCarouselVideos(): Promise<Array<Video>> {
-    const videos = new Array<Video>(
+  async getCarouselVideos(): Promise<Array<BandVideo>> {
+    const videos = new Array<BandVideo>(
       {
         src: `${this.config.baseUrl}/vids/EclecticPickup_WakeUpCall.mp4`,
         alt: "Video Clip",
@@ -91,8 +91,8 @@ class ApiClient {
     return videos;
   }
 
-  async getCarouselImages(): Promise<Array<Image>> {
-    const images = new Array<Image>(
+  async getCarouselImages(): Promise<Array<BandImage>> {
+    const images = new Array<BandImage>(
       // {
       //   src: `${this.config.baseUrl}/img/EclecticPickup-224x300.gif`,
       //   alt: "",

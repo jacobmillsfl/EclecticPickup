@@ -37,4 +37,17 @@ export default class Misc {
     static capitalizeFirstLetter(str: string) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
+
+    static shuffleArray(array: Array<any>) {
+        let currentIndex = array.length,  randomIndex;
+      
+        while (currentIndex > 0) {
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex--;
+          [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+      
+        return array;
+      }
 }

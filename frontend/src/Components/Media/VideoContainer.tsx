@@ -1,24 +1,19 @@
 import { useState, useEffect, useContext } from 'react'
-import mediaContext from "../../Contexts/Homepage/MediaContext";
+// import mediaContext from "../../Contexts/Homepage/MediaContext";
 import VideoUtility from "../../Utilities/VideoUtility";
 import { VideoDetail } from "../../Types/VideoDetail";
 
-function MediaContainer() {
-    const {
-        currentSongIndex,
-        videoShuffle,
-    } = useContext(mediaContext)
-
+function VideoContainer() {
     let defaultVideo = { name: "default", video: null, playbackRate: 1 };
     const [currentVideo, setCurrentVideo] = useState<VideoDetail>(defaultVideo);
-    const videos = VideoUtility.getVideos();
-
+    
     useEffect(() => {
-        if (videoShuffle) {
-            const index = Math.floor(Math.random() * videos.length);
-            setCurrentVideo(videos[index]);
+        const videos = VideoUtility.getVideos();
+        if (videos.length > 0) {
+            // Always uses the first video; Assumes unchanging videos
+            setCurrentVideo(videos[0]);
         }
-    }, [currentSongIndex])
+    }, [])
 
     function videoChanged() {
         let videoElement = document.querySelector("#background") as HTMLVideoElement;
@@ -34,4 +29,4 @@ function MediaContainer() {
     )
 }
 
-export default MediaContainer;
+export default VideoContainer;

@@ -3,7 +3,7 @@ import mediaContext from '../../Contexts/Homepage/MediaContext'
 import mediaReducer from '../../Contexts/Homepage/MediaReducer'
 import { SongDetail } from '../../Types/SongDetail';
 import { HtmlAudioRef } from '../../Types/HtmlAudioRef';
-import MediaContainer from './MediaContainer';
+import VideoContainer from '../Media/VideoContainer';
 
 import {
     SET_CURRENT_SONG,
@@ -199,7 +199,6 @@ const MediaComponent = (props: any) => {
                 autoPlay={state.audioPlaying}
                 muted={false}
             />            
-            <MediaContainer />
             {props.children}
         </mediaContext.Provider>
     )

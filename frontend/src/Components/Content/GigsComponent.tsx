@@ -1,36 +1,13 @@
 import Table from "react-bootstrap/Table";
 import { Gig } from "../../Types";
+import Misc from "../../Utilities/Misc";
 
-export type UpcomingGigsProps = {
+export type GigsProps = {
   heading: string;
   gigs: Array<Gig>;
 };
 
-export const UpcomingShows: React.FC<{ props: UpcomingGigsProps }> = ({ props }) => {
-  const formatDate = (date: Date) => {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const dayOfWeek = days[date.getDay()];
-    const dayOfMonth = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-
-    return `${dayOfWeek}, ${dayOfMonth} ${month} ${year}`;
-  };
+export const GigsComponent: React.FC<{ props: GigsProps }> = ({ props }) => {
 
   const sortShows = (shows: Array<Gig>): Array<Gig> => {
     // Use the sort method to sort the shows array based on the date field
@@ -72,7 +49,7 @@ export const UpcomingShows: React.FC<{ props: UpcomingGigsProps }> = ({ props })
         <tbody>
           {sortShows(props.gigs).map((show, index) => (
             <tr key={index} className={show.date.getTime() < Date.now() ? 'past-date' : '' }>
-              <td>{formatDate(show.date)}</td>
+              <td>{Misc.formatDate(show.date)}</td>
               <td>{show.time}</td>
               <td>{show.venue}</td>
               <td><a 

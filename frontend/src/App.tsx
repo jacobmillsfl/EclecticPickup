@@ -5,14 +5,13 @@ import {
 } from "react-router-dom";
 import MainNav from "./Components/Navigation/MainNav";
 import "./App.css";
-import MediaComponent from "./Components/MediaPlayer/MediaComponent";
+import AppContextProvider from "./Contexts/AppContextProvider";
 import Footer from "./Components/Footer/Footer";
 import LandingPage from "./Views/LandingPage";
 import { useEffect } from "react";
 import { LoginComponent } from "./Views/Auth/Login";
 import { AdminComponent } from "./Views/Admin/Admin";
 import { LogOutComponent } from "./Views/Auth/Logout";
-import AuthManager from "./Utilities/AuthManager";
 
 function App() {
   useEffect(() => {
@@ -33,7 +32,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <MediaComponent className="mediaComponent">
+        <AppContextProvider className="mediaComponent">
           <MainNav />
           <Routes>
             <Route path="/" element={<LandingPage />} />
@@ -51,7 +50,7 @@ function App() {
             />
           </Routes>
           <Footer />
-        </MediaComponent>
+        </AppContextProvider>
       </div>
     </Router>
   );

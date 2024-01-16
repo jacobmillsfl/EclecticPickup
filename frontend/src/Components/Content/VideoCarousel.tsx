@@ -2,14 +2,14 @@ import { useMemo } from "react";
 import ShadowBox from "../Controls/ShadowBox";
 import Carousel from "react-bootstrap/Carousel";
 
-export type Video = {
+export type BandVideo = {
   src: string;
   alt: string;
   youtube: boolean;
 };
 
-export const VideoCarousel: React.FC<{ props: Array<Video> }> = ({ props }) => {
-  const videoEmbed = (video: Video) => {
+export const VideoCarousel: React.FC<{ props: Array<BandVideo> }> = ({ props }) => {
+  const videoEmbed = (video: BandVideo) => {
     if (video.youtube) {
       return (
         <div style={VideoContainerStyle}>

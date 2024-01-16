@@ -1,12 +1,12 @@
 import ShadowBox from "../Controls/ShadowBox";
 import Carousel from "react-bootstrap/Carousel";
 
-export type Image = {
+export type BandImage = {
   src: string;
   alt: string;
 };
 
-export const ImageCarousel: React.FC<{ props: Array<Image> }> = ({ props }) => {
+export const ImageCarousel: React.FC<{ props: Array<BandImage> }> = ({ props }) => {
   const carouselItemData = props.map((item, index) => {
     return (
       <Carousel.Item key={index}>
