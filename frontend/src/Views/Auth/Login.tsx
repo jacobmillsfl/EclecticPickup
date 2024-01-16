@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { ContentContainer } from "../../Components/Controls/ContentContainer";
@@ -7,8 +7,10 @@ import AuthManager from "../../Utilities/AuthManager";
 import Alert from "react-bootstrap/Alert";
 import ApiClient from "../../Utilities/Api/ApiClient";
 import { useNavigate } from "react-router-dom";
+import appContext from "../../Contexts/AppContext";
 
 export const LoginComponent: React.FC = () => {
+  const { setLoggedIn } = useContext(appContext);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -18,8 +20,8 @@ export const LoginComponent: React.FC = () => {
 
   useEffect(() => {
     if (AuthManager.getAuthToken() !== "") {
-      console.log("LOGIN AUTH TOKEN", AuthManager.getAuthToken());
       navigate("/admin");
+      setLoggedIn(true);
     }
   }, []);
 
@@ -29,6 +31,7 @@ export const LoginComponent: React.FC = () => {
       if (result.status === 200) {
         AuthManager.setAuthToken(result.message);
         navigate("/admin");
+        setLoggedIn(true);
       } else {
         setDisplayAlert(true);
         setAlertHeading("Error");

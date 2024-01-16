@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ContentContainer } from "../../Components/Controls/ContentContainer";
 import AuthManager from "../../Utilities/AuthManager";
 import ShadowBox from "../../Components/Controls/ShadowBox";
@@ -9,22 +9,22 @@ import { Data, DataTable, JwtSubject } from "../../Types";
 import { CreateEvent } from "./CreateEvent";
 import { CreateSetting } from "./CreateSetting";
 import { useNavigate } from "react-router-dom";
+import appContext from "../../Contexts/AppContext";
 
 
 export const AdminComponent: React.FC = () => {
+  const { loggedIn, setLoggedIn } = useContext(appContext);
   const navigate = useNavigate();
   const [subject, setSubject] = useState<JwtSubject>();
   const [gigs, setGigs] = useState<Array<Data>>([]);
   const [settings, setSettings] = useState<Array<Data>>([]);
 
-  console.log("ADMIN COMPONENT LOAD")
   useEffect(() => {
-    console.log("USE EFFECT LOAD")
-    const jwt = AuthManager.getAuthToken();
-    if (!jwt) {
-      console.log("NO JWT TOKEN");
+    if (!loggedIn) {
       navigate("/login");
     }
+
+    const jwt = AuthManager.getAuthToken();
     const jwtParts = jwt?.split(".");
     if (jwtParts && jwtParts.length === 3) {
       const decodedSubject = JSON.parse(atob(jwtParts[1]));
