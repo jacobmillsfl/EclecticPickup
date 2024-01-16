@@ -1,11 +1,10 @@
 import Data from "./Data";
 
-type CreateEditDataProps = {
+type CreateEditDataProps<T extends Data> = {
     id?: number,
     close: () => void,
-    add: (newItem: Data) => void,
-    edit: (updatedItem: Data) => void,
-    // update: (updatedCollection: Array<Data>) => void,
+    add: (newItem: T) => void,
+    edit: (updatedItem: T) => void,
 };
 
 export default CreateEditDataProps

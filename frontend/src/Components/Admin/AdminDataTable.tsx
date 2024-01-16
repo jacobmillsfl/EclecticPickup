@@ -9,10 +9,10 @@ import { ApiResponse } from "../../Utilities/Api/ApiTypes";
 import { AlertVariant, Data, DataTable } from "../../Types";
 
 // Because of TypeScript issues DataTable must be given type any here
-export const AdminDataTable: React.FC<{ props: DataTable }> = ({ props }) => {
+export function AdminDataTable<T extends Data>(props: DataTable<T> ) {
 
     const [selectedIndex, setSelectedIndex] = useState<number>();
-    const [selectedData, setSelectedData] = useState<Data>();
+    const [selectedData, setSelectedData] = useState<T>();
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showComponentModal, setShowComponentModal] = useState(false);
     const [displayAlert, setDisplayAlert] = useState(false);

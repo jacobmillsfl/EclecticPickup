@@ -9,6 +9,7 @@ import { ApiConfig, ApiResponse } from "./ApiTypes";
 import { EventApi } from "./Endpoints/EventApi";
 import { SettingsApi } from "./Endpoints/SettingsApi";
 import { AuthApi } from "./Endpoints/AuthApi";
+import { UserApi } from "./Endpoints/UserApi";
 
 
 class ApiClient {
@@ -16,12 +17,14 @@ class ApiClient {
   event: EventApi;
   settings: SettingsApi;
   auth: AuthApi;
+  user: UserApi;
 
   constructor(config: ApiConfig) {
     this.config = config;
     this.event = new EventApi(config);
     this.settings = new SettingsApi(config);
     this.auth = new AuthApi(config);
+    this.user = new UserApi(config);
   }
 
   async getBandMembers(): Promise<Array<BandMember>> {
