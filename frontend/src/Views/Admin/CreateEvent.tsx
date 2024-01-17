@@ -7,8 +7,9 @@ import ShadowBox from "../../Components/Controls/ShadowBox"
 import { Alert } from "react-bootstrap";
 import ApiClient from "../../Utilities/Api/ApiClient";
 import { AlertVariant, CreateEditDataProps } from "../../Types";
+import { EventModel } from "../../Types/DbModels";
 
-export const CreateEvent: React.FC<CreateEditDataProps> = (props) => {
+export const CreateEvent: React.FC<CreateEditDataProps<EventModel>> = (props) => {
     const [eventId, setEventId] = useState<number | undefined>(props.id);
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");

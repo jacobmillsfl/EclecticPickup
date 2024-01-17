@@ -7,8 +7,9 @@ import ShadowBox from "../../Components/Controls/ShadowBox"
 import { Alert } from "react-bootstrap";
 import ApiClient from "../../Utilities/Api/ApiClient";
 import { AlertVariant, CreateEditDataProps } from "../../Types";
+import { SettingsModel } from "../../Types/DbModels";
 
-export const CreateSetting: React.FC<CreateEditDataProps> = (props) => {
+export const CreateSetting: React.FC<CreateEditDataProps<SettingsModel>> = (props) => {
     const [settingId, setSettingId] = useState<number | undefined>(props.id);
     const [name, setName] = useState("");
     const [value, setValue] = useState("");
