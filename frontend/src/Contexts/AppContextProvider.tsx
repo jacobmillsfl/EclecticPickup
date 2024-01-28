@@ -3,20 +3,19 @@ import { useEffect, useState } from "react";
 import VideoContainer from "../Components/Media/VideoContainer";
 import appContext from "./AppContext";
 import { BandMember } from "../Components/Content/BandMemberList";
-import { BandImage } from "../Components/Content/ImageCarousel";
 import { BandVideo } from "../Components/Content/VideoCarousel";
 import { AllSocialLinks } from "../Components/Content/Socials";
 import AuthManager from "../Utilities/AuthManager";
 import ApiClient from "../Utilities/Api/ApiClient";
 import Misc from "../Utilities/Misc";
-import { EventModel, SettingsModel } from "../Types/DbModels";
+import { EventModel, SettingsModel, BandImageModel } from "../Types/DbModels";
 
 const AppContextProvider = (props: any) => {
   const [loggedIn, setLoggedIn] = useState(AuthManager.isAuthenticated());
   const [bandMembers, setBandMembers] = useState<Array<BandMember>>(
     new Array()
   );
-  const [images, setImages] = useState<Array<BandImage>>(new Array());
+  const [images, setImages] = useState<Array<BandImageModel>>(new Array());
   const [videos, setVideos] = useState<Array<BandVideo>>(new Array());
   const [gigs, setGigs] = useState<Array<EventModel>>(new Array());
   const [settings, setSettings] = useState<Array<SettingsModel>>(new Array());
@@ -41,8 +40,11 @@ const AppContextProvider = (props: any) => {
     };
 
     const fetchImages = async () => {
-      const images = await ApiClient.getCarouselImages();
-      setImages(Misc.shuffleArray(images));
+      const response = await ApiClient.bandImage.all();
+      if (response.data) {
+        console.log("IMAGES", response.data)
+        setImages(Misc.shuffleArray(response.data));
+      }
     };
 
     const fetchGigs = async () => {

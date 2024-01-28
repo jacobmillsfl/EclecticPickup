@@ -23,7 +23,7 @@ class ConfigManager:
 
         # Check for missing environment variables
         if len(missing_values) > 0:
-            print("Missing environment variables... Defaulting to debug mode.")
+            print("Missing environment variables... Loading from dotenv file...")
             # Load values from a .env file using dotenv
             dotenv_config = dotenv_values(".backend.env")
             for setting in missing_values:

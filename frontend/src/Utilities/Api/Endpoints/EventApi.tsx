@@ -1,4 +1,4 @@
-import { Gig } from "../../../Types";
+import { Gig, Modify } from "../../../Types";
 import { EventModel } from "../../../Types/DbModels";
 import AuthManager from "../../AuthManager";
 import {
@@ -25,7 +25,9 @@ export class EventApi implements ICrudApi<EventModel> {
       ...result,
       status: response.status,
       data: response.status === 200
-        ? { ...result.data, date: new Date(`${result.data.date}T00:00:00`) }
+        ? { ...result.data, 
+          date: new Date(`${result.data.date} 00:00:00`)
+        }
         : undefined,
     };
   }
@@ -35,12 +37,13 @@ export class EventApi implements ICrudApi<EventModel> {
       method: "GET",
     });
     const result = await response.json();
+
     return {
       ...result,
       status: response.status,
       data: result.data.map((gig: Gig) => ({
         ...gig,
-        date: new Date(`${gig.date}T00:00:00`),
+        date: new Date(`${gig.date} 00:00:00`),
       })),
     };
   }
@@ -64,7 +67,7 @@ export class EventApi implements ICrudApi<EventModel> {
       ...result,
       status: response.status,
       data: response.status === 200
-        ? { ...result.data, date: new Date(`${result.data.date}T00:00:00`) }
+        ? { ...result.data, date: new Date(`${result.data.date} 00:00:00`) }
         : undefined,
     };
   }
@@ -80,7 +83,7 @@ export class EventApi implements ICrudApi<EventModel> {
         "Content-Type": "application/json",
         Authorization: `Bearer ${jwtToken}`,
       },
-      body: JSON.stringify({ ...event, date: event.date.toISOString().split('T')[0]  }),
+      body: JSON.stringify({ ...event, date: event.date.toISOString().split('T')[0] }),
     });
 
     const result = await response.json();

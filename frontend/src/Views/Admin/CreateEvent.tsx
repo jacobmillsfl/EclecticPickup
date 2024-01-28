@@ -9,6 +9,10 @@ import ApiClient from "../../Utilities/Api/ApiClient";
 import { AlertVariant, CreateEditDataProps } from "../../Types";
 import { EventModel } from "../../Types/DbModels";
 
+interface IAlertUpdate {
+    (display: boolean, heading: string, variant: AlertVariant, message: string) : void
+}
+
 export const CreateEvent: React.FC<CreateEditDataProps<EventModel>> = (props) => {
     const [eventId, setEventId] = useState<number | undefined>(props.id);
     const [date, setDate] = useState("");
@@ -20,7 +24,7 @@ export const CreateEvent: React.FC<CreateEditDataProps<EventModel>> = (props) =>
     const [alertMessage, setAlertMessage] = useState("");
     const [alertVariant, setAlertVariant] = useState<AlertVariant>();
 
-    const updateAlert = (display: boolean, heading: string, variant: AlertVariant, message: string) => {
+    const updateAlert: IAlertUpdate = (display: boolean, heading: string, variant: AlertVariant, message: string) => {
         setDisplayAlert(display);
         setAlertHeading(heading);
         setAlertVariant(variant);
@@ -52,15 +56,13 @@ export const CreateEvent: React.FC<CreateEditDataProps<EventModel>> = (props) =>
             if (eventId) {
                 const editedEvent = {
                     id: eventId,
-                    date: new Date(`${date}T00:00:00`),
+                    date: new Date(`${date} 00:00:00`),
                     time: time,
                     venue: venue,
                     address: address,
                 }
                 ApiClient.event.update(editedEvent).then(result => {
-                    console.log("API UPDATE", result);
                     if (result.status === 200) {
-                        console.log("Updating...")
                         props.edit(editedEvent)
                         props.close();
                     } else {
@@ -69,14 +71,14 @@ export const CreateEvent: React.FC<CreateEditDataProps<EventModel>> = (props) =>
                 })
             } else {
                 const newEvent = {
-                    date: new Date(`${date}T00:00:00`),
+                    date: new Date(`${date}`),
                     time: time,
                     venue: venue,
                     address: address,
                 }
                 ApiClient.event.create(newEvent).then(result => {
                     if (result.status === 200 && result.data) {
-                        const newEvent = {...result.data}                        
+                        const newEvent = { ...result.data }
                         props.add(newEvent)
                         props.close();
                     } else {
@@ -90,41 +92,39 @@ export const CreateEvent: React.FC<CreateEditDataProps<EventModel>> = (props) =>
     }
 
     return (
-        <ContentContainer>
-            <ShadowBox mode="form">
-                {displayAlert &&
-                    <Alert className="mt-5" variant={alertVariant} dismissible onClose={() => setDisplayAlert(false)}>
-                        <Alert.Heading>{alertHeading}</Alert.Heading>
-                        <p>
-                            {alertMessage}
-                        </p>
-                    </Alert>
-                }
-                <Form className="input-form" onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="formBasicDate">
-                        <Form.Label>Date</Form.Label>
-                        <Form.Control type="date" placeholder="MM/DD/YYYY" value={date} onChange={e => setDate(e.target.value)} />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicTime">
-                        <Form.Label>Time</Form.Label>
-                        <Form.Control type="text" placeholder="6-8pm" value={time} onChange={e => setTime(e.target.value)} />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicVenue">
-                        <Form.Label>Venue</Form.Label>
-                        <Form.Control type="text" placeholder="Venue Name" value={venue} onChange={e => setVenue(e.target.value)} />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicAddress">
-                        <Form.Label>Address</Form.Label>
-                        <Form.Control type="text" placeholder="123 Main St" value={address} onChange={e => setAddress(e.target.value)} />
-                    </Form.Group>
-                    <Button variant="danger" type="button" size="lg" className="input-form-button mt-5" onClick={props.close}>
-                        Cancel
-                    </Button>
-                    <Button variant="success" type="submit" size="lg" className="input-form-button mt-5" style={{"float":"right"}}>
-                        Submit
-                    </Button>
-                </Form>
-            </ShadowBox>
-        </ContentContainer>
+        <>
+            {displayAlert &&
+                <Alert className="mt-5" variant={alertVariant} dismissible onClose={() => setDisplayAlert(false)}>
+                    <Alert.Heading>{alertHeading}</Alert.Heading>
+                    <p>
+                        {alertMessage}
+                    </p>
+                </Alert>
+            }
+            <Form className="input-form" onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="formBasicDate">
+                    <Form.Label>Date</Form.Label>
+                    <Form.Control type="date" placeholder="MM/DD/YYYY" value={date} onChange={e => setDate(e.target.value)} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicTime">
+                    <Form.Label>Time</Form.Label>
+                    <Form.Control type="text" placeholder="6-8pm" value={time} onChange={e => setTime(e.target.value)} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicVenue">
+                    <Form.Label>Venue</Form.Label>
+                    <Form.Control type="text" placeholder="Venue Name" value={venue} onChange={e => setVenue(e.target.value)} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicAddress">
+                    <Form.Label>Address</Form.Label>
+                    <Form.Control type="text" placeholder="123 Main St" value={address} onChange={e => setAddress(e.target.value)} />
+                </Form.Group>
+                <Button variant="danger" type="button" size="lg" className="input-form-button mt-5" onClick={props.close}>
+                    Cancel
+                </Button>
+                <Button variant="success" type="submit" size="lg" className="input-form-button mt-5" style={{ "float": "right" }}>
+                    Submit
+                </Button>
+            </Form>
+        </>
     )
 }

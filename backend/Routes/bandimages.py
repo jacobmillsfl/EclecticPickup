@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user
 
 from Models.database import db
 from Models.bandimage import BandImage
@@ -12,8 +12,8 @@ def get_all_band_images():
     band_images = BandImage.query.all()
     band_image_list = [{
         'id': image.id,
-        'src': image.src,
-        'description': image.description
+        'filename': image.filename,
+        'caption': image.caption
     } for image in band_images]
     return jsonify({'message': 'All band images', 'data': band_image_list}), 200
 
@@ -23,8 +23,8 @@ def get_band_image_by_id(image_id):
     if image:
         image_data = {
             'id': image.id,
-            'src': image.src,
-            'description': image.description
+            'filename': image.filename,
+            'caption': image.caption
         }
         return jsonify({'message': 'Band image found', 'data': image_data}), 200
     else:
@@ -33,35 +33,36 @@ def get_band_image_by_id(image_id):
 @bandimage_bp.route('/bandimages', methods=['POST'])
 @jwt_required()
 @scope_required(["admin"])
-@required_fields(["src", "description"])
+@required_fields(["filename", "caption"])
 def create_band_image():
     data = request.get_json()
     new_image = BandImage(
-        src=data['src'],
-        description=data.get('description')
+        filename=data['filename'],
+        caption=data.get('caption'),
+        created_by_user_id=current_user.get("id"),
     )
     db.session.add(new_image)
     db.session.commit()
     db.session.flush()
     image_data = {
         'id': new_image.id,
-        'src': new_image.src,
-        'description': new_image.description
+        'filename': new_image.filename,
+        'caption': new_image.caption,
     }
     return jsonify({'message': 'BandImage created', 'data': image_data}), 200
 
 @bandimage_bp.route('/bandimages/<int:image_id>', methods=['PUT'])
 @jwt_required()
 @scope_required(["admin"])
-@required_fields(["src", "description"])
+@required_fields(["caption"])
 def edit_band_image(image_id):
     image = BandImage.query.get(image_id)
     if not image:
         return jsonify({'message': 'Band image not found'}), 404
 
     data = request.get_json()
-    image.src = data.get('src', image.src)
-    image.description = data.get('description', image.description)
+    image.caption = data.get('caption', image.caption)
+    image.modified_by_user_id = current_user.get("id")
     
     db.session.commit()
     return jsonify({'message': 'Band image updated successfully'}), 200

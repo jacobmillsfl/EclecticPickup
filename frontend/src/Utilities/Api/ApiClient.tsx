@@ -1,15 +1,14 @@
-import { InfoBoxProps } from "../../Components/Content/InfoBox";
-import { BandImage } from "../../Components/Content/ImageCarousel";
 import { BandMember } from "../../Components/Content/BandMemberList";
-import { Gig } from "../../Types";
 import { AllSocialLinks } from "../../Components/Content/Socials";
 import { SocialListing } from "../../Components/Content/SocialList";
 import { BandVideo } from "../../Components/Content/VideoCarousel";
-import { ApiConfig, ApiResponse } from "./ApiTypes";
+import { ApiConfig } from "./ApiTypes";
 import { EventApi } from "./Endpoints/EventApi";
 import { SettingsApi } from "./Endpoints/SettingsApi";
 import { AuthApi } from "./Endpoints/AuthApi";
 import { UserApi } from "./Endpoints/UserApi";
+import { BandImageApi } from "./Endpoints/BandImageApi";
+import { FileApi } from "./Endpoints/FileApi";
 
 
 class ApiClient {
@@ -18,6 +17,8 @@ class ApiClient {
   settings: SettingsApi;
   auth: AuthApi;
   user: UserApi;
+  bandImage: BandImageApi;
+  file: FileApi;
 
   constructor(config: ApiConfig) {
     this.config = config;
@@ -25,6 +26,8 @@ class ApiClient {
     this.settings = new SettingsApi(config);
     this.auth = new AuthApi(config);
     this.user = new UserApi(config);
+    this.bandImage = new BandImageApi(config);
+    this.file = new FileApi(config);
   }
 
   async getBandMembers(): Promise<Array<BandMember>> {
@@ -94,64 +97,64 @@ class ApiClient {
     return videos;
   }
 
-  async getCarouselImages(): Promise<Array<BandImage>> {
-    const images = new Array<BandImage>(
-      // {
-      //   src: `${this.config.baseUrl}/img/EclecticPickup-224x300.gif`,
-      //   alt: "",
-      // },
-      {
-        src: `${this.config.baseUrl}/img/photos/1.jpg`,
-        alt: "@ Purpose Brewery",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/2.jpg`,
-        alt: "@ Fort Collins Block Party",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/3.jpg`,
-        alt: "@ Purpose Brewery",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/4.jpg`,
-        alt: "@ Fort Collins Block Party",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/5.jpg`,
-        alt: "@ Funkwerks Brewery",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/6.jpg`,
-        alt: "@ Funkwerks Brewery",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/7.jpg`,
-        alt: "@ Fort Collins Block Party",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/8.jpg`,
-        alt: "@ Purpose Brewery",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/9.jpg`,
-        alt: "@ Funkwerks Brewery",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/10.jpg`,
-        alt: "@ Funkwerks Brewery",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/11.jpg`,
-        alt: "@ Fort Collins Block Party",
-      },
-      {
-        src: `${this.config.baseUrl}/img/photos/12.jpg`,
-        alt: "@ Funkwerks Brewery",
-      },
-    );
+  // async getCarouselImages(): Promise<Array<BandImage>> {
+  //   const images = new Array<BandImage>(
+  //     // {
+  //     //   src: `${this.config.baseUrl}/img/EclecticPickup-224x300.gif`,
+  //     //   alt: "",
+  //     // },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/1.jpg`,
+  //       alt: "@ Purpose Brewery",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/2.jpg`,
+  //       alt: "@ Fort Collins Block Party",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/3.jpg`,
+  //       alt: "@ Purpose Brewery",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/4.jpg`,
+  //       alt: "@ Fort Collins Block Party",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/5.jpg`,
+  //       alt: "@ Funkwerks Brewery",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/6.jpg`,
+  //       alt: "@ Funkwerks Brewery",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/7.jpg`,
+  //       alt: "@ Fort Collins Block Party",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/8.jpg`,
+  //       alt: "@ Purpose Brewery",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/9.jpg`,
+  //       alt: "@ Funkwerks Brewery",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/10.jpg`,
+  //       alt: "@ Funkwerks Brewery",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/11.jpg`,
+  //       alt: "@ Fort Collins Block Party",
+  //     },
+  //     {
+  //       src: `${this.config.baseUrl}/img/photos/12.jpg`,
+  //       alt: "@ Funkwerks Brewery",
+  //     },
+  //   );
 
-    return images;
-  }
+  //   return images;
+  // }
 
   async getAllSocialLinks(): Promise<AllSocialLinks> {
     const streamingList = new Array<SocialListing>(

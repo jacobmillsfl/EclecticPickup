@@ -51,6 +51,8 @@ def edit_user(user_id):
         return jsonify({'message': 'User not found'}), 404
     if user.username == "admin":
         return jsonify({'message': 'This user cannot be modified'}), 401
+    if data.get("scope") == "admin":
+        return jsonify({'message': 'Unauthorized scope'}), 401
 
     data = request.get_json()
     user.username = data.get('username', user.username)
@@ -64,12 +66,12 @@ def edit_user(user_id):
     db.session.commit()
     user_data = {
         'id': user.id,
-        'username': user.href_url,
-        'email': user.img_url,
-        'active': user.text,
-        'scope': user.text,
-        'about': user.text,
-        'password': user.text,
+        'username': user.username,
+        'email': user.email,
+        'active': user.active,
+        'scope': user.scope,
+        'about': user.about,
+        'password': user.password,
     }
     return jsonify({'message': 'User updated', 'data': user_data}), 200
 

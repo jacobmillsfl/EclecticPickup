@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user
 
 from Models.database import db
 from Models.bandmember import BandMember
@@ -41,7 +41,8 @@ def create_band_member():
     new_member = BandMember(
         name=data['name'],
         img_url=data.get('img_url'),
-        text=data.get('text')
+        text=data.get('text'),
+        created_by_user_id=current_user.get("id"),
     )
     db.session.add(new_member)
     db.session.commit()
@@ -67,6 +68,7 @@ def edit_band_member(member_id):
     member.name = data.get('name', member.name)
     member.img_url = data.get('img_url', member.img_url)
     member.text = data.get('text', member.text)
+    member.modified_by_user_id = current_user.get("id")
     
     db.session.commit()
     return jsonify({'message': 'Band member updated successfully'}), 200

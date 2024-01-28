@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user
 
 from Models.database import db
 from Models.sociallink import SocialLink
@@ -41,7 +41,8 @@ def create_social_link():
     new_link = SocialLink(
         href_url=data['href_url'],
         img_url=data.get('img_url'),
-        text=data.get('text')
+        text=data.get('text'),
+        created_by_user_id=current_user.get("id"),
     )
     db.session.add(new_link)
     db.session.commit()
@@ -67,6 +68,7 @@ def edit_social_link(link_id):
     link.href_url = data.get('href_url', link.href_url)
     link.img_url = data.get('img_url', link.img_url)
     link.text = data.get('text', link.text)
+    link.modified_by_user_id = current_user.get("id")
     
     db.session.commit()
     return jsonify({'message': 'Social link updated successfully'}), 200

@@ -5,3 +5,5 @@ export type { default as AlertVariant } from './AlertVariant';
 export type { default as CreateEditDataProps } from './CreateEditDataProps';
 export type { default as Data } from './Data';
 export type { default as DataTable } from './DataTable';
+export type { default as DataTableOptions } from './DataTableOptions';
+export type { default as Modify } from "./Modify";

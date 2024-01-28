@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
 import Badge from "react-bootstrap/Badge";
 import Table from "react-bootstrap/Table";
-  
 
 import Misc from "../../Utilities/Misc";
 import { ApiResponse } from "../../Utilities/Api/ApiTypes";
 import { AlertVariant, Data, DataTable } from "../../Types";
 
-// Because of TypeScript issues DataTable must be given type any here
-export function AdminDataTable<T extends Data>(props: DataTable<T> ) {
+export function AdminDataTable<T extends Data>(props: DataTable<T>) {
 
     const [selectedIndex, setSelectedIndex] = useState<number>();
     const [selectedData, setSelectedData] = useState<T>();
@@ -134,50 +132,44 @@ export function AdminDataTable<T extends Data>(props: DataTable<T> ) {
                     ))}
                 </tbody>
             </Table>
-            <div
-                className="modal show"
-                style={{ display: "block", position: "initial" }}
-            >
-                <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Delete</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>
-                            Are you sure that you want to delete the following?
-                        </p>
-                        {selectedData && (
-                            <pre style={ItemDetailsStyle}>
-                                {Object.entries(selectedData).map(([key, value]) => (
-                                    <p key={key}>
-                                        <strong>{key}:</strong> {Misc.formatType(value)}
-                                    </p>
-                                ))}
-                            </pre>
-                        )}
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>Close</Button>
-                        <Button variant="danger" onClick={handleConfirmDelete}>Delete</Button>
-                    </Modal.Footer>
-                </Modal>
-                <Modal show={showComponentModal} onHide={() => setShowComponentModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{props.name}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        {
-                            <props.component
-                                id={selectedIndex}
-                                close={() => setShowComponentModal(false)}
-                                add={(newItem) => props.add(newItem)}
-                                edit={(updatedItem) => props.edit(updatedItem)}
-                            />
-
-                        }
-                    </Modal.Body>
-                </Modal>
-            </div>
+            <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+                <Modal.Header className="bg-dark text-light" closeButton>
+                    <Modal.Title>Delete</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="bg-dark text-light">
+                    <p>
+                        Are you sure that you want to delete the following?
+                    </p>
+                    {selectedData && (
+                        <pre style={ItemDetailsStyle}>
+                            {Object.entries(selectedData).map(([key, value]) => (
+                                <p key={key}>
+                                    <strong>{key}:</strong> {Misc.formatType(value)}
+                                </p>
+                            ))}
+                        </pre>
+                    )}
+                </Modal.Body>
+                <Modal.Footer className="bg-dark text-light">
+                    <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>Close</Button>
+                    <Button variant="danger" onClick={handleConfirmDelete}>Delete</Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showComponentModal} onHide={() => setShowComponentModal(false)}>
+                <Modal.Header className="bg-dark text-light" closeButton>
+                    <Modal.Title>{props.name}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="bg-dark text-light">
+                    {
+                        <props.component
+                            id={selectedIndex}
+                            close={() => setShowComponentModal(false)}
+                            add={(newItem) => props.add(newItem)}
+                            edit={(updatedItem) => props.edit(updatedItem)}
+                        />
+                    }
+                </Modal.Body>
+            </Modal>
         </div>
     );
 };

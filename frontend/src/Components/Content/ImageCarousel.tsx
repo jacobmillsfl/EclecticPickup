@@ -1,18 +1,15 @@
+import { BandImageModel } from "../../Types/DbModels";
 import ShadowBox from "../Controls/ShadowBox";
 import Carousel from "react-bootstrap/Carousel";
 
-export type BandImage = {
-  src: string;
-  alt: string;
-};
-
-export const ImageCarousel: React.FC<{ props: Array<BandImage> }> = ({ props }) => {
+export const ImageCarousel: React.FC<{ props: Array<BandImageModel> }> = ({ props }) => {
+  console.log("img fc props", props)
   const carouselItemData = props.map((item, index) => {
     return (
       <Carousel.Item key={index}>
-        <img src={item.src} alt={item.alt} style={ImageStyle} />
+        <img src={item.filename} alt={item.caption} style={ImageStyle} />
         <Carousel.Caption style={CaptionStyle}>
-          <p>{item.alt}</p>
+          <p>{item.caption}</p>
         </Carousel.Caption>
       </Carousel.Item>
     );

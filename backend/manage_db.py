@@ -1,3 +1,4 @@
+from datetime import datetime
 import sqlite3
 import argparse
 from Utils.CryptoManager import CryptoManager
@@ -56,9 +57,10 @@ class ChangelogRunner:
         active = True
         scope = "admin"
         description = "Automatically created administrative user"
-        user_data = (self.username, self.email, hashed_password, active, scope, description)
-        sql = '''   INSERT INTO user (username, email, password, active, scope, about)
-                    VALUES (?, ?, ?, ?, ?, ?) '''
+        created_date = datetime.utcnow()
+        user_data = (self.username, self.email, hashed_password, active, scope, description, created_date)
+        sql = '''   INSERT INTO user (username, email, password, active, scope, about, created_date)
+                    VALUES (?, ?, ?, ?, ?, ?, ?) '''
         cur = self.conn.cursor()
         cur.execute(sql, user_data)
         self.conn.commit()
@@ -72,10 +74,12 @@ class ChangelogRunner:
             time = event['time']
             venue = event['venue']
             address = event['address']
+            created_by_user_id = 1
+            created_date = datetime.utcnow()
 
             cursor.execute(
-                'INSERT INTO event (date, time, venue, address) VALUES (?, ?, ?, ?)',
-                (date, time, venue, address)
+                'INSERT INTO event (date, time, venue, address, created_by_user_id, created_date) VALUES (?, ?, ?, ?, ?, ?)',
+                (date, time, venue, address, created_by_user_id, created_date)
             )
         self.conn.commit()
 
@@ -85,10 +89,12 @@ class ChangelogRunner:
         for event in settings_to_insert:
             name = event['name']
             value = event['value']
+            created_by_user_id = 1
+            created_date = datetime.utcnow()
 
             cursor.execute(
-                'INSERT INTO settings (name, value) VALUES (?, ?)',
-                (name, value)
+                'INSERT INTO settings (name, value, created_by_user_id, created_date) VALUES (?, ?, ?, ?)',
+                (name, value, created_by_user_id, created_date)
             )
         self.conn.commit()
 

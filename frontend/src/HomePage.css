@@ -844,12 +844,12 @@ h6 {
     margin: 0 0 40px 0;
 }
 
-input[type=checkbox] {
+/* input[type=checkbox] {
     visibility: hidden;
     margin: 0;
     padding: 0;
     z-index: 10;
-}
+} */
 
 label.main:before {
     position: absolute;
@@ -1406,4 +1406,43 @@ html {
     clear: left;
     font: 14px Helvetica, Arial, sans-serif;
 }
+
 /** End MailChimp **/
+
+/** Modal Theme **/
+/* Dark mode styles for the modal */
+.dark-mode-modal {
+    background: #333;
+    /* Dark background color */
+    color: #fff;
+    /* Light text color */
+}
+
+.dark-mode-modal .modal-header {
+    background-color: #444;
+    /* Dark header background color */
+    color: #fff;
+    /* Light header text color */
+}
+
+.dark-mode-modal .modal-body {
+    background-color: #333;
+    /* Dark body background color */
+    color: #fff;
+    /* Light body text color */
+}
+
+/** END Modal Theme **/
+
+/** Image Hover**/
+.hover-zoom {
+    transition: transform 0.3s;
+}
+
+.hover-zoom:hover {
+    transform: scale(5);
+    max-width: 50vw;
+    max-height: 50vh;
+}
+
+/** END Image Hover **/

@@ -83,33 +83,31 @@ export const CreateSetting: React.FC<CreateEditDataProps<SettingsModel>> = (prop
     }
 
     return (
-        <ContentContainer>
-            <ShadowBox mode="form">
-                {displayAlert &&
-                    <Alert className="mt-5" variant={alertVariant} dismissible onClose={() => setDisplayAlert(false)}>
-                        <Alert.Heading>{alertHeading}</Alert.Heading>
-                        <p>
-                            {alertMessage}
-                        </p>
-                    </Alert>
-                }
-                <Form className="input-form" onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="formBasicName">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicValue">
-                        <Form.Label>Value</Form.Label>
-                        <Form.Control type="text" as="textarea" rows={8} placeholder="Value" value={value} onChange={e => setValue(e.target.value)} />
-                    </Form.Group>
-                    <Button variant="danger" type="button" size="lg" className="input-form-button mt-5" onClick={props.close}>
-                        Cancel
-                    </Button>
-                    <Button variant="success" type="submit" size="lg" className="input-form-button mt-5" style={{"float":"right"}}>
-                        Submit
-                    </Button>
-                </Form>
-            </ShadowBox>
-        </ContentContainer>
+        <>
+            {displayAlert &&
+                <Alert className="mt-5" variant={alertVariant} dismissible onClose={() => setDisplayAlert(false)}>
+                    <Alert.Heading>{alertHeading}</Alert.Heading>
+                    <p>
+                        {alertMessage}
+                    </p>
+                </Alert>
+            }
+            <Form className="input-form" onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="formBasicName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicValue">
+                    <Form.Label>Value</Form.Label>
+                    <Form.Control type="text" as="textarea" rows={8} placeholder="Value" value={value} onChange={e => setValue(e.target.value)} />
+                </Form.Group>
+                <Button variant="danger" type="button" size="lg" className="input-form-button mt-5" onClick={props.close}>
+                    Cancel
+                </Button>
+                <Button variant="success" type="submit" size="lg" className="input-form-button mt-5" style={{ "float": "right" }}>
+                    Submit
+                </Button>
+            </Form>
+        </>
     )
 }

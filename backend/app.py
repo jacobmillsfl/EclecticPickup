@@ -53,6 +53,11 @@ db.init_app(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
 
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    return identity
+
 # #####################
 # Routes
 # #####################
@@ -76,5 +81,5 @@ def home():
 
 
 # WARNING: Comment this code when running in docker. Uncomment only for local dev without Docker.
-# if __name__ == "__main__":
-#    app.run(host="0.0.0.0", port=8081)
+if __name__ == "__main__":
+   app.run(host="0.0.0.0", port=8081)

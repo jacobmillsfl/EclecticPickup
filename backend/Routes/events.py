@@ -1,5 +1,6 @@
+from datetime import datetime
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from Utils.ConfigManager import ConfigManager
 from Models.event import Event
@@ -14,7 +15,7 @@ def get_all_events():
     events = Event.query.all()
     event_list = [{
         'id': event.id,
-        'date': event.date,
+        'date': event.date.strftime("%Y-%m-%d"),
         'time': event.time,
         'venue': event.venue,
         'address': event.address
@@ -27,7 +28,7 @@ def get_event_by_id(event_id):
     if event:
         event_data = {
             'id': event.id,
-            'date': event.date,
+            'date': event.date.strftime("%Y-%m-%d"),
             'time': event.time,
             'venue': event.venue,
             'address': event.address
@@ -43,17 +44,18 @@ def get_event_by_id(event_id):
 def create_event():
     data = request.get_json()
     new_event = Event(
-        date=data['date'],
+        date=datetime.strptime(data['date'], "%Y-%m-%d").date(),
         time=data['time'],
         venue=data['venue'],
-        address=data['address']
+        address=data['address'],
+        created_by_user_id=get_jwt_identity().get("id"),
     )
     db.session.add(new_event)
     db.session.commit()
     db.session.flush()
     event_data = {
         'id': new_event.id,
-        'date': new_event.date,
+        'date': new_event.date.strftime("%Y-%m-%d"),
         'time': new_event.time,
         'venue': new_event.venue,
         'address': new_event.address
@@ -70,10 +72,11 @@ def edit_event(event_id):
         return jsonify({'message': 'Event not found'}), 404
 
     data = request.get_json()
-    event.date = data.get('date', event.date)
+    event.date = datetime.strptime(data['date'], "%Y-%m-%d").date()
     event.time = data.get('time', event.time)
     event.venue = data.get('venue', event.venue)
     event.address = data.get('address', event.address)
+    event.modified_by_user_id = get_jwt_identity().get("id")
     
     db.session.commit()
     return jsonify({'message': 'Event updated successfully'}), 200

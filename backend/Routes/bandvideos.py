@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user
 
 from Models.database import db
 from Models.bandvideo import BandVideo
@@ -41,7 +41,8 @@ def create_band_video():
     new_video = BandVideo(
         src=data['src'],
         description=data.get('description'),
-        youtube=data.get('youtube', False)
+        youtube=data.get('youtube', False),
+        created_by_user_id=current_user.get("id"),
     )
     db.session.add(new_video)
     db.session.commit()
@@ -67,6 +68,7 @@ def edit_band_video(video_id):
     video.src = data.get('src', video.src)
     video.description = data.get('description', video.description)
     video.youtube = data.get('youtube', video.youtube)
+    video.modified_by_user_id = current_user.get("id")
     
     db.session.commit()
     return jsonify({'message': 'Band video updated successfully'}), 200

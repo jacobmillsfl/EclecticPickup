@@ -41,12 +41,10 @@ export class UserApi implements ICrudApi<UserModel> {
       },
     });
     const result = await response.json();
-    console.log("RES", result)
-    const data = {
+    return {
       ...result,
       status: response.status,
     };
-    return data;
   }
 
   async create(

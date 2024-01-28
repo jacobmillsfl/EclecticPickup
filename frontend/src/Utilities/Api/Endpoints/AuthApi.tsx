@@ -1,4 +1,6 @@
-import { ApiConfig, ApiResponse } from "../ApiTypes";
+import { UserModel } from "../../../Types/DbModels";
+import AuthManager from "../../AuthManager";
+import { ApiConfig, ApiResponse, ApiResponseWithData } from "../ApiTypes";
 
 export class AuthApi {
   private config: ApiConfig;
@@ -8,27 +10,25 @@ export class AuthApi {
   }
 
   async registerUser(
-    username: string,
-    email: string,
-    password: string
-  ): Promise<ApiResponse> {
+    user: Omit<UserModel, "id">
+  ): Promise<ApiResponseWithData<UserModel>> {
+    const jwtToken = AuthManager.getAuthToken();
     const response = await fetch(`${this.config.apiUrl}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
-        username: username,
-        email: email,
-        password: password,
+        ...user
       }),
     });
     const result = await response.json();
-    const data = {
+
+    return {
       ...result,
       status: response.status,
-    } as ApiResponse;
-    return data;
+    }  as ApiResponseWithData<UserModel>;
   }
 
   async login(username: string, password: string): Promise<ApiResponse> {
@@ -43,10 +43,9 @@ export class AuthApi {
       }),
     });
     const result = await response.json();
-    const data = {
+    return {
       ...result,
       status: response.status,
-    } as ApiResponse;
-    return data;
+    }  as ApiResponse;
   }
 }

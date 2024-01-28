@@ -36,7 +36,7 @@ def required_fields(fields):
 
             for field in fields:
                 if not data.get(field):
-                    return jsonify({'error': f'{field} cannot be empty'}), 400
+                    return jsonify({'message': f'{field} cannot be empty'}), 400
 
             return func(*args, **kwargs)
 

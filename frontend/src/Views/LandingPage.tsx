@@ -1,6 +1,6 @@
 import "../HomePage.css";
 import { useContext, useEffect, useState } from "react";
-import { ImageCarousel, BandImage } from "../Components/Content/ImageCarousel";
+import { ImageCarousel } from "../Components/Content/ImageCarousel";
 import { ContentContainer } from "../Components/Controls/ContentContainer";
 import {
   BandMember,

@@ -1,3 +1,5 @@
+import Image from 'react-bootstrap/Image';
+
 export default class Misc {
     static formatDate = (date: Date) => {
         const months = [
@@ -26,6 +28,12 @@ export default class Misc {
 
     static formatType = (item: unknown) => {
         if (typeof item === "string") {
+            const imageTypes = [".png",".jpg",".jpeg",".gif"]
+            for (const ext of imageTypes) {
+                if (item.endsWith(ext)) {
+                    return <Image src={`${process.env.REACT_APP_API_URL}/files/${item}`} className="hover-zoom" style={{"maxWidth": "100px", "maxHeight":"100px"}} thumbnail />
+                }
+            }
             return item.toString();
         } else if (item instanceof Date) {
             return Misc.formatDate(item);

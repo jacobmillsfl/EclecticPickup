@@ -21,25 +21,7 @@ export const RegisterComponent: React.FC = () => {
     const  handleSubmit = async (event: any) => {
         console.log(username, email, password, confirmPassword);
         event.preventDefault();
-        if (password === confirmPassword) {
-            ApiClient.auth.registerUser(username, email, password).then( result => {
-                setDisplayAlert(true);
-                setAlertMessage(result.message);
-                console.log(result)
-                if (result.status === 200) {
-                    setAlertHeading("Success");
-                    setAlertVariant("success");
-                } else {
-                    setAlertHeading("Error");
-                    setAlertVariant("danger");
-                }
-            })
-        } else {
-            setDisplayAlert(true);
-            setAlertHeading("Error");
-            setAlertMessage("Passwords must match");
-            setAlertVariant("danger");
-        }
+
     }
 
     return (

@@ -1,14 +1,13 @@
 import { createContext } from 'react';
 import { BandMember } from '../Components/Content/BandMemberList';
 import { AllSocialLinks } from '../Components/Content/Socials';
-import { BandImage } from "../Components/Content/ImageCarousel";
 import { BandVideo } from "../Components/Content/VideoCarousel";
-import { EventModel, SettingsModel } from '../Types/DbModels';
+import { EventModel, SettingsModel, BandImageModel } from '../Types/DbModels';
 
 interface ApplicationContext {
     loggedIn: boolean;
     bandMembers: Array<BandMember>;
-    images: Array<BandImage>;
+    images: Array<BandImageModel>;
     videos: Array<BandVideo>;
     gigs: Array<EventModel>;
     settings: Array<SettingsModel>;
@@ -17,7 +16,7 @@ interface ApplicationContext {
     setLoggedIn: (jwt: boolean) => void;
     setSettings: (settings: Array<SettingsModel>) => void;
     setBandMembers: (members: Array<BandMember>) => void;
-    setImages: (images: Array<BandImage>) => void;
+    setImages: (images: Array<BandImageModel>) => void;
     setVideos: (videos: Array<BandVideo>) => void;
     setGigs: (props: Array<EventModel>) => void;
     setSocialLinks: (links: AllSocialLinks) => void;
