@@ -28,10 +28,10 @@ export default class Misc {
 
     static formatType = (item: unknown) => {
         if (typeof item === "string") {
-            const imageTypes = [".png",".jpg",".jpeg",".gif"]
+            const imageTypes = [".png", ".jpg", ".jpeg", ".gif"]
             for (const ext of imageTypes) {
                 if (item.endsWith(ext)) {
-                    return <Image src={`${process.env.REACT_APP_API_URL}/files/${item}`} className="hover-zoom" style={{"maxWidth": "100px", "maxHeight":"100px"}} thumbnail />
+                    return <Image src={`${item}`} className="hover-zoom" style={{ "maxWidth": "100px", "maxHeight": "100px" }} thumbnail />
                 }
             }
             return item.toString();
@@ -47,15 +47,25 @@ export default class Misc {
     }
 
     static shuffleArray(array: Array<any>) {
-        let currentIndex = array.length,  randomIndex;
-      
+        let currentIndex = array.length, randomIndex;
+
         while (currentIndex > 0) {
-          randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex--;
-          [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]];
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
         }
-      
+
         return array;
-      }
+    }
+
+    static isValidUrl(url: string): boolean {
+        try {
+            const parsedUrl = new URL(url);
+            const isSafeUrl = url === parsedUrl.href || `${url}/` === parsedUrl.href;
+
+            return isSafeUrl;
+        } catch (error) {
+            return false;
+        }
+    }
 }

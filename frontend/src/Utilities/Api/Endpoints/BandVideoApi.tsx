@@ -1,8 +1,8 @@
-import { BandImageModel } from "../../../Types/DbModels";
+import { BandVideoModel } from "../../../Types/DbModels";
 import AuthManager from "../../AuthManager";
 import { ApiConfig, ApiResponse, ApiResponseWithData, ICrudApi } from "../ApiTypes";
 
-export class BandImageApi implements ICrudApi<BandImageModel> {
+export class BandVideoApi implements ICrudApi<BandVideoModel> {
     private config: ApiConfig;
 
     constructor(config: ApiConfig) {
@@ -10,18 +10,18 @@ export class BandImageApi implements ICrudApi<BandImageModel> {
     }
 
     async create(
-        bandImage: Omit<BandImageModel, "id">
-    ): Promise<ApiResponseWithData<BandImageModel>> {
+        bandVideo: Omit<BandVideoModel, "id">
+    ): Promise<ApiResponseWithData<BandVideoModel>> {
         const jwtToken = AuthManager.getAuthToken();
 
-        const response = await fetch(`${this.config.apiUrl}/bandimages`, {
+        const response = await fetch(`${this.config.apiUrl}/bandvideos`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${jwtToken}`,
             },
             body: JSON.stringify({
-                ...bandImage
+                ...bandVideo
             }),
         });
         const result = await response.json();
@@ -30,15 +30,18 @@ export class BandImageApi implements ICrudApi<BandImageModel> {
             ...result,
             status: response.status,
             data: response.status === 200
-                ? { ...result.data, filename: `${this.config.apiUrl}/files/${result.data.filename}` }
+                ? {
+                    ...result.data,
+                    src: result.data.youtube ? result.data.src : `${this.config.apiUrl}/bandvideos/${result.data.src}`
+                }
                 : undefined,
         };
     }
 
-    async get(bandImageId: number): Promise<ApiResponseWithData<BandImageModel>> {
+    async get(bandVideoId: number): Promise<ApiResponseWithData<BandVideoModel>> {
         const jwtToken = AuthManager.getAuthToken();
 
-        const response = await fetch(`${this.config.apiUrl}/bandimages/${bandImageId}`, {
+        const response = await fetch(`${this.config.apiUrl}/bandvideos/${bandVideoId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${jwtToken}`,
@@ -50,15 +53,18 @@ export class BandImageApi implements ICrudApi<BandImageModel> {
             ...result,
             status: response.status,
             data: response.status === 200
-                ? { ...result.data, filename: `${this.config.apiUrl}/files/${result.data.filename}` }
+                ? {
+                    ...result.data,
+                    src: result.data.youtube ? result.data.src : `${this.config.apiUrl}/bandvideos/${result.data.src}`
+                }
                 : undefined,
         };
     }
 
-    async all(): Promise<ApiResponseWithData<Array<BandImageModel>>> {
+    async all(): Promise<ApiResponseWithData<Array<BandVideoModel>>> {
         const jwtToken = AuthManager.getAuthToken();
 
-        const response = await fetch(`${this.config.apiUrl}/bandimages`, {
+        const response = await fetch(`${this.config.apiUrl}/bandvideos`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${jwtToken}`,
@@ -69,25 +75,25 @@ export class BandImageApi implements ICrudApi<BandImageModel> {
         return {
             ...result,
             status: response.status,
-            data: result.data.map((image: BandImageModel) => ({
-                ...image,
-                filename: `${this.config.apiUrl}/files/${image.filename}`,
+            data: result.data.map((video: BandVideoModel) => ({
+                ...video,
+                src: result.data.youtube ? result.data.src : `${this.config.apiUrl}/bandvideos/${result.data.src}`,
             })),
         };
     }
 
     async update(
-        bandImage: Omit<BandImageModel, "filename">
-    ): Promise<ApiResponseWithData<BandImageModel>> {
+        bandVideo: Omit<BandVideoModel, "src">
+    ): Promise<ApiResponseWithData<BandVideoModel>> {
         const jwtToken = AuthManager.getAuthToken();
 
-        const response = await fetch(`${this.config.apiUrl}/bandimages/${bandImage.id}`, {
+        const response = await fetch(`${this.config.apiUrl}/bandvideos/${bandVideo.id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${jwtToken}`,
             },
-            body: JSON.stringify({ ...bandImage }),
+            body: JSON.stringify({ ...bandVideo }),
         });
         const result = await response.json();
 
@@ -100,10 +106,10 @@ export class BandImageApi implements ICrudApi<BandImageModel> {
         };
     }
 
-    async delete(bandImageId: number): Promise<ApiResponse> {
+    async delete(bandVideoId: number): Promise<ApiResponse> {
         const jwtToken = AuthManager.getAuthToken();
 
-        const response = await fetch(`${this.config.apiUrl}/bandimages/${bandImageId}`, {
+        const response = await fetch(`${this.config.apiUrl}/bandvideos/${bandVideoId}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${jwtToken}`,

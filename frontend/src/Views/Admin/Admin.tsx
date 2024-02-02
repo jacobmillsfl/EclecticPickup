@@ -10,11 +10,12 @@ import { CreateEvent } from "./CreateEvent";
 import { CreateSetting } from "./CreateSetting";
 import { useNavigate } from "react-router-dom";
 import appContext from "../../Contexts/AppContext";
-import { EventModel, SettingsModel, UserModel } from "../../Types/DbModels";
+import { BandVideoModel, EventModel, SettingsModel, UserModel } from "../../Types/DbModels";
 import { CreateUser } from "./CreateUser";
 import DataTableFactory from "../../Utilities/DataTableHelper";
 import BandImageModel from "../../Types/DbModels/BandImageModel";
 import { CreateBandImage } from "./CreateBandImage";
+import { CreateBandVideo } from "./CreateBandVideo";
 
 export const AdminComponent: React.FC = () => {
   const { loggedIn, gigs, settings, setGigs, setSettings } = useContext(appContext);
@@ -22,6 +23,7 @@ export const AdminComponent: React.FC = () => {
   const [subject, setSubject] = useState<JwtSubject>();
   const [users, setUsers] = useState<Array<UserModel>>(new Array());
   const [bandPictures, setBandPictures] = useState<Array<BandImageModel>>(new Array());
+  const [bandVideos, setBandVideos] = useState<Array<BandVideoModel>>(new Array());
 
   useEffect(() => {
     if (!loggedIn) {
@@ -96,6 +98,14 @@ export const AdminComponent: React.FC = () => {
     api: ApiClient.bandImage,
   });
 
+  const bandVidsDataTable = DataTableFactory.createDataTable<BandVideoModel>({
+    name: "Band Videos",
+    items: bandVideos,
+    setItems: setBandVideos,
+    component: CreateBandVideo,
+    api: ApiClient.bandVideo,
+  });
+
   return (
     <ContentContainer>
       <ShadowBox mode="wide">
@@ -114,14 +124,14 @@ export const AdminComponent: React.FC = () => {
           <Tab eventKey="settings" title="Settings">
             <AdminDataTable<SettingsModel> {...settingsDataTable} />
           </Tab>
-          <Tab eventKey="members" title="Band">
+          {/* <Tab eventKey="members" title="Band">
             <AdminDataTable<BandImageModel> {...bandPicsDataTable} />
-          </Tab>
+          </Tab> */}
           <Tab eventKey="pictures" title="Pictures">
             <AdminDataTable<BandImageModel> {...bandPicsDataTable} />
           </Tab>
           <Tab eventKey="videos" title="Videos">
-            <AdminDataTable<BandImageModel> {...bandPicsDataTable} />
+            <AdminDataTable<BandVideoModel> {...bandVidsDataTable} />
           </Tab>
           <Tab eventKey="socials" title="Socials">
             <AdminDataTable<BandImageModel> {...bandPicsDataTable} />

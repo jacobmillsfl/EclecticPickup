@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, current_user
+import validators
 
 from Models.database import db
 from Models.bandvideo import BandVideo
@@ -38,6 +39,11 @@ def get_band_video_by_id(video_id):
 @required_fields(["src","description","youtube"])
 def create_band_video():
     data = request.get_json()
+
+    # Don't allow invalid URLs for YouTube videos
+    if data['youtube'] is True and not validators.url(data['src']):
+        return jsonify({'status': 'error', 'message': 'Invalid src URL'})
+
     new_video = BandVideo(
         src=data['src'],
         description=data.get('description'),

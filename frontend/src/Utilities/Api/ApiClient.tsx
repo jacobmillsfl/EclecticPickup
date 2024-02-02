@@ -9,6 +9,7 @@ import { AuthApi } from "./Endpoints/AuthApi";
 import { UserApi } from "./Endpoints/UserApi";
 import { BandImageApi } from "./Endpoints/BandImageApi";
 import { FileApi } from "./Endpoints/FileApi";
+import { BandVideoApi } from "./Endpoints/BandVideoApi";
 
 
 class ApiClient {
@@ -18,6 +19,7 @@ class ApiClient {
   auth: AuthApi;
   user: UserApi;
   bandImage: BandImageApi;
+  bandVideo: BandVideoApi;
   file: FileApi;
 
   constructor(config: ApiConfig) {
@@ -27,6 +29,7 @@ class ApiClient {
     this.auth = new AuthApi(config);
     this.user = new UserApi(config);
     this.bandImage = new BandImageApi(config);
+    this.bandVideo = new BandVideoApi(config);
     this.file = new FileApi(config);
   }
 

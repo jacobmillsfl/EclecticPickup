@@ -111,7 +111,7 @@ export const CreateBandImage: React.FC<CreateEditDataProps<BandImageModel>> = (p
                 </Form.Group>
                 {filename !== "" &&
                     <>
-                        <Image src={`${process.env.REACT_APP_API_URL}/files/${filename}`} className="mx-auto d-block" style={{ "maxHeight": "300px" }} thumbnail />
+                        <Image src={`${filename}`} className="mx-auto d-block" style={{ "maxHeight": "300px" }} thumbnail />
                         <br /><br />
                     </>
                 }
