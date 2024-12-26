@@ -8,7 +8,7 @@ export type ApiConfig = {
 };
 
 export type ApiResponse = {
-  message: string;
+  msg: string;
   status: number;
 };
 

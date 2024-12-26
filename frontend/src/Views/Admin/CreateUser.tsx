@@ -68,7 +68,7 @@ export const CreateUser: React.FC<CreateEditDataProps<UserModel>> = (props) => {
                 }
                 ApiClient.user.update(updatedUser).then(result => {
                     setDisplayAlert(true);
-                    setAlertMessage(result.message);
+                    setAlertMessage(result.msg);
                     if (result.status === 200) {
                         setAlertHeading("Success");
                         setAlertVariant("success");
@@ -90,7 +90,7 @@ export const CreateUser: React.FC<CreateEditDataProps<UserModel>> = (props) => {
                     }
                     ApiClient.auth.registerUser(newUser).then(result => {
                         setDisplayAlert(true);
-                        setAlertMessage(result.message);
+                        setAlertMessage(result.msg);
                         if (result.status === 200 && result.data) {
                             setAlertHeading("Success");
                             setAlertVariant("success");

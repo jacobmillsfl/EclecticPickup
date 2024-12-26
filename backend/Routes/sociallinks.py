@@ -16,7 +16,7 @@ def get_all_social_links():
         'img_url': link.img_url,
         'text': link.text
     } for link in social_links]
-    return jsonify({'message': 'All social links', 'data': social_link_list}), 200
+    return jsonify({'msg': 'All social links', 'data': social_link_list}), 200
 
 @sociallink_bp.route('/sociallinks/<int:link_id>', methods=['GET'])
 def get_social_link_by_id(link_id):
@@ -28,9 +28,9 @@ def get_social_link_by_id(link_id):
             'img_url': link.img_url,
             'text': link.text
         }
-        return jsonify({'message': 'Social link found', 'data': link_data}), 200
+        return jsonify({'msg': 'Social link found', 'data': link_data}), 200
     else:
-        return jsonify({'message': 'Social link not found'}), 404
+        return jsonify({'msg': 'Social link not found'}), 404
 
 @sociallink_bp.route('/sociallinks', methods=['POST'])
 @jwt_required()
@@ -53,7 +53,7 @@ def create_social_link():
         'img_url': new_link.img_url,
         'text': new_link.text
     }
-    return jsonify({'message': 'SocialLink created', 'data': link_data}), 200
+    return jsonify({'msg': 'SocialLink created', 'data': link_data}), 200
 
 @sociallink_bp.route('/sociallinks/<int:link_id>', methods=['PUT'])
 @jwt_required()
@@ -62,7 +62,7 @@ def create_social_link():
 def edit_social_link(link_id):
     link = SocialLink.query.get(link_id)
     if not link:
-        return jsonify({'message': 'Social link not found'}), 404
+        return jsonify({'msg': 'Social link not found'}), 404
 
     data = request.get_json()
     link.href_url = data.get('href_url', link.href_url)
@@ -71,7 +71,7 @@ def edit_social_link(link_id):
     link.modified_by_user_id = current_user.get("id")
     
     db.session.commit()
-    return jsonify({'message': 'Social link updated successfully'}), 200
+    return jsonify({'msg': 'Social link updated successfully'}), 200
 
 @sociallink_bp.route('/sociallinks/<int:link_id>', methods=['DELETE'])
 @jwt_required()
@@ -79,8 +79,8 @@ def edit_social_link(link_id):
 def delete_social_link(link_id):
     link = SocialLink.query.get(link_id)
     if not link:
-        return jsonify({'message': 'Social link not found'}), 404
+        return jsonify({'msg': 'Social link not found'}), 404
 
     db.session.delete(link)
     db.session.commit()
-    return jsonify({'message': 'Social link deleted successfully'}), 200
+    return jsonify({'msg': 'Social link deleted successfully'}), 200

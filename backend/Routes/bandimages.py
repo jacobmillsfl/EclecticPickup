@@ -16,7 +16,7 @@ def get_all_band_images():
         'filename': image.filename,
         'caption': image.caption
     } for image in band_images]
-    return jsonify({'message': 'All band images', 'data': band_image_list}), 200
+    return jsonify({'msg': 'All band images', 'data': band_image_list}), 200
 
 @bandimage_bp.route('/bandimages/<int:image_id>', methods=['GET'])
 def get_band_image_by_id(image_id):
@@ -27,9 +27,9 @@ def get_band_image_by_id(image_id):
             'filename': image.filename,
             'caption': image.caption
         }
-        return jsonify({'message': 'Band image found', 'data': image_data}), 200
+        return jsonify({'msg': 'Band image found', 'data': image_data}), 200
     else:
-        return jsonify({'message': 'Band image not found'}), 404
+        return jsonify({'msg': 'Band image not found'}), 404
 
 @bandimage_bp.route('/bandimages', methods=['POST'])
 @jwt_required()
@@ -50,7 +50,7 @@ def create_band_image():
         'filename': new_image.filename,
         'caption': new_image.caption,
     }
-    return jsonify({'message': 'BandImage created', 'data': image_data}), 200
+    return jsonify({'msg': 'BandImage created', 'data': image_data}), 200
 
 @bandimage_bp.route('/bandimages/<int:image_id>', methods=['PUT'])
 @jwt_required()
@@ -59,14 +59,14 @@ def create_band_image():
 def edit_band_image(image_id):
     image = BandImage.query.get(image_id)
     if not image:
-        return jsonify({'message': 'Band image not found'}), 404
+        return jsonify({'msg': 'Band image not found'}), 404
 
     data = request.get_json()
     image.caption = data.get('caption', image.caption)
     image.modified_by_user_id = current_user.get("id")
     
     db.session.commit()
-    return jsonify({'message': 'Band image updated successfully'}), 200
+    return jsonify({'msg': 'Band image updated successfully'}), 200
 
 @bandimage_bp.route('/bandimages/<int:image_id>', methods=['DELETE'])
 @jwt_required()
@@ -74,7 +74,7 @@ def edit_band_image(image_id):
 def delete_band_image(image_id):
     image = BandImage.query.get(image_id)
     if not image:
-        return jsonify({'message': 'Band image not found'}), 404
+        return jsonify({'msg': 'Band image not found'}), 404
 
     db.session.delete(image)
     db.session.commit()
@@ -82,8 +82,8 @@ def delete_band_image(image_id):
     try:
         if os.path.exists(image.filename):
             os.remove(image.filename)
-            return jsonify({'message': 'Band image deleted successfully'}), 200
+            return jsonify({'msg': 'Band image deleted successfully'}), 200
         else:
-            return jsonify({"message": f"Unable to remove image {image.filename} not found"}), 404
+            return jsonify({"msg": f"Unable to remove image {image.filename} not found"}), 404
     except Exception as e:
-        return jsonify({"message": f"Error removing file: {str(e)}"}), 500
+        return jsonify({"msg": f"Error removing file: {str(e)}"}), 500

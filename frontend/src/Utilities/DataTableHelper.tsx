@@ -57,7 +57,7 @@ export default class DataTableHelper {
               id ? edit(result.data) : add(result.data);
               close();
             } else {
-              updateAlert(true, 'Error', 'danger', result.message || 'An error occurred');
+              updateAlert(true, 'Error', 'danger', result.msg || 'An error occurred');
             }
           } catch (error) {
             console.error('Error:', error);

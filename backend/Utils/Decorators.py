@@ -10,7 +10,7 @@ def scope_required(scopes: list):
             identity_scopes = get_jwt_identity().get('scope', [])
             authorized = any(scope in identity_scopes for scope in scopes)
             if not authorized:
-                return jsonify({'message': 'Unauthorized'}), 403
+                return jsonify({'msg': 'Unauthorized'}), 403
             return func(*args, **kwargs)
         return wrapper
     return decorator
@@ -23,7 +23,7 @@ def user_edit_permission(func):
         identity_scopes = get_jwt_identity().get('scope', [])
 
         if current_user_id != user_id and 'admin' not in identity_scopes:
-            return jsonify({'message': 'Unauthorized'}), 403
+            return jsonify({'msg': 'Unauthorized'}), 403
 
         return func(*args, **kwargs)
     return wrapper
@@ -36,7 +36,7 @@ def required_fields(fields):
 
             for field in fields:
                 if not data.get(field):
-                    return jsonify({'message': f'{field} cannot be empty'}), 400
+                    return jsonify({'msg': f'{field} cannot be empty'}), 400
 
             return func(*args, **kwargs)
 

@@ -61,7 +61,7 @@ export const CreateBandImage: React.FC<CreateEditDataProps<BandImageModel>> = (p
                     props.edit({...updatedBandImage, filename: filename })
                     props.close();
                 } else {
-                    updateAlert(true, "Error", "danger", result.message);
+                    updateAlert(true, "Error", "danger", result.msg);
                 }
             })
         } else if (file !== null && caption !== "") {
@@ -81,11 +81,11 @@ export const CreateBandImage: React.FC<CreateEditDataProps<BandImageModel>> = (p
                             props.add(bandImage)
                             props.close();
                         } else {
-                            updateAlert(true, "Error", "danger", result.message);
+                            updateAlert(true, "Error", "danger", result.msg);
                         }
                     })
                 } else {
-                    updateAlert(true, "Error", "danger", response.message);
+                    updateAlert(true, "Error", "danger", response.msg);
                 }
             })
         } else {

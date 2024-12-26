@@ -53,7 +53,7 @@ class ApiClient {
       {
         name: "Big Obie",
         imgUrl: "img/band/bigobie3.png",
-        text: "Mandolin, Vocals, Percussion",
+        text: "Mandolin, Keys, Vocals, Percussion",
       },
       {
         name: "Liam",
