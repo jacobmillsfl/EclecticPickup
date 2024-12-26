@@ -13,6 +13,7 @@ services:
     volumes:
       - ep_files:/home/appuser/app/files
       - ./backend/instance:/home/appuser/app/instance
+      - ./backend/init_script.sh:/home/appuser/app/init_script.sh
   app:
     container_name: eclecticpickup-app
     restart: unless-stopped
