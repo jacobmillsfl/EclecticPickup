@@ -17,6 +17,7 @@ export const MailChimpComponent: React.FC = () => {
       <div
         className="row"
         style={{
+          maxWidth: "800px",
           marginLeft: "auto",
           marginRight: "auto",
           color: "black",

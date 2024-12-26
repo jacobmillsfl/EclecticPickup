@@ -13,17 +13,17 @@ import { EventModel, SettingsModel, BandImageModel } from "../Types/DbModels";
 const AppContextProvider = (props: any) => {
   const [loggedIn, setLoggedIn] = useState(AuthManager.isAuthenticated());
   const [bandMembers, setBandMembers] = useState<Array<BandMember>>(
-    new Array()
+    []
   );
-  const [images, setImages] = useState<Array<BandImageModel>>(new Array());
-  const [videos, setVideos] = useState<Array<BandVideo>>(new Array());
-  const [gigs, setGigs] = useState<Array<EventModel>>(new Array());
-  const [settings, setSettings] = useState<Array<SettingsModel>>(new Array());
+  const [images, setImages] = useState<Array<BandImageModel>>([]);
+  const [videos, setVideos] = useState<Array<BandVideo>>([]);
+  const [gigs, setGigs] = useState<Array<EventModel>>([]);
+  const [settings, setSettings] = useState<Array<SettingsModel>>([]);
   const [socialLinks, setSocialLinks] = useState<AllSocialLinks>({
-    email: new Array(),
-    merch: new Array(),
-    socialMedia: new Array(),
-    streaming: new Array(),
+    email: [],
+    merch: [],
+    socialMedia: [],
+    streaming: [],
   });
 
   useEffect(() => {
@@ -42,7 +42,6 @@ const AppContextProvider = (props: any) => {
     const fetchImages = async () => {
       const response = await ApiClient.bandImage.all();
       if (response.data) {
-        console.log("IMAGES", response.data)
         setImages(Misc.shuffleArray(response.data));
       }
     };

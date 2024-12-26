@@ -67,34 +67,14 @@ class ApiClient {
   async getCarouselVideos(): Promise<Array<BandVideo>> {
     const videos = new Array<BandVideo>(
       {
-        src: `${this.config.baseUrl}/vids/EclecticPickup_WakeUpCall.mp4`,
-        alt: "Video Clip",
-        youtube: false
-      },
-      {
-        src: `https://www.youtube.com/embed/fjvXvEQSXrI?si=CzJAUOQqjuIsRCni`,
-        alt: "Funk'n A",
+        src: `https://www.youtube.com/embed/1db_WARusxQ?si=_JbIkY7f8u531N0T`,
+        alt: "The Devil You Know",
         youtube: true,
       },
       {
-        src: `https://www.youtube.com/embed/Gbcc9EOd2ik?si=3_h__QsQATo9Ea-5`,
-        alt: "Stepping Stones",
+        src: `https://www.youtube.com/embed/RBed2sk8vsk?si=TdOVfB3tiTD4qZyF`,
+        alt: "Too Much Too Late",
         youtube: true,
-      },
-      {
-        src: `${this.config.baseUrl}/vids/1.mov`,
-        alt: "Video Clip",
-        youtube: false
-      },
-      {
-        src: `${this.config.baseUrl}/vids/2.mov`,
-        alt: "Video Clip",
-        youtube: false
-      },
-      {
-        src: `${this.config.baseUrl}/vids/3.mov`,
-        alt: "Video Clip",
-        youtube: false
       }
     );
     return videos;
