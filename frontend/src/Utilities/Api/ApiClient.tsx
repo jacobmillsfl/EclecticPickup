@@ -165,6 +165,11 @@ class ApiClient {
         hrefUrl: "https://theeclecticpickup.bandcamp.com/",
         imgUrl: `${this.config.baseUrl}/img/socials/bandcamp.png`,
         text: "BandCamp",
+      },
+      {
+        hrefUrl: "https://youtube.com/@eclecticpickup",
+        imgUrl: `${this.config.baseUrl}/img/socials/youtube.jpg`,
+        text: "YouTube",
       }
     );
 

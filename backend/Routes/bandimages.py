@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, current_user
 
@@ -77,4 +78,12 @@ def delete_band_image(image_id):
 
     db.session.delete(image)
     db.session.commit()
-    return jsonify({'message': 'Band image deleted successfully'}), 200
+
+    try:
+        if os.path.exists(image.filename):
+            os.remove(image.filename)
+            return jsonify({'message': 'Band image deleted successfully'}), 200
+        else:
+            return jsonify({"message": f"Unable to remove image {image.filename} not found"}), 404
+    except Exception as e:
+        return jsonify({"message": f"Error removing file: {str(e)}"}), 500
