@@ -19,7 +19,6 @@ export const MailChimpComponent: React.FC = () => {
         style={{
           marginLeft: "auto",
           marginRight: "auto",
-          width: "fit-content",
           color: "black",
         }}
       >
@@ -101,19 +100,6 @@ export const MailChimpComponent: React.FC = () => {
                             borderRadius: "4px",
                           }}
                         >
-                          <img
-                            className="refferal_badge"
-                            src="https://digitalasset.intuit.com/render/content/dam/intuit/mc-fe/en_us/images/intuit-mc-rewards-text-dark.svg"
-                            alt="Intuit Mailchimp"
-                            style={{
-                              width: "220px",
-                              height: "40px",
-                              display: "flex",
-                              padding: "2px 0px",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          />
                         </span>
                       </a>
                     </p>
