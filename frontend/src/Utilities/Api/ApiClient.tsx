@@ -53,7 +53,7 @@ class ApiClient {
       {
         name: "Big Obie",
         imgUrl: "img/band/bigobie3.png",
-        text: "Mandolin, Vocals, Percussion",
+        text: "Mandolin, Keys, Vocals, Percussion",
       },
       {
         name: "Liam",
@@ -171,7 +171,7 @@ class ApiClient {
     const emailList = new Array<SocialListing>({
       hrefUrl: "mailto:eclecticpickup@gmail.com",
       imgUrl: `${this.config.baseUrl}/img/socials/email.png`,
-      text: "eclecticpickup@gmail.com",
+      text: "Email",
     });
 
     return {

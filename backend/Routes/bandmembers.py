@@ -16,7 +16,7 @@ def get_all_band_members():
         'img_url': member.img_url,
         'text': member.text
     } for member in band_members]
-    return jsonify({'message': 'All band members', 'data': band_member_list}), 200
+    return jsonify({'msg': 'All band members', 'data': band_member_list}), 200
 
 @bandmember_bp.route('/bandmembers/<int:member_id>', methods=['GET'])
 def get_band_member_by_id(member_id):
@@ -28,9 +28,9 @@ def get_band_member_by_id(member_id):
             'img_url': member.img_url,
             'text': member.text
         }
-        return jsonify({'message': 'Band member found', 'data': member_data}), 200
+        return jsonify({'msg': 'Band member found', 'data': member_data}), 200
     else:
-        return jsonify({'message': 'Band member not found'}), 404
+        return jsonify({'msg': 'Band member not found'}), 404
 
 @bandmember_bp.route('/bandmembers', methods=['POST'])
 @jwt_required()
@@ -53,7 +53,7 @@ def create_band_member():
         'img_url': new_member.img_url,
         'text': new_member.text
     }
-    return jsonify({'message': 'BandMember created', 'data': member_data}), 200
+    return jsonify({'msg': 'BandMember created', 'data': member_data}), 200
 
 @bandmember_bp.route('/bandmembers/<int:member_id>', methods=['PUT'])
 @jwt_required()
@@ -62,7 +62,7 @@ def create_band_member():
 def edit_band_member(member_id):
     member = BandMember.query.get(member_id)
     if not member:
-        return jsonify({'message': 'Band member not found'}), 404
+        return jsonify({'msg': 'Band member not found'}), 404
 
     data = request.get_json()
     member.name = data.get('name', member.name)
@@ -71,7 +71,7 @@ def edit_band_member(member_id):
     member.modified_by_user_id = current_user.get("id")
     
     db.session.commit()
-    return jsonify({'message': 'Band member updated successfully'}), 200
+    return jsonify({'msg': 'Band member updated successfully'}), 200
 
 @bandmember_bp.route('/bandmembers/<int:member_id>', methods=['DELETE'])
 @jwt_required()
@@ -79,8 +79,8 @@ def edit_band_member(member_id):
 def delete_band_member(member_id):
     member = BandMember.query.get(member_id)
     if not member:
-        return jsonify({'message': 'Band member not found'}), 404
+        return jsonify({'msg': 'Band member not found'}), 404
 
     db.session.delete(member)
     db.session.commit()
-    return jsonify({'message': 'Band member deleted successfully'}), 200
+    return jsonify({'msg': 'Band member deleted successfully'}), 200

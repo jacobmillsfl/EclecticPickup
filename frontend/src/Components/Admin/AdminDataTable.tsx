@@ -37,7 +37,7 @@ export function AdminDataTable<T extends Data>(props: DataTable<T>) {
                     setAlertHeading("Error");
                     setAlertVariant("danger");
                     setDisplayAlert(true);
-                    setAlertMessage(response.message);
+                    setAlertMessage(response.msg);
                 }
             });
         }

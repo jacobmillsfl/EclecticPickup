@@ -66,7 +66,7 @@ export const CreateEvent: React.FC<CreateEditDataProps<EventModel>> = (props) =>
                         props.edit(editedEvent)
                         props.close();
                     } else {
-                        updateAlert(true, "Error", "danger", result.message);
+                        updateAlert(true, "Error", "danger", result.msg);
                     }
                 })
             } else {
@@ -82,7 +82,7 @@ export const CreateEvent: React.FC<CreateEditDataProps<EventModel>> = (props) =>
                         props.add(newEvent)
                         props.close();
                     } else {
-                        updateAlert(true, "Error", "danger", result.message);
+                        updateAlert(true, "Error", "danger", result.msg);
                     }
                 })
             }

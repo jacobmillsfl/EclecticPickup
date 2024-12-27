@@ -20,7 +20,7 @@ def get_all_events():
         'venue': event.venue,
         'address': event.address
     } for event in events]
-    return jsonify({'message': 'All events', 'data': event_list}), 200
+    return jsonify({'msg': 'All events', 'data': event_list}), 200
 
 @event_bp.route('/events/<int:event_id>', methods=['GET'])
 def get_event_by_id(event_id):
@@ -33,9 +33,9 @@ def get_event_by_id(event_id):
             'venue': event.venue,
             'address': event.address
         }
-        return jsonify({'message': 'Event found', 'data': event_data}), 200
+        return jsonify({'msg': 'Event found', 'data': event_data}), 200
     else:
-        return jsonify({'message': 'Event not found'}), 404
+        return jsonify({'msg': 'Event not found'}), 404
 
 @event_bp.route('/events', methods=['POST'])
 @jwt_required()
@@ -60,7 +60,7 @@ def create_event():
         'venue': new_event.venue,
         'address': new_event.address
     }
-    return jsonify({'message': 'Event created', 'data': event_data}), 200
+    return jsonify({'msg': 'Event created', 'data': event_data}), 200
 
 @event_bp.route('/events/<int:event_id>', methods=['PUT'])
 @jwt_required()
@@ -69,7 +69,7 @@ def create_event():
 def edit_event(event_id):
     event = Event.query.get(event_id)
     if not event:
-        return jsonify({'message': 'Event not found'}), 404
+        return jsonify({'msg': 'Event not found'}), 404
 
     data = request.get_json()
     event.date = datetime.strptime(data['date'], "%Y-%m-%d").date()
@@ -79,7 +79,7 @@ def edit_event(event_id):
     event.modified_by_user_id = get_jwt_identity().get("id")
     
     db.session.commit()
-    return jsonify({'message': 'Event updated successfully'}), 200
+    return jsonify({'msg': 'Event updated successfully'}), 200
 
 @event_bp.route('/events/<int:event_id>', methods=['DELETE'])
 @jwt_required()
@@ -88,8 +88,8 @@ def delete_event(event_id):
 
     event = Event.query.get(event_id)
     if not event:
-        return jsonify({'message': 'Event not found'}), 404
+        return jsonify({'msg': 'Event not found'}), 404
 
     db.session.delete(event)
     db.session.commit()
-    return jsonify({'message': 'Event deleted successfully'})
+    return jsonify({'msg': 'Event deleted successfully'})

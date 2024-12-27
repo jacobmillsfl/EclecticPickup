@@ -20,7 +20,7 @@ def get_all_users():
         'scope': user.scope,
         'about': user.about
     } for user in users]
-    return jsonify({'message': 'All users', 'data': user_list}), 200
+    return jsonify({'msg': 'All users', 'data': user_list}), 200
 
 @user_bp.route('/users/<int:user_id>', methods=['GET'])
 @jwt_required()
@@ -36,9 +36,9 @@ def get_user_by_id(user_id):
             'scope': user.scope,
             'about': user.about
         }
-        return jsonify({'message': 'User found', 'data': user_data}), 200
+        return jsonify({'msg': 'User found', 'data': user_data}), 200
     else:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({'msg': 'User not found'}), 404
 
 @user_bp.route('/users/<int:user_id>', methods=['PUT'])
 @jwt_required()
@@ -48,11 +48,11 @@ def edit_user(user_id):
     user = User.query.get(user_id)
 
     if not user:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({'msg': 'User not found'}), 404
     if user.username == "admin":
-        return jsonify({'message': 'This user cannot be modified'}), 401
+        return jsonify({'msg': 'This user cannot be modified'}), 401
     if data.get("scope") == "admin":
-        return jsonify({'message': 'Unauthorized scope'}), 401
+        return jsonify({'msg': 'Unauthorized scope'}), 401
 
     data = request.get_json()
     user.username = data.get('username', user.username)
@@ -73,7 +73,7 @@ def edit_user(user_id):
         'about': user.about,
         'password': user.password,
     }
-    return jsonify({'message': 'User updated', 'data': user_data}), 200
+    return jsonify({'msg': 'User updated', 'data': user_data}), 200
 
 @user_bp.route('/users/<int:user_id>', methods=['DELETE'])
 @jwt_required()
@@ -82,10 +82,10 @@ def delete_user(user_id):
 
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({'msg': 'User not found'}), 404
     if user.username == "admin":
-        return jsonify({'message': 'This user cannot be modified'}), 401
+        return jsonify({'msg': 'This user cannot be modified'}), 401
 
     db.session.delete(user)
     db.session.commit()
-    return jsonify({'message': 'User deleted successfully'}), 200
+    return jsonify({'msg': 'User deleted successfully'}), 200

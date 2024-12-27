@@ -55,7 +55,7 @@ export const CreateSetting: React.FC<CreateEditDataProps<SettingsModel>> = (prop
                         props.edit(editedSetting);
                         props.close();
                     } else {
-                        updateAlert(true, "Error", "danger", result.message);
+                        updateAlert(true, "Error", "danger", result.msg);
                     }
                 })
             } else {
@@ -73,7 +73,7 @@ export const CreateSetting: React.FC<CreateEditDataProps<SettingsModel>> = (prop
                         props.add(setting)
                         props.close();
                     } else {
-                        updateAlert(true, "Error", "danger", result.message);
+                        updateAlert(true, "Error", "danger", result.msg);
                     }
                 })
             }

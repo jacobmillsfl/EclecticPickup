@@ -17,7 +17,7 @@ def get_all_band_videos():
         'description': video.description,
         'youtube': video.youtube
     } for video in band_videos]
-    return jsonify({'message': 'All band videos', 'data': band_video_list}), 200
+    return jsonify({'msg': 'All band videos', 'data': band_video_list}), 200
 
 @bandvideo_bp.route('/bandvideos/<int:video_id>', methods=['GET'])
 def get_band_video_by_id(video_id):
@@ -29,9 +29,9 @@ def get_band_video_by_id(video_id):
             'description': video.description,
             'youtube': video.youtube
         }
-        return jsonify({'message': 'Band video found', 'data': video_data}), 200
+        return jsonify({'msg': 'Band video found', 'data': video_data}), 200
     else:
-        return jsonify({'message': 'Band video not found'}), 404
+        return jsonify({'msg': 'Band video not found'}), 404
 
 @bandvideo_bp.route('/bandvideos', methods=['POST'])
 @jwt_required()
@@ -42,7 +42,7 @@ def create_band_video():
 
     # Don't allow invalid URLs for YouTube videos
     if data['youtube'] is True and not validators.url(data['src']):
-        return jsonify({'status': 'error', 'message': 'Invalid src URL'})
+        return jsonify({'status': 'error', 'msg': 'Invalid src URL'})
 
     new_video = BandVideo(
         src=data['src'],
@@ -59,7 +59,7 @@ def create_band_video():
         'description': new_video.description,
         'youtube': new_video.youtube
     }
-    return jsonify({'message': 'BandVideo created', 'data': video_data}), 200
+    return jsonify({'msg': 'BandVideo created', 'data': video_data}), 200
 
 @bandvideo_bp.route('/bandvideos/<int:video_id>', methods=['PUT'])
 @jwt_required()
@@ -68,7 +68,7 @@ def create_band_video():
 def edit_band_video(video_id):
     video = BandVideo.query.get(video_id)
     if not video:
-        return jsonify({'message': 'Band video not found'}), 404
+        return jsonify({'msg': 'Band video not found'}), 404
 
     data = request.get_json()
     video.src = data.get('src', video.src)
@@ -77,7 +77,7 @@ def edit_band_video(video_id):
     video.modified_by_user_id = current_user.get("id")
     
     db.session.commit()
-    return jsonify({'message': 'Band video updated successfully'}), 200
+    return jsonify({'msg': 'Band video updated successfully'}), 200
 
 @bandvideo_bp.route('/bandvideos/<int:video_id>', methods=['DELETE'])
 @jwt_required()
@@ -85,8 +85,8 @@ def edit_band_video(video_id):
 def delete_band_video(video_id):
     video = BandVideo.query.get(video_id)
     if not video:
-        return jsonify({'message': 'Band video not found'}), 404
+        return jsonify({'msg': 'Band video not found'}), 404
 
     db.session.delete(video)
     db.session.commit()
-    return jsonify({'message': 'Band video deleted successfully'}), 200
+    return jsonify({'msg': 'Band video deleted successfully'}), 200

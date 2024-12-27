@@ -29,13 +29,13 @@ export const LoginComponent: React.FC = () => {
     event.preventDefault();
     ApiClient.auth.login(username, password).then((result) => {
       if (result.status === 200) {
-        AuthManager.setAuthToken(result.message);
+        AuthManager.setAuthToken(result.msg);
         navigate("/admin");
         setLoggedIn(true);
       } else {
         setDisplayAlert(true);
         setAlertHeading("Error");
-        setAlertMessage(result.message);
+        setAlertMessage(result.msg);
       }
     });
   };

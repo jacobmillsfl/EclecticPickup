@@ -15,7 +15,7 @@ def get_all_settings():
         'name': setting.name,
         'value': setting.value
     } for setting in settings]
-    return jsonify({'message': 'All settings', 'data': setting_list}), 200
+    return jsonify({'msg': 'All settings', 'data': setting_list}), 200
 
 @setting_bp.route('/settings/<int:setting_id>', methods=['GET'])
 def get_setting_by_id(setting_id):
@@ -26,9 +26,9 @@ def get_setting_by_id(setting_id):
             'name': setting.name,
             'value': setting.value
         }
-        return jsonify({'message': 'Setting found', 'data': setting_data}), 200
+        return jsonify({'msg': 'Setting found', 'data': setting_data}), 200
     else:
-        return jsonify({'message': 'Setting not found'}), 404
+        return jsonify({'msg': 'Setting not found'}), 404
 
 @setting_bp.route('/settings/name/<string:setting_name>', methods=['GET'])
 def get_setting_by_name(setting_name):
@@ -39,9 +39,9 @@ def get_setting_by_name(setting_name):
             'name': setting.name,
             'value': setting.value
         }
-        return jsonify({'message': 'Setting found', 'data': setting_data}), 200
+        return jsonify({'msg': 'Setting found', 'data': setting_data}), 200
     else:
-        return jsonify({'message': 'Setting not found'}), 404
+        return jsonify({'msg': 'Setting not found'}), 404
 
 
 @setting_bp.route('/settings', methods=['POST'])
@@ -63,7 +63,7 @@ def create_setting():
         'name': new_setting.name,
         'value': new_setting.value,
     }
-    return jsonify({'message': 'Setting created', 'data': setting_data}), 200
+    return jsonify({'msg': 'Setting created', 'data': setting_data}), 200
 
 @setting_bp.route('/settings/<int:setting_id>', methods=['PUT'])
 @jwt_required()
@@ -72,7 +72,7 @@ def create_setting():
 def edit_setting(setting_id):
     setting = Settings.query.get(setting_id)
     if not setting:
-        return jsonify({'message': 'Setting not found'}), 404
+        return jsonify({'msg': 'Setting not found'}), 404
 
     data = request.get_json()
     setting.name = data.get('name', setting.name)
@@ -80,7 +80,7 @@ def edit_setting(setting_id):
     setting.modified_by_user_id = current_user.get("id")
     
     db.session.commit()
-    return jsonify({'message': 'Setting updated successfully'}), 200
+    return jsonify({'msg': 'Setting updated successfully'}), 200
 
 @setting_bp.route('/settings/<int:setting_id>', methods=['DELETE'])
 @jwt_required()
@@ -89,8 +89,8 @@ def delete_setting(setting_id):
 
     setting = Settings.query.get(setting_id)
     if not setting:
-        return jsonify({'message': 'Setting not found'}), 404
+        return jsonify({'msg': 'Setting not found'}), 404
 
     db.session.delete(setting)
     db.session.commit()
-    return jsonify({'message': 'Setting deleted successfully'}), 200
+    return jsonify({'msg': 'Setting deleted successfully'}), 200
