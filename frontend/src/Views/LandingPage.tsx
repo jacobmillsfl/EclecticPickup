@@ -83,9 +83,9 @@ export default function LandingPage() {
       <GigsComponent props={upcomingGigs}/>
       <GigsComponent props={pastGigs}/>
       {/* <MediaPlayer /> */}
-      <Socials props={socialLinks} />
+      {/* <Socials props={socialLinks} /> */}
       <MailChimpComponent />
-      <QuoteBox props={motto}/>
+      {/* <QuoteBox props={motto}/> */}
     </ContentContainer>
   );
 }

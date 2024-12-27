@@ -171,7 +171,7 @@ class ApiClient {
     const emailList = new Array<SocialListing>({
       hrefUrl: "mailto:eclecticpickup@gmail.com",
       imgUrl: `${this.config.baseUrl}/img/socials/email.png`,
-      text: "eclecticpickup@gmail.com",
+      text: "Email",
     });
 
     return {

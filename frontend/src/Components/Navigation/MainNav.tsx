@@ -80,9 +80,6 @@ function MainNav() {
               <ScrollLink to="shows" role="button" className="nav-link" smooth={true} offset={-70} duration={500}>
                 Shows
               </ScrollLink>
-              <ScrollLink to="socials" role="button" className="nav-link" smooth={true} offset={-70} duration={500}>
-                Socials
-              </ScrollLink>
               <ScrollLink to="subscribe" role="button" className="nav-link" smooth={true} offset={-70} duration={500}>
                 Subscribe
               </ScrollLink>
@@ -94,7 +91,6 @@ function MainNav() {
                 <Nav.Link href="/#about">About</Nav.Link>
                 <Nav.Link href="/#videos">Videos</Nav.Link>
                 <Nav.Link href="/#shows">Shows</Nav.Link>
-                <Nav.Link href="/#socials">Socials</Nav.Link>
                 <Nav.Link href="/#subscribe">Subscribe</Nav.Link>
               </>
             )}

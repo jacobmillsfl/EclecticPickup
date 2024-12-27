@@ -60,6 +60,7 @@
   width: 100%;
   bottom: 0;
   z-index: 999;
+  height: 100px;
 }
 
 .footerLayerBg {
@@ -68,8 +69,29 @@
   box-shadow: 0 0 1em rgb(0, 0, 0);
   display: flex;
   align-items: center;
+  justify-content: space-evenly; /* Ensure even spacing for the items */
+  height: 100%;
+  flex-direction: row; /* Arrange items horizontally */
+}
+
+.footerItem {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  flex-direction: column;
+  height: 100%;
+}
+
+.footerItem img {
+  width: 70px; /* Adjust as needed */
+  height: 70px; /* Keep the images uniform */
+  object-fit: cover;
+  border-radius: 10%; /* Optional: for circular images */
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.footerItem img:hover {
+  transform: scale(1.1); /* Add a slight zoom effect on hover */
 }
 
 .footerLayerAuthor {
