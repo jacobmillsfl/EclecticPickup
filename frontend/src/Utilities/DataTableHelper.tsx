@@ -12,16 +12,17 @@ export default class DataTableHelper {
         setItems,
         component,
         api,
+        hideCreate,
+        hideDelete,
     }: DataTableOptions<T>): DataTable<T> => {
         const add = async (newItem: T) => {
-            const newItems = [...items, newItem];
-            setItems(newItems);
-
+            setItems((prev) => [...prev, newItem]);
         };
 
         const edit = async (updatedItem: T) => {
-            const updatedItems = items.map((item: T) => (item.id === updatedItem.id ? updatedItem : item));
-            setItems(updatedItems);
+            setItems((prev) =>
+                prev.map((item: T) => (item.id === updatedItem.id ? updatedItem : item))
+            );
         };
 
         const deleteMethod = async (id: number) => {
@@ -36,6 +37,8 @@ export default class DataTableHelper {
             add,
             edit,
             setItems,
+            hideCreate,
+            hideDelete,
         };
     };
 

@@ -1,6 +1,7 @@
 from datetime import datetime
-import sqlite3
 import argparse
+import sqlite3
+
 from Utils.CryptoManager import CryptoManager
 
 
@@ -17,9 +18,10 @@ class ChangelogRunner:
     def __init__(self, db_file, username, email, password):
 
         self.conn = sqlite3.connect(db_file)
-        self.username = username
-        self.email = email
-        self.password = password
+        # Match what users type at /login (no accidental leading/trailing space from .env).
+        self.username = (username or "").strip()
+        self.email = (email or "").strip()
+        self.password = (password or "").strip()
         self.changelog_entries = [
             ChangelogEntry("INSERT_ADMIN_USER", self.insert_admin_user, "Creates an admin user"),
             ChangelogEntry("INITIAL_EVENTS", self.insert_events, "Creates the initial events"),
@@ -53,18 +55,43 @@ class ChangelogRunner:
         self.conn.commit()
 
     def insert_admin_user(self):
+        """
+        Idempotent for production deploys: if this username or email already exists
+        (e.g. admin was created on a prior deploy), skip insert. Changelog is still
+        recorded afterward by run(), so we do not retry every boot.
+        """
+        cur = self.conn.cursor()
+        cur.execute(
+            "SELECT COUNT(*) FROM user WHERE username = ? OR email = ?",
+            (self.username, self.email),
+        )
+        if cur.fetchone()[0] > 0:
+            print(
+                "INSERT_ADMIN_USER: user already exists for this username or email; "
+                "skipping INSERT — the password in the DB is unchanged (ADMIN_PASSWORD from env is NOT applied). "
+                "Use --diagnose-login USER PASS to verify the stored hash, or --set-password to fix."
+            )
+            return
+
         hashed_password = CryptoManager.hash_password(self.password)
         active = True
         scope = "admin"
         description = "Automatically created administrative user"
         created_date = datetime.utcnow()
         user_data = (self.username, self.email, hashed_password, active, scope, description, created_date)
-        sql = '''   INSERT INTO user (username, email, password, active, scope, about, created_date)
-                    VALUES (?, ?, ?, ?, ?, ?, ?) '''
-        cur = self.conn.cursor()
-        cur.execute(sql, user_data)
-        self.conn.commit()
-        return cur.lastrowid
+        sql = """INSERT INTO user (username, email, password, active, scope, about, created_date)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)"""
+        try:
+            cur.execute(sql, user_data)
+            self.conn.commit()
+            return cur.lastrowid
+        except sqlite3.IntegrityError:
+            self.conn.rollback()
+            print(
+                "INSERT_ADMIN_USER: insert skipped due to DB constraint "
+                "(user likely created concurrently); safe to continue."
+            )
+            return None
     
     def insert_events(self):
         global events_to_insert
@@ -182,17 +209,128 @@ class StoreUserDetails(argparse.Action):
             setattr(namespace, self.dest, values)
 
 #########################
+# Password maintenance
+#########################
+
+
+def diagnose_login(db_file: str, username: str, plaintext: str) -> None:
+    """
+    Show whether the DB row matches the given password (same bcrypt check as /login).
+    Does not print the full hash.
+    """
+    conn = sqlite3.connect(db_file)
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT username, email, password FROM user WHERE username = ?",
+            (username,),
+        )
+        row = cur.fetchone()
+        if not row:
+            cur.execute("SELECT username FROM user")
+            names = [r[0] for r in cur.fetchall()]
+            print(f"No user with username={username!r} (exact match). Usernames in DB: {names}")
+            return
+        db_user, email, stored = row
+        print(f"Row found: username={db_user!r}, email={email!r}")
+        if not stored:
+            print("Stored password field is empty — login will fail.")
+            return
+        slen = len(stored)
+        prefix = stored[:7]
+        print(f"Stored password field: length={slen}, prefix={prefix!r} (bcrypt hashes are usually 60 chars, prefix like '$2b$12$')")
+        if not (
+            stored.startswith("$2a$")
+            or stored.startswith("$2b$")
+            or stored.startswith("$2y$")
+        ):
+            print(
+                "WARNING: stored value does not look like bcrypt. "
+                "CryptoManager only verifies bcrypt; legacy schemes will always FAIL."
+            )
+        ok = CryptoManager.check_password(plaintext, stored)
+        print(f"bcrypt.checkpw (same as API /login): {'MATCH' if ok else 'NO MATCH'}")
+        if not ok:
+            # Same check with stripped plaintext (common .env / copy-paste issue).
+            stripped = plaintext.strip()
+            if stripped != plaintext:
+                ok2 = CryptoManager.check_password(stripped, stored)
+                print(
+                    f"Retry with .strip() on plaintext: {'MATCH' if ok2 else 'NO MATCH'} "
+                    f"(if this matches, your env or form had leading/trailing spaces)"
+                )
+            print(
+                "If NO MATCH but you are sure the password was 'password' at creation time, "
+                "the admin row may have been created earlier with a different hash "
+                "(bootstrap skips INSERT when the user already exists, but still records the changelog)."
+            )
+    finally:
+        conn.close()
+
+
+def update_user_password(db_file: str, username: str, plaintext: str) -> None:
+    """Overwrite bcrypt hash for an existing user (bootstrap skips insert when user already exists)."""
+    hashed = CryptoManager.hash_password(plaintext.strip())
+    conn = sqlite3.connect(db_file)
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            "UPDATE user SET password = ? WHERE username = ?",
+            (hashed, username),
+        )
+        if cur.rowcount == 0:
+            raise SystemExit(f"No user updated: username {username!r} not found.")
+        conn.commit()
+    finally:
+        conn.close()
+    print(f"Password updated for user {username!r}.")
+
+
+#########################
 # Main
 #########################
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Manage Database Script')
-    parser.add_argument("--database", type=str, help='The location of the database file')
-    parser.add_argument('--user', nargs=3, action=StoreUserDetails, required=True, metavar=('Username', 'Email', 'Password'), help='Create admin user with provided username, email, and password')
+    parser = argparse.ArgumentParser(description="Manage Database Script")
+    parser.add_argument(
+        "--database",
+        type=str,
+        required=True,
+        help="Path to SQLite database file (e.g. instance/database.db)",
+    )
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "--user",
+        nargs=3,
+        action=StoreUserDetails,
+        metavar=("Username", "Email", "Password"),
+        help="Bootstrap: changelog + seed (skips admin insert if username/email already exist)",
+    )
+    group.add_argument(
+        "--set-password",
+        nargs=2,
+        metavar=("USERNAME", "PLAINTEXT"),
+        help="Set bcrypt password for an existing user (use when login fails after env/password changes)",
+    )
+    group.add_argument(
+        "--diagnose-login",
+        nargs=2,
+        metavar=("USERNAME", "PLAINTEXT"),
+        help="Print whether the DB bcrypt hash matches the plaintext (same as /login); use to debug 'Incorrect password'",
+    )
     args = parser.parse_args()
 
     database = args.database
+    if args.diagnose_login:
+        u, p = args.diagnose_login
+        diagnose_login(database, u, p)
+        return
+    if args.set_password:
+        username, plaintext = args.set_password
+        update_user_password(database, username, plaintext)
+        return
+
     username = args.user[0]
     email = args.user[1]
     password = args.user[2]

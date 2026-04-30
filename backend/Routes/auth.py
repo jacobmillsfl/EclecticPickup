@@ -1,10 +1,10 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
+
 from flask import Blueprint, jsonify, request
-from Utils.Decorators import required_fields, scope_required
-from flask_jwt_extended import jwt_required
-import jwt
+from flask_jwt_extended import create_access_token, jwt_required
 
 from Utils.CryptoManager import CryptoManager
+from Utils.Decorators import required_fields, scope_required
 from Utils.ConfigManager import ConfigManager
 from Models.user import User
 from Models.database import db
@@ -89,19 +89,17 @@ def login():
     if not user:
         return jsonify({'msg': 'User not found'}), 400
     elif CryptoManager.check_password(password, user.password):
-        claims = {
-            'iss': 'api.eclecticpickup.com',  # Issuer
-            'sub': {
-                'id': user.id,
-                'username': user.username,
-                'scope': user.scope,
-                'active': user.active
+        # Flask-JWT-Extended requires identity (JWT "sub") to be a string — not a dict.
+        # User metadata lives in additional_claims (see Utils/Decorators.scope_required).
+        token = create_access_token(
+            identity=str(user.id),
+            additional_claims={
+                "username": user.username,
+                "scope": user.scope,
+                "active": user.active,
             },
-            'exp': datetime.utcnow() + timedelta(days=30),  # Expiration Time
-            'iat': datetime.utcnow(),  # Issued At
-        }
-        
-        token = jwt.encode(claims, config.jwt_secret, algorithm='HS256')
-        return jsonify({'msg': token}), 200
+            expires_delta=timedelta(days=30),
+        )
+        return jsonify({"msg": token}), 200
     else:
         return jsonify({'msg': 'Incorrect password'}), 400

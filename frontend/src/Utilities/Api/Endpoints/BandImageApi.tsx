@@ -36,13 +36,8 @@ export class BandImageApi implements ICrudApi<BandImageModel> {
     }
 
     async get(bandImageId: number): Promise<ApiResponseWithData<BandImageModel>> {
-        const jwtToken = AuthManager.getAuthToken();
-
         const response = await fetch(`${this.config.apiUrl}/bandimages/${bandImageId}`, {
             method: "GET",
-            headers: {
-                Authorization: `Bearer ${jwtToken}`,
-            },
         });
         const result = await response.json();
 
@@ -56,13 +51,8 @@ export class BandImageApi implements ICrudApi<BandImageModel> {
     }
 
     async all(): Promise<ApiResponseWithData<Array<BandImageModel>>> {
-        const jwtToken = AuthManager.getAuthToken();
-
         const response = await fetch(`${this.config.apiUrl}/bandimages`, {
             method: "GET",
-            headers: {
-                Authorization: `Bearer ${jwtToken}`,
-            },
         });
         const result = await response.json();
 

@@ -71,18 +71,20 @@ export function AdminDataTable<T extends Data>(props: DataTable<T>) {
                     </Alert>
                 }
             </div>
-            <div className="row mt-4 mb-4">
-                <div>
-                    <Button
-                        variant="primary"
-                        size="lg"
-                        style={{ float: "right" }}
-                        onClick={() => handleShowComponentModal()}
-                    >
-                        Create
-                    </Button>
+            {!props.hideCreate && (
+                <div className="row mt-4 mb-4">
+                    <div>
+                        <Button
+                            variant="primary"
+                            size="lg"
+                            style={{ float: "right" }}
+                            onClick={() => handleShowComponentModal()}
+                        >
+                            Create
+                        </Button>
+                    </div>
                 </div>
-            </div>
+            )}
             <Table striped bordered hover variant="dark">
                 <thead>
                     <tr>
@@ -90,7 +92,7 @@ export function AdminDataTable<T extends Data>(props: DataTable<T>) {
                             <th key={key}>{Misc.capitalizeFirstLetter(key)}</th>
                         ))}
                         <th>Edit</th>
-                        <th>Delete</th>
+                        {!props.hideDelete && <th>Delete</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -116,18 +118,20 @@ export function AdminDataTable<T extends Data>(props: DataTable<T>) {
                                     <i className="fas fa-edit"></i>
                                 </Badge>
                             </td>
-                            <td>
-                                <Badge
-                                    pill
-                                    bg="danger"
-                                    style={{ "cursor": "pointer" }}
-                                    onClick={() => {
-                                        handleShowDeleteModal(item.id);
-                                    }}
-                                >
-                                    <i className="fas fa-trash"></i>
-                                </Badge>
-                            </td>
+                            {!props.hideDelete && (
+                                <td>
+                                    <Badge
+                                        pill
+                                        bg="danger"
+                                        style={{ "cursor": "pointer" }}
+                                        onClick={() => {
+                                            handleShowDeleteModal(item.id);
+                                        }}
+                                    >
+                                        <i className="fas fa-trash"></i>
+                                    </Badge>
+                                </td>
+                            )}
                         </tr>
                     ))}
                 </tbody>

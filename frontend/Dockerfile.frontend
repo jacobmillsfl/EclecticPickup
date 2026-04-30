@@ -1,21 +1,25 @@
-FROM node:alpine as build-stage
+# syntax=docker/dockerfile:1
+# Copy the lockfile and use `npm ci` so installs are fast and reproducible (fixes missing package-lock in COPY).
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
-# Install dependencies before copying code changes
-COPY package.json ./package.json
-RUN npm install
+COPY package.json package-lock.json ./
+RUN npm ci
 
-COPY ./ /app/
+COPY . ./
 
-# Uncomment to run tests on docker-build
-#RUN CI=true npm test
+# CRA reads env from .frontend.env at build time (see package.json `env-cmd -f ./.frontend.env`).
+# If you have frontend/.frontend.env on disk (e.g. from install.sh), it is copied above — do NOT overwrite it.
+# Only when the file is absent (e.g. fresh clone) fall back to the compose build arg.
+ARG REACT_APP_API_URL=http://127.0.0.1:8081
+RUN if [ ! -f .frontend.env ]; then \
+  printf 'REACT_APP_API_URL=%s\nFAST_REFRESH=false\n' "${REACT_APP_API_URL}" > .frontend.env; \
+fi
 
 RUN npm run build
 
-# Use nginx image for HTTP routing
-FROM nginx:1.15
+FROM nginx:1.26-alpine
 
-COPY --from=build-stage /app/build/ /usr/share/nginx/html
-
-COPY --from=build-stage /app/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/build/ /usr/share/nginx/html/
+COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf

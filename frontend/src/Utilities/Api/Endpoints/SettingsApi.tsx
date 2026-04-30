@@ -36,13 +36,8 @@ export class SettingsApi implements ICrudApi<SettingsModel> {
   }
 
   async get(settingId: number): Promise<ApiResponseWithData<SettingsModel>> {
-    const jwtToken = AuthManager.getAuthToken();
-
     const response = await fetch(`${this.config.apiUrl}/settings/${settingId}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
     });
     const result = await response.json();
 
@@ -56,20 +51,21 @@ export class SettingsApi implements ICrudApi<SettingsModel> {
   }
 
   async all(): Promise<ApiResponseWithData<Array<SettingsModel>>> {
-    const jwtToken = AuthManager.getAuthToken();
-
     const response = await fetch(`${this.config.apiUrl}/settings`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
+      cache: "no-store",
     });
     const result = await response.json();
-    const data = {
+    const rows = Array.isArray(result?.data)
+      ? result.data
+      : Array.isArray(result)
+        ? result
+        : [];
+    return {
       ...result,
       status: response.status,
+      data: rows,
     };
-    return data;
   }
 
   async update(
@@ -114,13 +110,8 @@ export class SettingsApi implements ICrudApi<SettingsModel> {
   }
 
   async getSettingByName(settingName: string): Promise<ApiResponseWithData<SettingsModel>> {
-    const jwtToken = AuthManager.getAuthToken();
-
     const response = await fetch(`${this.config.apiUrl}/settings/name/${settingName}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
     });
     const result = await response.json();
 

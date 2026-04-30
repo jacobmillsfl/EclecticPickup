@@ -39,13 +39,8 @@ export class BandVideoApi implements ICrudApi<BandVideoModel> {
     }
 
     async get(bandVideoId: number): Promise<ApiResponseWithData<BandVideoModel>> {
-        const jwtToken = AuthManager.getAuthToken();
-
         const response = await fetch(`${this.config.apiUrl}/bandvideos/${bandVideoId}`, {
             method: "GET",
-            headers: {
-                Authorization: `Bearer ${jwtToken}`,
-            },
         });
         const result = await response.json();
 
@@ -62,28 +57,24 @@ export class BandVideoApi implements ICrudApi<BandVideoModel> {
     }
 
     async all(): Promise<ApiResponseWithData<Array<BandVideoModel>>> {
-        const jwtToken = AuthManager.getAuthToken();
-
         const response = await fetch(`${this.config.apiUrl}/bandvideos`, {
             method: "GET",
-            headers: {
-                Authorization: `Bearer ${jwtToken}`,
-            },
         });
         const result = await response.json();
 
+        const rows = Array.isArray(result?.data) ? result.data : [];
         return {
             ...result,
             status: response.status,
-            data: result.data.map((video: BandVideoModel) => ({
+            data: rows.map((video: BandVideoModel) => ({
                 ...video,
-                src: result.data.youtube ? result.data.src : `${this.config.apiUrl}/bandvideos/${result.data.src}`,
+                src: video.youtube ? video.src : `${this.config.apiUrl}/bandvideos/${video.src}`,
             })),
         };
     }
 
     async update(
-        bandVideo: Omit<BandVideoModel, "src">
+        bandVideo: BandVideoModel
     ): Promise<ApiResponseWithData<BandVideoModel>> {
         const jwtToken = AuthManager.getAuthToken();
 
@@ -100,9 +91,15 @@ export class BandVideoApi implements ICrudApi<BandVideoModel> {
         return {
             ...result,
             status: response.status,
-            data: response.status === 200
-                ? result.data
-                : undefined,
+            data:
+                response.status === 200 && result.data
+                    ? {
+                        ...result.data,
+                        src: result.data.youtube
+                            ? result.data.src
+                            : `${this.config.apiUrl}/bandvideos/${result.data.src}`,
+                    }
+                    : undefined,
         };
     }
 

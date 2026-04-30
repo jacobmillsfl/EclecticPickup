@@ -3,3 +3,5 @@ export type { default as SettingsModel } from './SettingsModel';
 export type { default as UserModel } from './UserModel';
 export type { default as BandImageModel } from './BandImageModel';
 export type { default as BandVideoModel } from './BandVideoModel';
+export type { default as BandMemberModel } from './BandMemberModel';
+export type { default as SocialLinkModel } from './SocialLinkModel';

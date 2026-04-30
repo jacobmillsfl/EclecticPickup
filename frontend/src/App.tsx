@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { LoginComponent } from "./Views/Auth/Login";
 import { AdminComponent } from "./Views/Admin/Admin";
 import { LogOutComponent } from "./Views/Auth/Logout";
+import { RequireAuth } from "./Views/Auth/RequireAuth";
 
 function App() {
   useEffect(() => {
@@ -42,7 +43,11 @@ function App() {
             />
             <Route
               path="/admin"
-              element={<AdminComponent />}
+              element={
+                <RequireAuth>
+                  <AdminComponent />
+                </RequireAuth>
+              }
             />
             <Route
               path="/logout"

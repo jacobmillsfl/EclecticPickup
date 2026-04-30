@@ -2,8 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import AuthManager from './Utilities/AuthManager';
 //import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Drop pre-migration JWTs (dict `sub`) so API calls stop failing until user logs in again.
+AuthManager.clearLegacyJwtIfPresent();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

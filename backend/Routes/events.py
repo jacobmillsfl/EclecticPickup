@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from Utils.ConfigManager import ConfigManager
 from Models.event import Event
@@ -48,7 +48,7 @@ def create_event():
         time=data['time'],
         venue=data['venue'],
         address=data['address'],
-        created_by_user_id=get_jwt_identity().get("id"),
+        created_by_user_id=int(get_jwt_identity()),
     )
     db.session.add(new_event)
     db.session.commit()
@@ -76,7 +76,7 @@ def edit_event(event_id):
     event.time = data.get('time', event.time)
     event.venue = data.get('venue', event.venue)
     event.address = data.get('address', event.address)
-    event.modified_by_user_id = get_jwt_identity().get("id")
+    event.modified_by_user_id = int(get_jwt_identity())
     
     db.session.commit()
     return jsonify({'msg': 'Event updated successfully'}), 200

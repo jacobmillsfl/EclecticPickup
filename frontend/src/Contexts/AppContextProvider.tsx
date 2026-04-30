@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import VideoContainer from "../Components/Media/VideoContainer";
 import appContext from "./AppContext";
@@ -11,6 +12,7 @@ import Misc from "../Utilities/Misc";
 import { EventModel, SettingsModel, BandImageModel } from "../Types/DbModels";
 
 const AppContextProvider = (props: any) => {
+  const location = useLocation();
   const [loggedIn, setLoggedIn] = useState(AuthManager.isAuthenticated());
   const [bandMembers, setBandMembers] = useState<Array<BandMember>>(
     []
@@ -27,13 +29,6 @@ const AppContextProvider = (props: any) => {
   });
 
   useEffect(() => {
-    const fetchSettings = async () => {
-      const response = await ApiClient.settings.all();
-      if (response.data) {
-        setSettings(response.data);
-      }
-    };
-
     const fetchBandMembers = async () => {
       const bandMembers = await ApiClient.getBandMembers();
       setBandMembers(Misc.shuffleArray(bandMembers));
@@ -68,8 +63,26 @@ const AppContextProvider = (props: any) => {
     fetchGigs();
     fetchImages();
     fetchBandMembers();
-    fetchSettings();
   }, []);
+
+  // Settings drive BAND_BIO / BAND_MOTTO on the home page — refetch on every route change so
+  // edits in Admin appear after navigation without a full reload.
+  useEffect(() => {
+    let cancelled = false;
+    const fetchSettings = async () => {
+      const response = await ApiClient.settings.all();
+      if (cancelled) {
+        return;
+      }
+      if (Array.isArray(response.data)) {
+        setSettings([...response.data]);
+      }
+    };
+    fetchSettings();
+    return () => {
+      cancelled = true;
+    };
+  }, [location.pathname]);
 
 
   return (

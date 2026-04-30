@@ -1,4 +1,10 @@
-version: "3.7"
+# Data persistence (survives image rebuilds and `docker compose up/down`):
+#   • SQLite: host path ./backend/instance → /home/appuser/app/instance (database.db)
+#   • Uploads: named volume ep_files → /home/appuser/app/files (band photos, etc.)
+# Never run `docker compose down -v` or `docker volume prune` without a backup.
+# Use a stable clone path on the server and avoid renaming COMPOSE_PROJECT_NAME
+# or you may get a new empty ep_files volume (uploads appear "gone").
+
 services:
   api:
     container_name: ep-api

@@ -8,33 +8,62 @@ import { AdminDataTable } from "../../Components/Admin/AdminDataTable";
 import { JwtSubject } from "../../Types";
 import { CreateEvent } from "./CreateEvent";
 import { CreateSetting } from "./CreateSetting";
-import { useNavigate } from "react-router-dom";
 import appContext from "../../Contexts/AppContext";
-import { BandVideoModel, EventModel, SettingsModel, UserModel } from "../../Types/DbModels";
+import {
+  BandMemberModel,
+  BandVideoModel,
+  EventModel,
+  SettingsModel,
+  SocialLinkModel,
+  UserModel,
+} from "../../Types/DbModels";
 import { CreateUser } from "./CreateUser";
 import DataTableFactory from "../../Utilities/DataTableHelper";
 import BandImageModel from "../../Types/DbModels/BandImageModel";
 import { CreateBandImage } from "./CreateBandImage";
 import { CreateBandVideo } from "./CreateBandVideo";
+import { CreateSocialLink } from "./CreateSocialLink";
+import { CreateBandMember } from "./CreateBandMember";
+import { SOCIAL_PLATFORM_SORT_ORDER } from "../../Utilities/socialLinkPresets";
+
+function sortSocialLinksForAdmin(links: SocialLinkModel[]): SocialLinkModel[] {
+  const order = new Map<string, number>(
+    SOCIAL_PLATFORM_SORT_ORDER.map((p, i) => [p, i])
+  );
+  return [...links].sort((a, b) => {
+    const ai = a.platform != null ? order.get(a.platform) ?? 100 : 100;
+    const bi = b.platform != null ? order.get(b.platform) ?? 100 : 100;
+    return ai - bi || a.id - b.id;
+  });
+}
 
 export const AdminComponent: React.FC = () => {
-  const { loggedIn, gigs, settings, setGigs, setSettings } = useContext(appContext);
-  const navigate = useNavigate();
+  const { gigs, settings, setGigs, setSettings } = useContext(appContext);
   const [subject, setSubject] = useState<JwtSubject>();
   const [users, setUsers] = useState<Array<UserModel>>(new Array());
   const [bandPictures, setBandPictures] = useState<Array<BandImageModel>>(new Array());
   const [bandVideos, setBandVideos] = useState<Array<BandVideoModel>>(new Array());
+  const [socialLinks, setSocialLinks] = useState<Array<SocialLinkModel>>(new Array());
+  const [bandMembers, setBandMembers] = useState<Array<BandMemberModel>>(new Array());
 
   useEffect(() => {
-    if (!loggedIn) {
-      navigate("/login");
-    }
-
     const jwt = AuthManager.getAuthToken();
     const jwtParts = jwt?.split(".");
     if (jwtParts && jwtParts.length === 3) {
-      const decodedSubject = JSON.parse(atob(jwtParts[1]));
-      setSubject(decodedSubject["sub"] as JwtSubject);
+      const payload = JSON.parse(atob(jwtParts[1]));
+      // New API tokens: sub is string user id; username/scope/active are top-level claims.
+      // Legacy tokens: sub was a nested object.
+      const rawSub = payload.sub;
+      if (typeof rawSub === "object" && rawSub !== null) {
+        setSubject(rawSub as JwtSubject);
+      } else {
+        setSubject({
+          id: Number(rawSub),
+          username: String(payload.username ?? ""),
+          scope: String(payload.scope ?? ""),
+          active: Boolean(payload.active),
+        });
+      }
     }
 
     ApiClient.user.all().then((response) => {
@@ -43,12 +72,29 @@ export const AdminComponent: React.FC = () => {
       }
     })
 
-    ApiClient.bandImage.all().then(response => {
+    ApiClient.bandImage.all().then((response) => {
       if (response.data) {
         setBandPictures(response.data);
       }
-    })
+    });
 
+    ApiClient.bandVideo.all().then((response) => {
+      if (response.data) {
+        setBandVideos(response.data);
+      }
+    });
+
+    ApiClient.socialLink.all().then((response) => {
+      if (response.data) {
+        setSocialLinks(sortSocialLinksForAdmin(response.data));
+      }
+    });
+
+    ApiClient.bandMember.all().then((response) => {
+      if (response.data) {
+        setBandMembers(response.data);
+      }
+    });
   }, []);
 
   const getProfile = () => {
@@ -106,6 +152,22 @@ export const AdminComponent: React.FC = () => {
     api: ApiClient.bandVideo,
   });
 
+  const bandMembersDataTable = DataTableFactory.createDataTable<BandMemberModel>({
+    name: "Band members",
+    items: bandMembers,
+    setItems: setBandMembers,
+    component: CreateBandMember,
+    api: ApiClient.bandMember,
+  });
+
+  const socialLinksDataTable = DataTableFactory.createDataTable<SocialLinkModel>({
+    name: "Social links",
+    items: socialLinks,
+    setItems: setSocialLinks,
+    component: CreateSocialLink,
+    api: ApiClient.socialLink,
+  });
+
   return (
     <ContentContainer>
       <ShadowBox mode="wide">
@@ -134,7 +196,10 @@ export const AdminComponent: React.FC = () => {
             <AdminDataTable<BandVideoModel> {...bandVidsDataTable} />
           </Tab>
           <Tab eventKey="socials" title="Socials">
-            <AdminDataTable<BandImageModel> {...bandPicsDataTable} />
+            <AdminDataTable<SocialLinkModel> {...socialLinksDataTable} />
+          </Tab>
+          <Tab eventKey="members" title="Band members">
+            <AdminDataTable<BandMemberModel> {...bandMembersDataTable} />
           </Tab>
           <Tab eventKey="users" title="Users">
             <AdminDataTable<UserModel> {...usersDataTable} />

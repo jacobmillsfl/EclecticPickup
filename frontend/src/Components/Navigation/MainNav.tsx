@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { Link, useLocation } from "react-router-dom";
 import { Link as ScrollLink } from 'react-scroll';
 
 import appContext from "../../Contexts/AppContext";
@@ -10,6 +11,7 @@ function MainNav() {
   const [collapsed, setCollapsed] = useState(true);
   const [ isHomepage, setIsHomepage ] = useState(true);
   const { loggedIn } = useContext(appContext);
+  const location = useLocation();
 
   useEffect(() => {
 
@@ -26,13 +28,13 @@ function MainNav() {
       }, 1200);
     }
 
-    const currentPath = window.location.pathname;
+    const currentPath = location.pathname;
     if (currentPath !== "/") {
       setIsHomepage(false);
     } else {
       setIsHomepage(true);
     }
-  }, []);
+  }, [location.pathname]);
 
   const toggle = () => {
     setCollapsed((collapsed) => !collapsed);
@@ -96,8 +98,12 @@ function MainNav() {
             )}
             {loggedIn && (
               <>
-                <Nav.Link href="/admin">Admin</Nav.Link>
-                <Nav.Link href="/logout">Logout</Nav.Link>
+                <Nav.Link as={Link} to="/admin">
+                  Admin
+                </Nav.Link>
+                <Nav.Link as={Link} to="/logout">
+                  Logout
+                </Nav.Link>
               </>
             )}
           </Nav>

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -41,10 +43,12 @@ CORS(app)
 
 config = ConfigManager.get_config()
 
-db_path = "database.db"
-# volume_path = "/home/appuser/app/instance/database.db"
-
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+# Keep SQLite on the mounted instance/ directory (Docker: ./backend/instance) so the same
+# file is used for `flask db upgrade`, manage_db.py, and uwsgi — and survives container rebuilds.
+_instance_dir = Path(__file__).resolve().parent / "instance"
+_instance_dir.mkdir(parents=True, exist_ok=True)
+_db_file = _instance_dir / "database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + str(_db_file.resolve())
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_TOKEN_LOCATION"] = ["headers", "query_string"]
 app.config["JWT_SECRET_KEY"] = config.jwt_secret

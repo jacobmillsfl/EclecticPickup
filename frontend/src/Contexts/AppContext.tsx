@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, type Dispatch, type SetStateAction } from 'react';
 import { BandMember } from '../Components/Content/BandMemberList';
 import { AllSocialLinks } from '../Components/Content/Socials';
 import { BandVideo } from "../Components/Content/VideoCarousel";
@@ -13,13 +13,13 @@ interface ApplicationContext {
     settings: Array<SettingsModel>;
     socialLinks: AllSocialLinks;
   
-    setLoggedIn: (jwt: boolean) => void;
-    setSettings: (settings: Array<SettingsModel>) => void;
-    setBandMembers: (members: Array<BandMember>) => void;
-    setImages: (images: Array<BandImageModel>) => void;
-    setVideos: (videos: Array<BandVideo>) => void;
-    setGigs: (props: Array<EventModel>) => void;
-    setSocialLinks: (links: AllSocialLinks) => void;
+    setLoggedIn: Dispatch<SetStateAction<boolean>>;
+    setSettings: Dispatch<SetStateAction<Array<SettingsModel>>>;
+    setBandMembers: Dispatch<SetStateAction<Array<BandMember>>>;
+    setImages: Dispatch<SetStateAction<Array<BandImageModel>>>;
+    setVideos: Dispatch<SetStateAction<Array<BandVideo>>>;
+    setGigs: Dispatch<SetStateAction<Array<EventModel>>>;
+    setSocialLinks: Dispatch<SetStateAction<AllSocialLinks>>;
   }
   
   const appContext = createContext<ApplicationContext>({

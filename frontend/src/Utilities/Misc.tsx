@@ -31,7 +31,21 @@ export default class Misc {
             const imageTypes = [".png", ".jpg", ".jpeg", ".gif"]
             for (const ext of imageTypes) {
                 if (item.endsWith(ext)) {
-                    return <Image src={`${item}`} className="hover-zoom" style={{ "maxWidth": "100px", "maxHeight": "100px" }} thumbnail />
+                    const base = process.env.PUBLIC_URL ?? "";
+                    const src =
+                        item.startsWith("http://") || item.startsWith("https://")
+                            ? item
+                            : item.startsWith("/")
+                              ? `${base}${item}`
+                              : `${base}/${item}`;
+                    return (
+                        <Image
+                            src={src}
+                            className="hover-zoom"
+                            style={{ maxWidth: "100px", maxHeight: "100px" }}
+                            thumbnail
+                        />
+                    );
                 }
             }
             return item.toString();
@@ -65,6 +79,24 @@ export default class Misc {
 
             return isSafeUrl;
         } catch (error) {
+            return false;
+        }
+    }
+
+    /** youtube.com, youtu.be, m.youtube.com, music.youtube.com, etc. */
+    static isYouTubeUrl(url: string): boolean {
+        if (!Misc.isValidUrl(url)) {
+            return false;
+        }
+        try {
+            const host = new URL(url).hostname.toLowerCase();
+            const base = host.startsWith("www.") ? host.slice(4) : host;
+            return (
+                base === "youtu.be" ||
+                base === "youtube.com" ||
+                base.endsWith(".youtube.com")
+            );
+        } catch {
             return false;
         }
     }

@@ -6,11 +6,15 @@ export type BandMember = {
 
 export const BandMemberList: React.FC<{ props: Array<BandMember> }> = ({props}) => {
   function generateMemberImage(member: BandMember) {
+    if (!member.imgUrl) {
+      return null;
+    }
     return (
       <div>
         <img
           style={BandListImgStyle}
-          src={process.env.PUBLIC_URL + member.imgUrl}
+          src={member.imgUrl}
+          alt={member.name}
         />
       </div>
     );
@@ -29,7 +33,7 @@ export const BandMemberList: React.FC<{ props: Array<BandMember> }> = ({props}) 
   function generateInnerContent(member: BandMember, key: number) {
     const position = key % 2;
 
-    if (position == 0) {
+    if (position === 0) {
       return (
         <span key={key} style={BandListSpanStyle}>
           {generateMemberImage(member)}

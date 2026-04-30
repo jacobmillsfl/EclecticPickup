@@ -1,12 +1,12 @@
-flask
-flask_cors
-pymysql
-wheel
-bcrypt
-python-dotenv
-PyJWT
-flask_sqlalchemy
-mysqlclient
-Flask-Migrate
-flask_jwt_extended
-validators
+# Pinned for reproducible installs (see security-lang-python dependency hygiene).
+Flask==3.0.3
+flask-cors==5.0.1
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.1.0
+Flask-JWT-Extended==4.7.1
+PyJWT==2.10.1
+bcrypt==4.2.1
+python-dotenv==1.0.1
+validators==0.34.0
+wheel==0.45.1
+uWSGI==2.0.28

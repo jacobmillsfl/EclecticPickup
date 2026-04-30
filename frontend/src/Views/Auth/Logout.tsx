@@ -8,13 +8,10 @@ export const LogOutComponent: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const logout = async () => {
-      AuthManager.setAuthToken("");
-      navigate("/login");
-      setLoggedIn(false);
-    };
+    AuthManager.clearAuthToken();
+    setLoggedIn(false);
+    navigate("/login", { replace: true });
+  }, [navigate, setLoggedIn]);
 
-    logout();
-  }, [navigate]);
-  return <></>;
+  return null;
 };

@@ -1,31 +1,46 @@
 from functools import wraps
+
 from flask import jsonify, request
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt, get_jwt_identity
+
+
+def _jwt_scope_list():
+    """Scopes from login additional_claims (scope is a single string, e.g. 'admin')."""
+    raw = get_jwt().get("scope")
+    if raw is None:
+        return []
+    return raw if isinstance(raw, list) else [raw]
+
 
 def scope_required(scopes: list):
-    """ Only allows access if one of the provided scopes is available """
+    """Only allows access if one of the provided scopes is available."""
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            identity_scopes = get_jwt_identity().get('scope', [])
+            identity_scopes = _jwt_scope_list()
             authorized = any(scope in identity_scopes for scope in scopes)
             if not authorized:
-                return jsonify({'msg': 'Unauthorized'}), 403
+                return jsonify({"msg": "Unauthorized"}), 403
             return func(*args, **kwargs)
+
         return wrapper
+
     return decorator
+
 
 def user_edit_permission(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        user_id = kwargs.get('user_id')
-        current_user_id = get_jwt_identity().get('id')
-        identity_scopes = get_jwt_identity().get('scope', [])
+        user_id = kwargs.get("user_id")
+        current_user_id = int(get_jwt_identity())
+        identity_scopes = _jwt_scope_list()
 
-        if current_user_id != user_id and 'admin' not in identity_scopes:
-            return jsonify({'msg': 'Unauthorized'}), 403
+        if current_user_id != user_id and "admin" not in identity_scopes:
+            return jsonify({"msg": "Unauthorized"}), 403
 
         return func(*args, **kwargs)
+
     return wrapper
 
 def required_fields(fields):

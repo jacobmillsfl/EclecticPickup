@@ -19,11 +19,11 @@ export const LoginComponent: React.FC = () => {
   const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
-    if (AuthManager.getAuthToken() !== "") {
-      navigate("/admin");
+    if (AuthManager.isAuthenticated()) {
+      navigate("/admin", { replace: true });
       setLoggedIn(true);
     }
-  }, []);
+  }, [navigate, setLoggedIn]);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();

@@ -1,5 +1,7 @@
+from urllib.parse import urlparse
+
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, current_user
+from flask_jwt_extended import get_jwt_identity, jwt_required
 import validators
 
 from Models.database import db
@@ -7,6 +9,23 @@ from Models.bandvideo import BandVideo
 from Utils.Decorators import scope_required, required_fields
 
 bandvideo_bp = Blueprint('bandvideo', __name__)
+
+
+def _is_youtube_url(url: str) -> bool:
+    if not url or not isinstance(url, str):
+        return False
+    try:
+        parsed = urlparse(url.strip())
+        if parsed.scheme not in ("http", "https"):
+            return False
+        host = (parsed.netloc or "").lower()
+        if ":" in host:
+            host = host.split(":")[0]
+        if host.startswith("www."):
+            host = host[4:]
+        return host == "youtu.be" or host == "youtube.com" or host.endswith(".youtube.com")
+    except Exception:
+        return False
 
 @bandvideo_bp.route('/bandvideos', methods=['GET'])
 def get_all_band_videos():
@@ -40,15 +59,18 @@ def get_band_video_by_id(video_id):
 def create_band_video():
     data = request.get_json()
 
-    # Don't allow invalid URLs for YouTube videos
-    if data['youtube'] is True and not validators.url(data['src']):
-        return jsonify({'status': 'error', 'msg': 'Invalid src URL'})
+    if not data.get('youtube'):
+        return jsonify({'msg': 'Only YouTube videos are supported'}), 400
+    if not validators.url(data['src']):
+        return jsonify({'msg': 'Invalid URL'}), 400
+    if not _is_youtube_url(data['src']):
+        return jsonify({'msg': 'URL must be a YouTube link (youtube.com or youtu.be)'}), 400
 
     new_video = BandVideo(
-        src=data['src'],
+        src=data['src'].strip(),
         description=data.get('description'),
-        youtube=data.get('youtube', False),
-        created_by_user_id=current_user.get("id"),
+        youtube=True,
+        created_by_user_id=int(get_jwt_identity()),
     )
     db.session.add(new_video)
     db.session.commit()
@@ -71,13 +93,27 @@ def edit_band_video(video_id):
         return jsonify({'msg': 'Band video not found'}), 404
 
     data = request.get_json()
-    video.src = data.get('src', video.src)
+    if not data.get('youtube'):
+        return jsonify({'msg': 'Only YouTube videos are supported'}), 400
+    src = data.get('src', video.src)
+    if not validators.url(src):
+        return jsonify({'msg': 'Invalid URL'}), 400
+    if not _is_youtube_url(src):
+        return jsonify({'msg': 'URL must be a YouTube link (youtube.com or youtu.be)'}), 400
+
+    video.src = src.strip()
     video.description = data.get('description', video.description)
-    video.youtube = data.get('youtube', video.youtube)
-    video.modified_by_user_id = current_user.get("id")
-    
+    video.youtube = True
+    video.modified_by_user_id = int(get_jwt_identity())
+
     db.session.commit()
-    return jsonify({'msg': 'Band video updated successfully'}), 200
+    video_data = {
+        'id': video.id,
+        'src': video.src,
+        'description': video.description,
+        'youtube': video.youtube,
+    }
+    return jsonify({'msg': 'Band video updated successfully', 'data': video_data}), 200
 
 @bandvideo_bp.route('/bandvideos/<int:video_id>', methods=['DELETE'])
 @jwt_required()

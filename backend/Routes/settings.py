@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, current_user
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from Models.database import db
 from Models.setting import Settings
@@ -53,7 +53,7 @@ def create_setting():
     new_setting = Settings(
         name=data['name'],
         value=data['value'],
-        created_by_user_id=current_user.get("id"),
+        created_by_user_id=int(get_jwt_identity()),
     )
     db.session.add(new_setting)
     db.session.commit()
@@ -77,10 +77,15 @@ def edit_setting(setting_id):
     data = request.get_json()
     setting.name = data.get('name', setting.name)
     setting.value = data.get('value', setting.value)
-    setting.modified_by_user_id = current_user.get("id")
+    setting.modified_by_user_id = int(get_jwt_identity())
     
     db.session.commit()
-    return jsonify({'msg': 'Setting updated successfully'}), 200
+    setting_data = {
+        'id': setting.id,
+        'name': setting.name,
+        'value': setting.value,
+    }
+    return jsonify({'msg': 'Setting updated successfully', 'data': setting_data}), 200
 
 @setting_bp.route('/settings/<int:setting_id>', methods=['DELETE'])
 @jwt_required()

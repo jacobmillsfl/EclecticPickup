@@ -1,37 +1,33 @@
-FROM python:3.7
+# syntax=docker/dockerfile:1
+FROM python:3.12-slim-bookworm
 
-# Set shell
-SHELL ["/bin/bash", "-c"]
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Install dependencies
-RUN apt update
-RUN apt install -y build-essential python3 python3-dev libssl-dev libffi-dev python3-setuptools uwsgi-plugin-python3
-RUN apt remove -y uwsgi
+# Build uWSGI and any wheels that need compilation. sqlite3 CLI for inspecting instance/database.db.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        libpcre3 \
+        libpcre3-dev \
+        sqlite3 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Create app user
 RUN useradd -ms /bin/bash appuser
-WORKDIR /home/appuser
-USER appuser
 
-# Copy the API code
-RUN mkdir ./app
-WORKDIR ./app
+WORKDIR /home/appuser/app
 COPY --chown=appuser:appuser ./ ./
 
-# Initialize volume data
-RUN mkdir -p ./files
-RUN mkdir -p ./instance
+# WORKDIR created this path as root; ensure appuser owns the tree and data dirs exist.
+RUN mkdir -p /home/appuser/app/files /home/appuser/app/instance \
+    && chown -R appuser:appuser /home/appuser/app
 
-# Install Python requirements
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
-RUN pip uninstall -y uwsgi
-RUN pip install uwsgi
+USER appuser
 
-# Expose port
+ENV PATH="/home/appuser/.local/bin:${PATH}"
+
+RUN pip install --user --no-cache-dir --upgrade pip \
+    && pip install --user --no-cache-dir -r ./requirements.txt
+
 EXPOSE 5000
 
-ENV PATH="${PATH}:/home/appuser/.local/bin/"
-
-# Run API
 CMD ["bash", "init_script.sh"]

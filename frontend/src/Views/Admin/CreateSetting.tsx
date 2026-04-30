@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -8,8 +8,10 @@ import { Alert } from "react-bootstrap";
 import ApiClient from "../../Utilities/Api/ApiClient";
 import { AlertVariant, CreateEditDataProps } from "../../Types";
 import { SettingsModel } from "../../Types/DbModels";
+import appContext from "../../Contexts/AppContext";
 
 export const CreateSetting: React.FC<CreateEditDataProps<SettingsModel>> = (props) => {
+    const { setSettings } = useContext(appContext);
     const [settingId, setSettingId] = useState<number | undefined>(props.id);
     const [name, setName] = useState("");
     const [value, setValue] = useState("");
@@ -41,6 +43,13 @@ export const CreateSetting: React.FC<CreateEditDataProps<SettingsModel>> = (prop
         }
     }, []);
 
+    const mergeSettingsFromApi = async () => {
+        const refreshed = await ApiClient.settings.all();
+        if (Array.isArray(refreshed.data)) {
+            setSettings([...refreshed.data]);
+        }
+    };
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         if (name !== "" && value !== "") {
@@ -50,32 +59,25 @@ export const CreateSetting: React.FC<CreateEditDataProps<SettingsModel>> = (prop
                     name: name,
                     value: value
                 }
-                ApiClient.settings.update(editedSetting).then(result => {
-                    if (result.status === 200) {
-                        props.edit(editedSetting);
-                        props.close();
-                    } else {
-                        updateAlert(true, "Error", "danger", result.msg);
-                    }
-                })
+                const result = await ApiClient.settings.update(editedSetting);
+                if (result.status === 200) {
+                    await mergeSettingsFromApi();
+                    props.close();
+                } else {
+                    updateAlert(true, "Error", "danger", result.msg);
+                }
             } else {
                 const newSetting = {
                     name: name,
                     value: value
                 }
-                ApiClient.settings.create(newSetting).then(result => {
-                    if (result.status === 200 && result.data) {
-                        const setting = {
-                            id: result.data.id,
-                            name: result.data.name,
-                            value: result.data.value
-                        }
-                        props.add(setting)
-                        props.close();
-                    } else {
-                        updateAlert(true, "Error", "danger", result.msg);
-                    }
-                })
+                const result = await ApiClient.settings.create(newSetting);
+                if (result.status === 200 && result.data) {
+                    await mergeSettingsFromApi();
+                    props.close();
+                } else {
+                    updateAlert(true, "Error", "danger", result.msg);
+                }
             }
         } else {
             updateAlert(true, "Error", "warning", "All fields are required");

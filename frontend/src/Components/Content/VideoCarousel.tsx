@@ -17,9 +17,12 @@ export const VideoCarousel: React.FC<{ props: Array<BandVideo> }> = ({ props }) 
             style={VideoContainerInnerStyle}
             src={video.src}
             title={video.alt}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
             frameBorder="0"
-          ></iframe>
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
         </div>
       );
     } else {

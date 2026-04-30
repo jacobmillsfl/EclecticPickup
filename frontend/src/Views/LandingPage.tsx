@@ -2,10 +2,7 @@ import "../HomePage.css";
 import { useContext, useEffect, useState } from "react";
 import { ImageCarousel } from "../Components/Content/ImageCarousel";
 import { ContentContainer } from "../Components/Controls/ContentContainer";
-import {
-  BandMember,
-  BandMemberList,
-} from "../Components/Content/BandMemberList";
+import { BandMemberList } from "../Components/Content/BandMemberList";
 import { InfoBox, InfoBoxProps } from "../Components/Content/InfoBox";
 import { GigsProps, GigsComponent } from "../Components/Content/GigsComponent";
 import { Socials, AllSocialLinks } from "../Components/Content/Socials";
@@ -76,9 +73,9 @@ export default function LandingPage() {
   return (
     <ContentContainer>
       <div id="home"></div>
-      <ImageCarousel props={images} />
+      {images.length > 0 && <ImageCarousel props={images} />}
       <InfoBox props={aboutInfo} />
-      <BandMemberList props={bandMembers} />
+      {bandMembers.length > 0 && <BandMemberList props={bandMembers} />}
       <VideoCarousel props={videos} />
       <GigsComponent props={upcomingGigs}/>
       <GigsComponent props={pastGigs}/>

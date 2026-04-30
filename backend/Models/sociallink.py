@@ -11,6 +11,11 @@ class SocialLink(db.Model):
     href_url = db.Column(db.String(256))
     img_url = db.Column(db.String(256))
     text = db.Column(db.String(64))
+    # One of: streaming, social_media, merch, email (matches public site groupings).
+    category = db.Column(db.String(32), nullable=False, default="social_media")
+    # Preset platform key (e.g. facebook); icon path is derived from this in the API.
+    platform = db.Column(db.String(32), nullable=True)
+    enabled = db.Column(db.Boolean, nullable=False, default=True)
     created_by_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     modified_by_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     created_date = db.Column(db.DateTime, default=datetime.utcnow)

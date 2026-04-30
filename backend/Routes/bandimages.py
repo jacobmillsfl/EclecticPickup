@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, current_user
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from Models.database import db
 from Models.bandimage import BandImage
@@ -40,7 +40,7 @@ def create_band_image():
     new_image = BandImage(
         filename=data['filename'],
         caption=data.get('caption'),
-        created_by_user_id=current_user.get("id"),
+        created_by_user_id=int(get_jwt_identity()),
     )
     db.session.add(new_image)
     db.session.commit()
@@ -63,7 +63,7 @@ def edit_band_image(image_id):
 
     data = request.get_json()
     image.caption = data.get('caption', image.caption)
-    image.modified_by_user_id = current_user.get("id")
+    image.modified_by_user_id = int(get_jwt_identity())
     
     db.session.commit()
     return jsonify({'msg': 'Band image updated successfully'}), 200
