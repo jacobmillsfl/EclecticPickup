@@ -39,7 +39,7 @@ export const CreateBandImage: React.FC<CreateEditDataProps<BandImageModel>> = (p
                 }
             });
         }
-    }, []);
+    }, [props.id]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {

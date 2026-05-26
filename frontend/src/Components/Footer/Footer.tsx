@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
 import appContext from '../../Contexts/AppContext';
-import { SocialList, SocialListing } from '../Content/SocialList';
+import { SocialListing } from '../Content/SocialList';
 
 function Footer() {
     const { socialLinks } = useContext(appContext);
-    const [listings, setListings] = useState(new Array<SocialListing>());
+    const [listings, setListings] = useState<SocialListing[]>([]);
 
     useEffect(() => {
         const tempListings: SocialListing[] = [];
@@ -37,12 +37,6 @@ function Footer() {
             </div>
         </div>
     );
-}
-
-const SocialListImgStyle = {
-    "display": "block",
-    "height": "62px",
-    "boxShadow": "0px 0px 5px #000000"
 }
 
 export default Footer;

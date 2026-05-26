@@ -5,47 +5,43 @@ import { ContentContainer } from "../Components/Controls/ContentContainer";
 import { BandMemberList } from "../Components/Content/BandMemberList";
 import { InfoBox, InfoBoxProps } from "../Components/Content/InfoBox";
 import { GigsProps, GigsComponent } from "../Components/Content/GigsComponent";
-import { Socials, AllSocialLinks } from "../Components/Content/Socials";
-import { QuoteBox, QuoteBoxProps } from "../Components/Content/QuoteBox";
-import { BandVideo, VideoCarousel } from "../Components/Content/VideoCarousel";
+import { VideoCarousel } from "../Components/Content/VideoCarousel";
 import { MailChimpComponent } from "../Components/MailChimp/MailChimpComponent";
 import appContext from "../Contexts/AppContext";
 
 export default function LandingPage() {
-  const { images, bandMembers, videos, gigs, settings, socialLinks } =
-    useContext(appContext);
+  const { images, bandMembers, videos, gigs, settings } = useContext(appContext);
 
   const [upcomingGigs, setUpcomingGigs] = useState<GigsProps>({
     heading: "",
-    gigs: new Array(),
+    gigs: [],
   });
   const [pastGigs, setPastGigs] = useState<GigsProps>({
     heading: "",
-    gigs: new Array(),
+    gigs: [],
   });
   const [aboutInfo, setAboutInfo] = useState<InfoBoxProps>({
     heading: "",
     paragraph: "",
   });
-  const [motto, setMotto] = useState<QuoteBoxProps>({ quote: "" });
 
   useEffect(() => {
-    const upcomingGigs = {
+    const upcoming = {
       heading: "Upcoming Gigs",
       gigs: gigs.filter((gig) => gig.date.getTime() > Date.now()),
     };
 
-    const pastGigs = {
+    const past = {
       heading: "Previous Gigs",
       gigs: gigs.filter((gig) => gig.date.getTime() < Date.now()),
     };
 
-    if (upcomingGigs.gigs.length > 0) {
-      setUpcomingGigs(upcomingGigs);
+    if (upcoming.gigs.length > 0) {
+      setUpcomingGigs(upcoming);
     }
 
-    if (pastGigs.gigs.length > 0) {
-      setPastGigs(pastGigs);
+    if (past.gigs.length > 0) {
+      setPastGigs(past);
     }
   }, [gigs]);
 
@@ -53,20 +49,10 @@ export default function LandingPage() {
     const bandBio = settings.find((setting) => setting.name === "BAND_BIO");
 
     if (bandBio) {
-      const infoBoxProps = {
+      setAboutInfo({
         heading: "Eclectic Pickup",
         paragraph: bandBio.value,
-      };
-
-      setAboutInfo(infoBoxProps);
-    }
-
-    const bandMotto = settings.find((setting) => setting.name === "BAND_MOTTO");
-    if (bandMotto) {
-      const quoteBoxProps = {
-        quote: bandMotto.value,
-      };
-      setMotto(quoteBoxProps);
+      });
     }
   }, [settings]);
 
@@ -77,12 +63,9 @@ export default function LandingPage() {
       <InfoBox props={aboutInfo} />
       {bandMembers.length > 0 && <BandMemberList props={bandMembers} />}
       <VideoCarousel props={videos} />
-      <GigsComponent props={upcomingGigs}/>
-      <GigsComponent props={pastGigs}/>
-      {/* <MediaPlayer /> */}
-      {/* <Socials props={socialLinks} /> */}
+      <GigsComponent props={upcomingGigs} />
+      <GigsComponent props={pastGigs} />
       <MailChimpComponent />
-      {/* <QuoteBox props={motto}/> */}
     </ContentContainer>
   );
 }

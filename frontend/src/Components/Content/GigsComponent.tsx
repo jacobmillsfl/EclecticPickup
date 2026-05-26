@@ -32,7 +32,7 @@ export const GigsComponent: React.FC<{ props: GigsProps }> = ({ props }) => {
   }
 
   return (
-    <div id="shows" className={props.heading == "Upcoming Gigs" ? "layer4Bg" : "layer4BgReversed"}>
+    <div id="shows" className={props.heading === "Upcoming Gigs" ? "layer4Bg" : "layer4BgReversed"}>
       <div style={HeaderStyle}>
         <h2>{props.heading}</h2>
       </div>

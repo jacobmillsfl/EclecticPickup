@@ -1,5 +1,5 @@
 import { AlertVariant, CreateEditDataProps, Data, DataTable, DataTableOptions } from "../Types";
-import { ApiResponse, ICrudApi } from "./Api/ApiTypes";
+import { ICrudApi } from "./Api/ApiTypes";
 
 interface IAlertUpdate {
     (display: boolean, heading: string, variant: AlertVariant, message: string) : void

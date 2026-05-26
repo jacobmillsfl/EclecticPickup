@@ -40,11 +40,11 @@ function sortSocialLinksForAdmin(links: SocialLinkModel[]): SocialLinkModel[] {
 export const AdminComponent: React.FC = () => {
   const { gigs, settings, setGigs, setSettings } = useContext(appContext);
   const [subject, setSubject] = useState<JwtSubject>();
-  const [users, setUsers] = useState<Array<UserModel>>(new Array());
-  const [bandPictures, setBandPictures] = useState<Array<BandImageModel>>(new Array());
-  const [bandVideos, setBandVideos] = useState<Array<BandVideoModel>>(new Array());
-  const [socialLinks, setSocialLinks] = useState<Array<SocialLinkModel>>(new Array());
-  const [bandMembers, setBandMembers] = useState<Array<BandMemberModel>>(new Array());
+  const [users, setUsers] = useState<UserModel[]>([]);
+  const [bandPictures, setBandPictures] = useState<BandImageModel[]>([]);
+  const [bandVideos, setBandVideos] = useState<BandVideoModel[]>([]);
+  const [socialLinks, setSocialLinks] = useState<SocialLinkModel[]>([]);
+  const [bandMembers, setBandMembers] = useState<BandMemberModel[]>([]);
 
   useEffect(() => {
     const jwt = AuthManager.getAuthToken();

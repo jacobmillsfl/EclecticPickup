@@ -1,4 +1,4 @@
-import { Gig, Modify } from "../../../Types";
+import { Gig } from "../../../Types";
 import { EventModel } from "../../../Types/DbModels";
 import AuthManager from "../../AuthManager";
 import {

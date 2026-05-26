@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import { ContentContainer } from "../../Components/Controls/ContentContainer"
-import ShadowBox from "../../Components/Controls/ShadowBox"
 import { Alert } from "react-bootstrap";
 import ApiClient from "../../Utilities/Api/ApiClient";
 import { AlertVariant, CreateEditDataProps } from "../../Types";
@@ -51,7 +49,7 @@ export const CreateUser: React.FC<CreateEditDataProps<UserModel>> = (props) => {
                 }
             });
         }
-    }, []);
+    }, [props.id]);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();

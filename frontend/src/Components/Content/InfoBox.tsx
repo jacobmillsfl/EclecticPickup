@@ -10,9 +10,9 @@ export const InfoBox: React.FC<{ props: InfoBoxProps }> = ({ props }) => {
   return (
     <ShadowBox mode="top">
       <div id="about" style={InfoBoxBodyStyle}>
-        { props.image && 
-          <img src={props.image} />
-        }        
+        {props.image ? (
+          <img src={props.image} alt={props.heading} />
+        ) : null}        
         <h2>{props.heading}</h2>
         <p style={AboutContentStyle}>{props.paragraph}</p>
       </div>

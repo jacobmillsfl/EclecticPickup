@@ -1,32 +1,25 @@
-import { useState, useEffect, useContext } from 'react'
-// import mediaContext from "../../Contexts/Homepage/MediaContext";
+import { useState } from "react";
 import VideoUtility from "../../Utilities/VideoUtility";
-import { VideoDetail } from "../../Types/VideoDetail";
 
 function VideoContainer() {
-    let defaultVideo = { name: "default", video: null, playbackRate: 1 };
-    const [currentVideo, setCurrentVideo] = useState<VideoDetail>(defaultVideo);
-    
-    useEffect(() => {
-        const videos = VideoUtility.getVideos();
-        if (videos.length > 0) {
-            // Always uses the first video; Assumes unchanging videos
-            setCurrentVideo(videos[0]);
-        }
-    }, [])
+  const [currentBackground] = useState(() =>
+    VideoUtility.getRandomBackground()
+  );
 
-    function videoChanged() {
-        let videoElement = document.querySelector("#background") as HTMLVideoElement;
-        videoElement.playbackRate = currentVideo.playbackRate;
-    }
+  if (!currentBackground.video) {
+    return null;
+  }
 
-    return (
-        <div className="backgroundContainer">
-            <video id="background" muted autoPlay loop src={currentVideo.video} onLoadedData={videoChanged} >
-                <source type="video/mp4" />
-            </video>
-        </div>
-    )
+  return (
+    <div className="backgroundContainer">
+      <img
+        id="background"
+        src={currentBackground.video}
+        alt=""
+        aria-hidden
+      />
+    </div>
+  );
 }
 
 export default VideoContainer;

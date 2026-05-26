@@ -1,8 +1,3 @@
-type AuthResponse = {
-  message: string;
-  status: number;
-};
-
 class AuthManager {
   private static instance: AuthManager | null = null;
 
