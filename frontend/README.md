@@ -7,6 +7,20 @@ shell styles live in `src/App.css`; public sections live in `src/HomePage.css`.
 The old full-page background, fixed social footer, and borrowed layout CSS are
 no longer part of the active layout.
 
+## Homepage priorities
+
+The listening-led introduction points to the discography first, then shows.
+The sections follow that order: albums, shows, band biography/photos/videos,
+configured social media links, and the existing Mailchimp signup. Navigation
+mirrors that hierarchy; Socials appears only when social media links are configured.
+
+`src/Components/Content/Albums.tsx` lists Volume 1, Volume 2, and LIVE at Breck.
+The four supplied Spotify, YouTube Music, Apple Music, and Bandcamp URLs are
+shared artist pages, not album-specific links. Cards intentionally use typography
+until approved album artwork and direct album URLs are supplied. No release dates
+or newest-album claims are assumed. The official PNG logo is still pending;
+the current text wordmark and existing band photo remain in place.
+
 ## Shows
 
 The Shows section has keyboard-accessible Upcoming shows and Past shows tabs.

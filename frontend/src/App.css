@@ -56,9 +56,6 @@
   font-weight: 400;
   margin-left: 0.35em;
 }
-.brand-dot {
-  color: var(--ep-accent);
-}
 .site-nav .navbar-nav {
   gap: 1.5rem;
   align-items: center;

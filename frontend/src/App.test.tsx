@@ -37,7 +37,7 @@ test("renders the modern public site with unique section anchors and CMS content
   render(<App />);
   await screen.findByRole("tab", { name: "Upcoming shows (0)" });
   expect(
-    screen.getByRole("heading", { level: 1, name: /Eclectic Pickup/ })
+    screen.getByRole("heading", { level: 1, name: "Eclectic Pickup" })
   ).toBeInTheDocument();
   expect(screen.getByRole("main")).toHaveAttribute("id", "main-content");
   expect(
@@ -64,6 +64,71 @@ test("renders the modern public site with unique section anchors and CMS content
     "action",
     expect.stringContaining("list-manage.com/subscribe/post")
   );
+});
+
+test("prioritizes the discography and links honestly to the supplied artist pages", async () => {
+  render(<App />);
+  await screen.findByRole("tab", { name: "Upcoming shows (0)" });
+  const main = screen.getByRole("main");
+  expect(
+    Array.from(main.querySelectorAll(".landing-page > section[id]")).map(
+      (section) => section.id
+    )
+  ).toEqual(["home", "albums", "shows", "about", "videos", "subscribe"]);
+  const albums = screen.getByRole("region", {
+    name: "Find your next favorite.",
+  });
+  expect(
+    within(albums)
+      .getAllByRole("heading", { level: 3 })
+      .map((h) => h.textContent)
+  ).toEqual(["Volume 1", "Volume 2", "LIVE at Breck"]);
+  expect(
+    screen.getByRole("link", { name: /Listen to the albums/ })
+  ).toHaveAttribute("href", "#albums");
+  expect(
+    within(albums).getByText("Explore all three albums on our artist pages:")
+  ).toBeInTheDocument();
+  const listening = screen.getByRole("navigation", {
+    name: "Listen to Eclectic Pickup",
+  });
+  const destinations = [
+    ["Spotify", "https://open.spotify.com/artist/0HU4opVeWSZBryB0vZzxu4"],
+    ["YouTube Music", "https://music.youtube.com/@EclecticPickup"],
+    [
+      "Apple Music",
+      "https://music.apple.com/us/artist/eclectic-pickup/1788079254",
+    ],
+    ["Bandcamp", "https://eclecticpickup.bandcamp.com/"],
+  ];
+  expect(within(listening).getAllByRole("link")).toHaveLength(4);
+  destinations.forEach(([name, href]) => {
+    const link = within(listening).getByRole("link", {
+      name: `${name} (opens in a new tab)`,
+    });
+    expect(link).toHaveAttribute("href", href);
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  });
+  const navigation = screen.getByRole("navigation", {
+    name: "Main navigation",
+  });
+  expect(
+    within(navigation)
+      .getAllByRole("link")
+      .map((link) => link.getAttribute("href"))
+  ).toEqual(["/", "/#albums", "/#shows", "/#about", "/#videos", "/#subscribe"]);
+  expect(
+    within(navigation).getByRole("link", { name: /^ECLECTIC\s?PICKUP$/ })
+  ).toHaveTextContent(/^ECLECTICPICKUP$/);
+  expect(
+    within(screen.getByRole("contentinfo")).getByRole("link", {
+      name: "Eclectic Pickup",
+    })
+  ).toHaveTextContent(/^Eclectic Pickup$/);
+  expect(
+    screen.queryByRole("link", { name: "Socials" })
+  ).not.toBeInTheDocument();
 });
 
 test("keeps band administration reachable and guards unauthenticated admin access", async () => {
@@ -151,10 +216,49 @@ test("preserves band members, photos, all videos and social destinations", async
     "lazy"
   );
   expect(screen.getByTitle("Second performance")).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: /Follow the band/ })).toHaveAttribute(
-    "href",
-    "https://example.com/band"
-  );
+  const socialSection = screen.getByRole("region", {
+    name: "Keep good company.",
+  });
+  const socialLink = within(socialSection).getByRole("link", {
+    name: /Follow the band/,
+  });
+  expect(socialLink).toHaveAttribute("href", "https://example.com/band");
+  expect(socialLink).toHaveAttribute("target", "_blank");
+  expect(socialLink).toHaveAttribute("rel", "noopener noreferrer");
+  expect(
+    within(screen.getByRole("contentinfo")).getByRole("link", {
+      name: /Follow the band/,
+    })
+  ).toHaveAttribute("href", "https://example.com/band");
+  expect(
+    Array.from(
+      screen.getByRole("main").querySelectorAll(".landing-page > section[id]")
+    ).map((section) => section.id)
+  ).toEqual([
+    "home",
+    "albums",
+    "shows",
+    "about",
+    "videos",
+    "socials",
+    "subscribe",
+  ]);
+  const navigation = screen.getByRole("navigation", {
+    name: "Main navigation",
+  });
+  expect(
+    within(navigation)
+      .getAllByRole("link")
+      .map((link) => link.getAttribute("href"))
+  ).toEqual([
+    "/",
+    "/#albums",
+    "/#shows",
+    "/#about",
+    "/#videos",
+    "/#socials",
+    "/#subscribe",
+  ]);
 });
 
 test("closes mobile navigation when a section is selected", async () => {
@@ -163,6 +267,6 @@ test("closes mobile navigation when a section is selected", async () => {
   const toggle = screen.getByRole("button", { name: "Toggle navigation" });
   fireEvent.click(toggle);
   expect(toggle).toHaveAttribute("aria-expanded", "true");
-  fireEvent.click(screen.getByRole("link", { name: "The band" }));
+  fireEvent.click(screen.getByRole("link", { name: "Albums" }));
   expect(toggle).toHaveAttribute("aria-expanded", "false");
 });

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import appContext from "../../Contexts/AppContext";
+import { SocialLinks } from "../Content/SocialLinks";
 
 function Footer() {
   const { socialLinks, loggedIn } = useContext(appContext);
@@ -16,27 +17,12 @@ function Footer() {
       <div className="footer-top">
         <div>
           <a href="/#home" className="footer-brand">
-            Eclectic Pickup.
+            Eclectic Pickup
           </a>
           <p>From Fort Collins, with love.</p>
         </div>
         {listings.length > 0 && (
-          <nav className="social-links" aria-label="Follow Eclectic Pickup">
-            {listings.map((listing, index) => (
-              <a
-                key={`${listing.hrefUrl}-${index}`}
-                href={listing.hrefUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {listing.imgUrl && (
-                  <img src={listing.imgUrl} alt="" loading="lazy" />
-                )}
-                {listing.text}
-                <span className="visually-hidden"> (opens in a new tab)</span>
-              </a>
-            ))}
-          </nav>
+          <SocialLinks listings={listings} label="Follow Eclectic Pickup" />
         )}
       </div>
       <div className="footer-bottom">

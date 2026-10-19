@@ -51,6 +51,11 @@
   flex-wrap: wrap;
   gap: 0.8rem;
 }
+.hero-albums {
+  color: var(--ep-text);
+  line-height: 1.7;
+  margin: 0 0 2rem;
+}
 .button-primary,
 .button-secondary {
   display: inline-flex;
@@ -163,6 +168,48 @@
   font-size: 0.85rem;
   max-width: 17rem;
   margin: 0 0 0.25rem;
+}
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.album-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 220px;
+  padding: 1.75rem;
+  border: 1px solid var(--ep-line);
+  border-top: 3px solid var(--ep-accent);
+  border-radius: 0.5rem;
+  background: var(--ep-surface);
+}
+.album-card .eyebrow {
+  font-size: 0.6rem;
+}
+.album-card h3 {
+  font-family: Impact, "Arial Narrow", sans-serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin: 0;
+}
+.album-platforms {
+  margin-top: 2rem;
+}
+.album-platforms > p {
+  color: var(--ep-muted);
+  font-size: 0.85rem;
+}
+.album-platforms .social-links,
+.follow-section .social-links {
+  max-width: 100%;
+  justify-content: flex-start;
 }
 .shows-card {
   border: 1px solid var(--ep-line);
@@ -485,6 +532,12 @@
   }
   .hero-photo {
     min-height: 300px;
+  }
+  .album-grid {
+    grid-template-columns: 1fr;
+  }
+  .album-card {
+    min-height: 160px;
   }
   .hero-strip {
     font-size: 0.55rem;

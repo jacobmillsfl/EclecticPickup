@@ -8,6 +8,8 @@ import { VideoCarousel } from "../Components/Content/VideoCarousel";
 import { MailChimpComponent } from "../Components/MailChimp/MailChimpComponent";
 import appContext from "../Contexts/AppContext";
 import heroImage from "../media/EclecticPickup-22.jpg";
+import { Albums } from "../Components/Content/Albums";
+import { SocialLinks } from "../Components/Content/SocialLinks";
 
 export default function LandingPage() {
   const {
@@ -19,6 +21,7 @@ export default function LandingPage() {
     gigsLoading,
     gigsError,
     reloadGigs,
+    socialLinks,
   } = useContext(appContext);
   const bio = settings.find((setting) => setting.name === "BAND_BIO")?.value;
   const motto = settings.find(
@@ -36,17 +39,22 @@ export default function LandingPage() {
           <h1 id="hero-heading">
             Eclectic
             <br />
-            <span>Pickup.</span>
+            <span>Pickup</span>
           </h1>
           <p className="hero-description">
             {motto || "Good music. Good company. Come be part of it."}
           </p>
+          <p className="hero-albums">
+            Volume 1. Volume 2. LIVE at Breck.
+            <br />
+            Our music, ready when you are.
+          </p>
           <div className="hero-actions">
-            <a className="button-primary" href="#shows">
-              Find a show <span aria-hidden="true">&#8599;</span>
+            <a className="button-primary" href="#albums">
+              Listen to the albums <span aria-hidden="true">&#8599;</span>
             </a>
-            <a className="button-secondary" href="#about">
-              Meet the band <span aria-hidden="true">&#8595;</span>
+            <a className="button-secondary" href="#shows">
+              Find a show <span aria-hidden="true">&#8599;</span>
             </a>
           </div>
         </div>
@@ -60,6 +68,7 @@ export default function LandingPage() {
         <span>Colorado roots</span>
         <span>Live &amp; loud</span>
       </div>
+      <Albums />
       <GigsComponent
         gigs={gigs}
         loading={gigsLoading}
@@ -78,6 +87,25 @@ export default function LandingPage() {
       </section>
       {images.length > 0 && <ImageCarousel props={images} />}
       <VideoCarousel props={videos} />
+      {socialLinks.socialMedia.length > 0 && (
+        <section
+          id="socials"
+          className="page-section follow-section"
+          aria-labelledby="socials-heading"
+        >
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Between shows</p>
+              <h2 id="socials-heading">Keep good company.</h2>
+            </div>
+            <p>More music, band moments, and news. Find us on social media.</p>
+          </div>
+          <SocialLinks
+            listings={socialLinks.socialMedia}
+            label="Band social media"
+          />
+        </section>
+      )}
       <MailChimpComponent />
     </div>
   );

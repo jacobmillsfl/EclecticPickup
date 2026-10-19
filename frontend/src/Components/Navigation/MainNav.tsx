@@ -7,7 +7,7 @@ import appContext from "../../Contexts/AppContext";
 
 function MainNav() {
   const [expanded, setExpanded] = useState(false);
-  const { loggedIn } = useContext(appContext);
+  const { loggedIn, socialLinks } = useContext(appContext);
   const location = useLocation();
 
   useEffect(() => {
@@ -37,9 +37,6 @@ function MainNav() {
           onClick={() => setExpanded(false)}
         >
           ECLECTIC<span>PICKUP</span>
-          <span className="brand-dot" aria-hidden="true">
-            .
-          </span>
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="site-navigation"
@@ -48,9 +45,13 @@ function MainNav() {
         />
         <Navbar.Collapse id="site-navigation">
           <Nav className="ms-auto" onSelect={() => setExpanded(false)}>
+            <Nav.Link href="/#albums">Albums</Nav.Link>
             <Nav.Link href="/#shows">Shows</Nav.Link>
             <Nav.Link href="/#about">The band</Nav.Link>
             <Nav.Link href="/#videos">Watch</Nav.Link>
+            {socialLinks.socialMedia.length > 0 && (
+              <Nav.Link href="/#socials">Socials</Nav.Link>
+            )}
             <Nav.Link href="/#subscribe" className="nav-subscribe">
               Stay in the loop <span aria-hidden="true">&#8599;</span>
             </Nav.Link>
