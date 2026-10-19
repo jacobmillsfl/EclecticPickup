@@ -1,4 +1,38 @@
-# Getting Started with Create React App
+# Eclectic Pickup frontend
+
+The public site uses a responsive dark concert-poster theme with locally bundled
+band photography, warm accents, normal-flow navigation/footer, and shared
+Bootstrap styling for the existing admin workflows. Theme tokens and shared
+shell styles live in `src/App.css`; public sections live in `src/HomePage.css`.
+The old full-page background, fixed social footer, and borrowed layout CSS are
+no longer part of the active layout.
+
+## Shows
+
+The Shows section has keyboard-accessible Upcoming shows and Past shows tabs.
+Each pane displays eight shows per page, with Previous/Next controls and a range
+summary. Upcoming shows are sorted soonest first; history is newest first.
+Changing panes starts at page one. The table scrolls horizontally on small
+screens without overflowing the page.
+
+Show dates are calendar dates in the visitor's local timezone: today's shows
+remain upcoming until the next local midnight, regardless of the displayed show
+time. The split refreshes at midnight and when the page regains focus/visibility.
+Pagination clamps when data shrinks, and empty panes explain what happens next.
+Loading and fetch failures have separate states; failed show requests expose a
+retry button instead of reporting an empty schedule.
+
+Photos are manually navigated, videos use a responsive grid without autoplay,
+and newsletter signup uses the existing Mailchimp form endpoint and honeypot
+without the embedded third-party stylesheet or validation script.
+
+For a non-interactive regression run from this directory:
+
+```sh
+CI=true npm test -- --watchAll=false --runInBand
+```
+
+## Development
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

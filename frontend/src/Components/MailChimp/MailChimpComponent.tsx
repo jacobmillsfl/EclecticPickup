@@ -1,120 +1,50 @@
-import { useState } from "react";
-import ShadowBox from "../Controls/ShadowBox";
-
-export const MailChimpComponent: React.FC = () => {
-  const [formText, setFormText] = useState("");
-  const [formEmail, setFormEmail] = useState("");
-
-  return (
-    <ShadowBox mode="wide">
-      <h2 id="subscribe"
-        style={{
-          textAlign: "center",
-        }}
-      >
-        Eclectic Pickup Mailing List
-      </h2>
-      <div
-        className="row"
-        style={{
-          maxWidth: "800px",
-          marginLeft: "auto",
-          marginRight: "auto",
-          color: "black",
-        }}
-      >
-        <div id="mc_embed_shell">
-          <div id="mc_embed_signup">
-            <form
-              action="https://jesterjay.us7.list-manage.com/subscribe/post?u=b502469e7948b1c03ab920c6c&amp;id=694d4baf18&amp;f_id=008ed3e4f0"
-              method="post"
-              id="mc-embedded-subscribe-form"
-              name="mc-embedded-subscribe-form"
-              className="validate"
-              target="_blank"
-            >
-              <div id="mc_embed_signup_scroll">
-                <div className="indicates-required">
-                  <span className="asterisk">*</span> indicates required
-                </div>
-                <div className="mc-field-group">
-                  <label htmlFor="mce-EMAIL">
-                    Email Address <span className="asterisk">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    name="EMAIL"
-                    className="required email"
-                    id="mce-EMAIL"
-                    required={true}
-                    value={formEmail}
-                    onChange={(e) => setFormEmail(e.target.value)}
-                  />
-                  <span
-                    id="mce-EMAIL-HELPERTEXT"
-                    className="helper_text"
-                  ></span>
-                </div>
-                <div id="mce-responses" className="clear foot">
-                  <div
-                    className="response"
-                    id="mce-error-response"
-                    style={{ display: "none" }}
-                  ></div>
-                  <div
-                    className="response"
-                    id="mce-success-response"
-                    style={{ display: "none" }}
-                  ></div>
-                </div>
-                <div
-                  aria-hidden="true"
-                  style={{ position: "absolute", left: "-5000px" }}
-                >
-                  <input
-                    type="text"
-                    name="b_b502469e7948b1c03ab920c6c_694d4baf18"
-                    tabIndex={-1}
-                    value={formText}
-                    onChange={(e) => setFormText(e.target.value)}
-                  />
-                </div>
-                <div className="optionalParent">
-                  <div className="clear foot">
-                    <input
-                      type="submit"
-                      name="subscribe"
-                      id="mc-embedded-subscribe"
-                      className="button"
-                      value="Subscribe"
-                      readOnly={true}
-                    />
-                    <p style={{ margin: "0px auto" }}>
-                      <a
-                        href="http://eepurl.com/iklYhf"
-                        title="Mailchimp - email marketing made easy and fun"
-                      >
-                        <span
-                          style={{
-                            display: "inline-block",
-                            backgroundColor: "transparent",
-                            borderRadius: "4px",
-                          }}
-                        >
-                        </span>
-                      </a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-          <script
-            type="text/javascript"
-            src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"
-          ></script>
-        </div>
+export const MailChimpComponent = () => (
+  <section
+    id="subscribe"
+    className="page-section subscribe-section"
+    aria-labelledby="subscribe-heading"
+  >
+    <div>
+      <p className="eyebrow">You're on the list</p>
+      <h2 id="subscribe-heading">Don't miss the next one.</h2>
+      <p>
+        New shows, fresh music, and news from the band. Straight to your inbox.
+      </p>
+    </div>
+    <form
+      action="https://jesterjay.us7.list-manage.com/subscribe/post?u=b502469e7948b1c03ab920c6c&id=694d4baf18&f_id=008ed3e4f0"
+      method="post"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="subscribe-form"
+      aria-label="Mailing list signup"
+    >
+      <label htmlFor="newsletter-email">Email address</label>
+      <div className="subscribe-fields">
+        <input
+          id="newsletter-email"
+          name="EMAIL"
+          type="email"
+          autoComplete="email"
+          placeholder="you@example.com"
+          required
+          aria-describedby="newsletter-help"
+        />
+        <button type="submit" name="subscribe" className="button-primary">
+          Count me in <span aria-hidden="true">&#8599;</span>
+        </button>
       </div>
-    </ShadowBox>
-  );
-};
+      <div className="subscribe-honeypot" aria-hidden="true">
+        <input
+          type="text"
+          name="b_b502469e7948b1c03ab920c6c_694d4baf18"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+      <p id="newsletter-help">
+        Unsubscribe anytime. Signup opens securely in Mailchimp.
+      </p>
+    </form>
+  </section>
+);

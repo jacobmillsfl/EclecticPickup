@@ -3,99 +3,57 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link, useLocation } from "react-router-dom";
-import { Link as ScrollLink } from 'react-scroll';
-
 import appContext from "../../Contexts/AppContext";
 
 function MainNav() {
-  const [collapsed, setCollapsed] = useState(true);
-  const [ isHomepage, setIsHomepage ] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const { loggedIn } = useContext(appContext);
   const location = useLocation();
 
   useEffect(() => {
-
-  }, []);
-
-
-  useEffect(() => {
-    const hash = window.location.hash.substring(1);
-    if (hash && document.getElementById(hash)) {
-      setTimeout(() => {
-        document.getElementById(hash)?.scrollIntoView({
-          behavior: 'smooth',
-        });
-      }, 1200);
+    setExpanded(false);
+    if (location.hash) {
+      const frame = requestAnimationFrame(() => {
+        document.getElementById(location.hash.slice(1))?.scrollIntoView();
+      });
+      return () => cancelAnimationFrame(frame);
     }
-
-    const currentPath = location.pathname;
-    if (currentPath !== "/") {
-      setIsHomepage(false);
-    } else {
-      setIsHomepage(true);
-    }
-  }, [location.pathname]);
-
-  const toggle = () => {
-    setCollapsed((collapsed) => !collapsed);
-  };
-
-  window.onscroll = function () {
-    scrollFunction();
-  };
-
-  function scrollFunction() {
-    if (
-      document.body.scrollTop > 40 ||
-      document.documentElement.scrollTop > 40
-    ) {
-      if (!collapsed) {
-        setCollapsed(true);
-      }
-    }
-  }
+  }, [location.pathname, location.hash]);
 
   return (
     <Navbar
       expand="lg"
-      bg="dark"
       variant="dark"
-      fixed="top"
-      expanded={!collapsed}
+      className="site-nav"
+      expanded={expanded}
+      onToggle={setExpanded}
+      aria-label="Main navigation"
     >
       <Container>
-        <Navbar.Brand href="/">EclecticPickup.com</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={toggle} />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-          {isHomepage && (
-              <>
-              <ScrollLink to="home" role="button" className="nav-link" smooth={true} offset={-70} duration={500}>
-                Home
-              </ScrollLink>
-              <ScrollLink to="about" role="button" className="nav-link" smooth={true} offset={-70} duration={500}>
-                About
-              </ScrollLink>
-              <ScrollLink to="videos" role="button" className="nav-link" smooth={true} offset={-70} duration={500}>
-                Videos
-              </ScrollLink>
-              <ScrollLink to="shows" role="button" className="nav-link" smooth={true} offset={-70} duration={500}>
-                Shows
-              </ScrollLink>
-              <ScrollLink to="subscribe" role="button" className="nav-link" smooth={true} offset={-70} duration={500}>
-                Subscribe
-              </ScrollLink>
-              </>
-              )}
-              {!isHomepage && (
-              <>
-                <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="/#about">About</Nav.Link>
-                <Nav.Link href="/#videos">Videos</Nav.Link>
-                <Nav.Link href="/#shows">Shows</Nav.Link>
-                <Nav.Link href="/#subscribe">Subscribe</Nav.Link>
-              </>
-            )}
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          className="brand"
+          onClick={() => setExpanded(false)}
+        >
+          ECLECTIC<span>PICKUP</span>
+          <span className="brand-dot" aria-hidden="true">
+            .
+          </span>
+        </Navbar.Brand>
+        <Navbar.Toggle
+          aria-controls="site-navigation"
+          aria-expanded={expanded}
+          label="Toggle navigation"
+        />
+        <Navbar.Collapse id="site-navigation">
+          <Nav className="ms-auto" onSelect={() => setExpanded(false)}>
+            <Nav.Link href="/#shows">Shows</Nav.Link>
+            <Nav.Link href="/#about">The band</Nav.Link>
+            <Nav.Link href="/#videos">Watch</Nav.Link>
+            <Nav.Link href="/#subscribe" className="nav-subscribe">
+              Stay in the loop <span aria-hidden="true">&#8599;</span>
+            </Nav.Link>
             {loggedIn && (
               <>
                 <Nav.Link as={Link} to="/admin">

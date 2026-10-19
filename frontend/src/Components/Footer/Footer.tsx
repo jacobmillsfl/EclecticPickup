@@ -1,42 +1,50 @@
-import { useState, useEffect, useContext } from 'react';
-import appContext from '../../Contexts/AppContext';
-import { SocialListing } from '../Content/SocialList';
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import appContext from "../../Contexts/AppContext";
 
 function Footer() {
-    const { socialLinks } = useContext(appContext);
-    const [listings, setListings] = useState<SocialListing[]>([]);
+  const { socialLinks, loggedIn } = useContext(appContext);
+  const listings = [
+    ...socialLinks.email,
+    ...socialLinks.merch,
+    ...socialLinks.socialMedia,
+    ...socialLinks.streaming,
+  ];
 
-    useEffect(() => {
-        const tempListings: SocialListing[] = [];
-        
-        [
-            ...socialLinks.email,
-            ...socialLinks.merch,
-            ...socialLinks.socialMedia,
-            ...socialLinks.streaming
-        ].forEach(link => tempListings.push(link));
-
-        setListings(tempListings);
-    }, [socialLinks]);
-
-    return (
-        <div className="footerLayer">
-            <div className="footerLayerBg">
-                {listings.map((listing, key) => (
-                    <div className="footerItem" key={key}>
-                                                <a 
-                            href={listing.hrefUrl} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            title={listing.text}
-                        >
-                            <img src={listing.imgUrl} alt={listing.text} />
-                        </a>
-                    </div>
-                ))}
-            </div>
+  return (
+    <footer className="site-footer">
+      <div className="footer-top">
+        <div>
+          <a href="/#home" className="footer-brand">
+            Eclectic Pickup.
+          </a>
+          <p>From Fort Collins, with love.</p>
         </div>
-    );
+        {listings.length > 0 && (
+          <nav className="social-links" aria-label="Follow Eclectic Pickup">
+            {listings.map((listing, index) => (
+              <a
+                key={`${listing.hrefUrl}-${index}`}
+                href={listing.hrefUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {listing.imgUrl && (
+                  <img src={listing.imgUrl} alt="" loading="lazy" />
+                )}
+                {listing.text}
+                <span className="visually-hidden"> (opens in a new tab)</span>
+              </a>
+            ))}
+          </nav>
+        )}
+      </div>
+      <div className="footer-bottom">
+        <span>&copy; {new Date().getFullYear()} Eclectic Pickup</span>
+        <Link to={loggedIn ? "/admin" : "/login"}>Band admin</Link>
+      </div>
+    </footer>
+  );
 }
 
 export default Footer;
