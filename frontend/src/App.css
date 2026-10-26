@@ -79,8 +79,7 @@
 .site-footer {
   width: min(100% - 4rem, 1176px);
   margin: 0 auto;
-  padding: 3rem 0 1.5rem;
-  border-top: 1px solid var(--ep-line);
+  padding: 0 0 1.5rem;
 }
 .footer-top,
 .footer-bottom {

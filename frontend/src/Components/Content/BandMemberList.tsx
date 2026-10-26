@@ -11,7 +11,14 @@ export const BandMemberList: React.FC<{ props: BandMember[] }> = ({
     {props.map((member) => (
       <article className="band-member" key={member.name}>
         {member.imgUrl && (
-          <img src={member.imgUrl} alt={member.name} loading="lazy" />
+          <img
+            src={member.imgUrl}
+            alt={member.name}
+            width={120}
+            height={120}
+            loading="lazy"
+            decoding="async"
+          />
         )}
         <div>
           <h3>{member.name}</h3>

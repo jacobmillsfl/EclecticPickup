@@ -1,10 +1,11 @@
 import { SocialListing } from "./SocialList";
+import { IconType } from "react-icons";
 
 export const SocialLinks = ({
   listings,
   label,
 }: {
-  listings: SocialListing[];
+  listings: (SocialListing & { icon?: IconType; iconColor?: string })[];
   label: string;
 }) => (
   <nav className="social-links" aria-label={label}>
@@ -15,6 +16,13 @@ export const SocialLinks = ({
         target="_blank"
         rel="noopener noreferrer"
       >
+        {listing.icon && (
+          <listing.icon
+            color={listing.iconColor}
+            aria-hidden="true"
+            focusable="false"
+          />
+        )}
         {listing.imgUrl && <img src={listing.imgUrl} alt="" loading="lazy" />}
         {listing.text}
         <span className="visually-hidden"> (opens in a new tab)</span>

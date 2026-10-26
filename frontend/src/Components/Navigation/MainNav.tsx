@@ -7,7 +7,7 @@ import appContext from "../../Contexts/AppContext";
 
 function MainNav() {
   const [expanded, setExpanded] = useState(false);
-  const { loggedIn, socialLinks } = useContext(appContext);
+  const { loggedIn } = useContext(appContext);
   const location = useLocation();
 
   useEffect(() => {
@@ -49,9 +49,7 @@ function MainNav() {
             <Nav.Link href="/#shows">Shows</Nav.Link>
             <Nav.Link href="/#about">The band</Nav.Link>
             <Nav.Link href="/#videos">Watch</Nav.Link>
-            {socialLinks.socialMedia.length > 0 && (
-              <Nav.Link href="/#socials">Socials</Nav.Link>
-            )}
+            <Nav.Link href="/#socials">Socials</Nav.Link>
             <Nav.Link href="/#subscribe" className="nav-subscribe">
               Stay in the loop <span aria-hidden="true">&#8599;</span>
             </Nav.Link>
