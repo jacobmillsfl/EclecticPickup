@@ -60,7 +60,7 @@ export default class Misc {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
-    static shuffleArray(array: Array<any>) {
+    static shuffleArray<T>(array: T[]): T[] {
         let currentIndex = array.length, randomIndex;
 
         while (currentIndex > 0) {

@@ -2,78 +2,14 @@ import { ReactNode } from "react";
 
 type ShadowBoxMode = "top" | "mid" | "bot" | "form" | "wide";
 
-type ShadowBoxProps = {
+export default function ShadowBox({
+  children,
+  mode,
+}: {
   children: ReactNode;
   mode: ShadowBoxMode;
-};
-
-export default function ShadowBox({ children, mode }: ShadowBoxProps) {
-  let boxStyle: React.CSSProperties | undefined = undefined;
-
-  if (mode === "top") {
-    boxStyle = ShadowBoxTopStyle;
-  } else if (mode === "mid") {
-    boxStyle = ShadowBoxMidStyle;
-  } else if (mode === "bot") {
-    // No bot style yet
-  } else if (mode === "form") {
-    boxStyle = ShadowBoxFormStyle;
-  } else if (mode === "wide") {
-    boxStyle = ShadowBoxWideStyle;
-  }
-
+}) {
   return (
-    <div className="shadowBox">
-      <div style={boxStyle}>
-        <div style={ShadowBoxInnerStyle}>{children}</div>
-      </div>
-    </div>
+    <div className={`content-panel content-panel--${mode}`}>{children}</div>
   );
 }
-
-const ShadowBoxTopStyle = {
-  backgroundColor: "#000000a8",
-  borderColor: "white",
-  /*"borderRadius": "0 0 2em 2em",*/
-  minHeight: "40h",
-  minWidth: "40vw",
-  paddingTop: "2em",
-};
-
-const ShadowBoxMidStyle = {
-  backgroundColor: "#000000a8",
-  borderColor: "white",
-  borderRadius: "2em 2em 2em 2em",
-  margin: "2em",
-  minHeight: "40h",
-  minWidth: "40vw",
-  paddingTop: "2em",
-};
-
-const ShadowBoxInnerStyle = {
-  margin: "2em",
-  paddingBottom: "1em",
-};
-
-const ShadowBoxFormStyle = {
-  backgroundColor: "#000000a8",
-  borderRadius: "5px",
-  marginLeft: "auto",
-  marginRight: "auto",
-  marginTop: "100px",
-  paddingBottom: "1em",
-  paddingTop: "2em",
-  maxWidth: "600px",
-  color: "#FFF",
-};
-
-const ShadowBoxWideStyle = {
-  backgroundColor: "#000000a8",
-  borderRadius: "5px",
-  marginLeft: "auto",
-  marginRight: "auto",
-  marginTop: "100px",
-  paddingBottom: "1em",
-  paddingTop: "2em",
-  color: "#FFF",
-};
